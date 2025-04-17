@@ -15,7 +15,7 @@
 #pragma once
 
 #include "glIncludes.h"
-#include "CCGRenderContext.h"
+#include "CGRenderContext.h"
 class CCG2022112453游坤坤View : public CView, public CCGRenderContext
 {
 // 数据成员

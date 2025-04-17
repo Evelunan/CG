@@ -48,7 +48,37 @@
     <ClInclude Include="glLinks.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CCGRenderContext.h">
+    <ClInclude Include="CGRenderContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGObject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGNode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGGroup.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGTransform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGGeode.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGRenderable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGGeometry.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGLineSegment.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGCamera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,7 +101,37 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="CCGRenderContext.cpp">
+    <ClCompile Include="CGRenderContext.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGNode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGGroup.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGTransform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGGeode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGRenderable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGGeometry.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGLineSegment.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGCamera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGScene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

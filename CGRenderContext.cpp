@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CCGRenderContext.h"
+#include "CGRenderContext.h"
 
 const glm::vec3 CCGRenderContext::DEFAULT_COLOR = glm::vec3(1.0f, 0.0f, 0.0f);
 // ³£Á¿ PI

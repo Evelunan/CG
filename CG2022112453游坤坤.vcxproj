@@ -189,11 +189,21 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CCGRenderContext.h" />
+    <ClInclude Include="CGRenderContext.h" />
     <ClInclude Include="CCGSceneGraphView.h" />
     <ClInclude Include="CG2022112453游坤坤.h" />
     <ClInclude Include="CG2022112453游坤坤Doc.h" />
     <ClInclude Include="CG2022112453游坤坤View.h" />
+    <ClInclude Include="CGCamera.h" />
+    <ClInclude Include="CGGeode.h" />
+    <ClInclude Include="CGGeometry.h" />
+    <ClInclude Include="CGGroup.h" />
+    <ClInclude Include="CGLineSegment.h" />
+    <ClInclude Include="CGNode.h" />
+    <ClInclude Include="CGObject.h" />
+    <ClInclude Include="CGRenderable.h" />
+    <ClInclude Include="CGScene.h" />
+    <ClInclude Include="CGTransform.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="glIncludes.h" />
     <ClInclude Include="glLinks.h" />
@@ -203,11 +213,21 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CCGRenderContext.cpp" />
+    <ClCompile Include="CGRenderContext.cpp" />
     <ClCompile Include="CCGSceneGraphView.cpp" />
     <ClCompile Include="CG2022112453游坤坤.cpp" />
     <ClCompile Include="CG2022112453游坤坤Doc.cpp" />
     <ClCompile Include="CG2022112453游坤坤View.cpp" />
+    <ClCompile Include="CGCamera.cpp" />
+    <ClCompile Include="CGGeode.cpp" />
+    <ClCompile Include="CGGeometry.cpp" />
+    <ClCompile Include="CGGroup.cpp" />
+    <ClCompile Include="CGLineSegment.cpp" />
+    <ClCompile Include="CGNode.cpp" />
+    <ClCompile Include="CGObject.cpp" />
+    <ClCompile Include="CGRenderable.cpp" />
+    <ClCompile Include="CGScene.cpp" />
+    <ClCompile Include="CGTransform.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
