@@ -1,60 +1,107 @@
-ï»¿// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢
-// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
-// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ
-// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚
-// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚
-// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—®
+// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ
+// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
+// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ
+// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£
+// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£
+// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ
 // https://go.microsoft.com/fwlink/?LinkId=238214.
 //
-// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
-// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+// °æÈ¨ËùÓĞ(C) Microsoft Corporation
+// ±£ÁôËùÓĞÈ¨Àû¡£
 
-// CG2022112453æ¸¸å¤å¤Doc.cpp: CCG2022112453æ¸¸å¤å¤Doc ç±»çš„å®ç°
+// CG2022112453ÓÎÀ¤À¤Doc.cpp: CCG2022112453ÓÎÀ¤À¤Doc ÀàµÄÊµÏÖ
 //
 
 #include "pch.h"
 #include "framework.h"
-// SHARED_HANDLERS å¯ä»¥åœ¨å®ç°é¢„è§ˆã€ç¼©ç•¥å›¾å’Œæœç´¢ç­›é€‰å™¨å¥æŸ„çš„
-// ATL é¡¹ç›®ä¸­è¿›è¡Œå®šä¹‰ï¼Œå¹¶å…è®¸ä¸è¯¥é¡¹ç›®å…±äº«æ–‡æ¡£ä»£ç ã€‚
+// SHARED_HANDLERS ¿ÉÒÔÔÚÊµÏÖÔ¤ÀÀ¡¢ËõÂÔÍ¼ºÍËÑË÷É¸Ñ¡Æ÷¾ä±úµÄ
+// ATL ÏîÄ¿ÖĞ½øĞĞ¶¨Òå£¬²¢ÔÊĞíÓë¸ÃÏîÄ¿¹²ÏíÎÄµµ´úÂë¡£
 #ifndef SHARED_HANDLERS
-#include "CG2022112453æ¸¸å¤å¤.h"
+#include "CG2022112453ÓÎÀ¤À¤.h"
 #endif
 
-#include "CG2022112453æ¸¸å¤å¤Doc.h"
+#include "CG2022112453ÓÎÀ¤À¤Doc.h"
 
 #include <propkey.h>
+#include "CG2022112453ÓÎÀ¤À¤View.h" 
+#include "CGScene.h" 
+#include "CGCamera.h" 
+#include "CGTransform.h" 
+#include "CGGeode.h" 
+#include "CGLineSegment.h" 
+#include "CGRenderContext.h" 
+#include "UIEventHandler.h" 
+#include "CGDraw2DLineSeg.h" 
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-// CCG2022112453æ¸¸å¤å¤Doc
 
-IMPLEMENT_DYNCREATE(CCG2022112453æ¸¸å¤å¤Doc, CDocument)
 
-BEGIN_MESSAGE_MAP(CCG2022112453æ¸¸å¤å¤Doc, CDocument)
+// CCG2022112453ÓÎÀ¤À¤Doc
+
+IMPLEMENT_DYNCREATE(CCG2022112453ÓÎÀ¤À¤Doc, CDocument)
+
+BEGIN_MESSAGE_MAP(CCG2022112453ÓÎÀ¤À¤Doc, CDocument)
+	ON_UPDATE_COMMAND_UI(ID_DRAW2D_LINESEG, &CCG2022112453ÓÎÀ¤À¤Doc::OnUpdateDraw2dLineseg)
+	ON_COMMAND(ID_DRAW2D_LINESEG, &CCG2022112453ÓÎÀ¤À¤Doc::OnDraw2dLineseg)
 END_MESSAGE_MAP()
 
 
-// CCG2022112453æ¸¸å¤å¤Doc æ„é€ /ææ„
+// CCG2022112453ÓÎÀ¤À¤Doc ¹¹Ôì/Îö¹¹
 
-CCG2022112453æ¸¸å¤å¤Doc::CCG2022112453æ¸¸å¤å¤Doc() noexcept
+CCG2022112453ÓÎÀ¤À¤Doc::CCG2022112453ÓÎÀ¤À¤Doc() noexcept
 {
-	// TODO: åœ¨æ­¤æ·»åŠ ä¸€æ¬¡æ€§æ„é€ ä»£ç 
-
+	// TODO: ÔÚ´ËÌí¼ÓÒ»´ÎĞÔ¹¹Ôì´úÂë
+	mScene = std::make_shared<CGScene>();
+	mScene->SetMainCamera(std::make_shared<CGCamera>());
+	auto e = std::make_shared<CGGeode>();
+	auto line = std::make_shared<CGLineSegment>(glm::dvec3(100, 100, 0), glm::dvec3(400, 300, 0));
+	e->AddChild(line);
+	auto g = std::make_shared<CGTransform>();
+	g->AddChild(e);
+	mScene->SetSceneData(g);
 }
 
-CCG2022112453æ¸¸å¤å¤Doc::~CCG2022112453æ¸¸å¤å¤Doc()
+CCG2022112453ÓÎÀ¤À¤Doc::~CCG2022112453ÓÎÀ¤À¤Doc()
 {
 }
 
-BOOL CCG2022112453æ¸¸å¤å¤Doc::OnNewDocument()
+bool CCG2022112453ÓÎÀ¤À¤Doc::RenderScene(CGRenderContext* pRC)
+{
+	if (pRC == nullptr)
+		return false;
+	if (mScene == nullptr)
+		return false;
+	CGCamera* pCamera = mScene->GetMainCamera();
+	if (pCamera == nullptr)
+		return false;
+
+	return mScene->Render(pRC, pCamera);
+}
+
+bool CCG2022112453ÓÎÀ¤À¤Doc::AddRenderable(std::shared_ptr<CGNode> r)
+{
+	if (mScene == nullptr)
+		return false;
+	CGGroup* g = mScene->GetSceneData()->asGroup();
+	if (g) {
+		g->AddChild(r);
+		return true;
+	}
+
+	return false;
+}
+
+BOOL CCG2022112453ÓÎÀ¤À¤Doc::OnNewDocument()
 {
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// TODO: åœ¨æ­¤æ·»åŠ é‡æ–°åˆå§‹åŒ–ä»£ç 
-	// (SDI æ–‡æ¡£å°†é‡ç”¨è¯¥æ–‡æ¡£)
+	// TODO: ÔÚ´ËÌí¼ÓÖØĞÂ³õÊ¼»¯´úÂë
+	// (SDI ÎÄµµ½«ÖØÓÃ¸ÃÎÄµµ)
 
 	return TRUE;
 }
@@ -62,26 +109,26 @@ BOOL CCG2022112453æ¸¸å¤å¤Doc::OnNewDocument()
 
 
 
-// CCG2022112453æ¸¸å¤å¤Doc åºåˆ—åŒ–
+// CCG2022112453ÓÎÀ¤À¤Doc ĞòÁĞ»¯
 
-void CCG2022112453æ¸¸å¤å¤Doc::Serialize(CArchive& ar)
+void CCG2022112453ÓÎÀ¤À¤Doc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: åœ¨æ­¤æ·»åŠ å­˜å‚¨ä»£ç 
+		// TODO: ÔÚ´ËÌí¼Ó´æ´¢´úÂë
 	}
 	else
 	{
-		// TODO: åœ¨æ­¤æ·»åŠ åŠ è½½ä»£ç 
+		// TODO: ÔÚ´ËÌí¼Ó¼ÓÔØ´úÂë
 	}
 }
 
 #ifdef SHARED_HANDLERS
 
-// ç¼©ç•¥å›¾çš„æ”¯æŒ
-void CCG2022112453æ¸¸å¤å¤Doc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
+// ËõÂÔÍ¼µÄÖ§³Ö
+void CCG2022112453ÓÎÀ¤À¤Doc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 {
-	// ä¿®æ”¹æ­¤ä»£ç ä»¥ç»˜åˆ¶æ–‡æ¡£æ•°æ®
+	// ĞŞ¸Ä´Ë´úÂëÒÔ»æÖÆÎÄµµÊı¾İ
 	dc.FillSolidRect(lprcBounds, RGB(255, 255, 255));
 
 	CString strText = _T("TODO: implement thumbnail drawing here");
@@ -99,18 +146,18 @@ void CCG2022112453æ¸¸å¤å¤Doc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 	dc.SelectObject(pOldFont);
 }
 
-// æœç´¢å¤„ç†ç¨‹åºçš„æ”¯æŒ
-void CCG2022112453æ¸¸å¤å¤Doc::InitializeSearchContent()
+// ËÑË÷´¦Àí³ÌĞòµÄÖ§³Ö
+void CCG2022112453ÓÎÀ¤À¤Doc::InitializeSearchContent()
 {
 	CString strSearchContent;
-	// ä»æ–‡æ¡£æ•°æ®è®¾ç½®æœç´¢å†…å®¹ã€‚
-	// å†…å®¹éƒ¨åˆ†åº”ç”±â€œ;â€åˆ†éš”
+	// ´ÓÎÄµµÊı¾İÉèÖÃËÑË÷ÄÚÈİ¡£
+	// ÄÚÈİ²¿·ÖÓ¦ÓÉ¡°;¡±·Ö¸ô
 
-	// ä¾‹å¦‚:     strSearchContent = _T("point;rectangle;circle;ole object;")ï¼›
+	// ÀıÈç:     strSearchContent = _T("point;rectangle;circle;ole object;")£»
 	SetSearchContent(strSearchContent);
 }
 
-void CCG2022112453æ¸¸å¤å¤Doc::SetSearchContent(const CString& value)
+void CCG2022112453ÓÎÀ¤À¤Doc::SetSearchContent(const CString& value)
 {
 	if (value.IsEmpty())
 	{
@@ -130,19 +177,49 @@ void CCG2022112453æ¸¸å¤å¤Doc::SetSearchContent(const CString& value)
 
 #endif // SHARED_HANDLERS
 
-// CCG2022112453æ¸¸å¤å¤Doc è¯Šæ–­
+// CCG2022112453ÓÎÀ¤À¤Doc Õï¶Ï
 
 #ifdef _DEBUG
-void CCG2022112453æ¸¸å¤å¤Doc::AssertValid() const
+void CCG2022112453ÓÎÀ¤À¤Doc::AssertValid() const
 {
 	CDocument::AssertValid();
 }
 
-void CCG2022112453æ¸¸å¤å¤Doc::Dump(CDumpContext& dc) const
+void CCG2022112453ÓÎÀ¤À¤Doc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
 #endif //_DEBUG
 
 
-// CCG2022112453æ¸¸å¤å¤Doc å‘½ä»¤
+// CCG2022112453ÓÎÀ¤À¤Doc ÃüÁî
+
+void CCG2022112453ÓÎÀ¤À¤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
+{
+	// TODO: ÔÚ´ËÌí¼ÓÃüÁî¸üĞÂÓÃ»§½çÃæ´¦Àí³ÌĞò´úÂë
+	// TODO: ÔÚ´ËÌí¼ÓÃüÁî¸üĞÂÓÃ»§½çÃæ´¦Àí³ÌĞò´úÂë 
+	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
+		EventType::Draw2DLineSeg);
+}
+
+void CCG2022112453ÓÎÀ¤À¤Doc::OnDraw2dLineseg()
+{
+	// TODO: ÔÚ´ËÌí¼ÓÃüÁî´¦Àí³ÌĞò´úÂë 
+	CCG2022112453ÓÎÀ¤À¤View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022112453ÓÎÀ¤À¤View))) {
+			view = dynamic_cast<CCG2022112453ÓÎÀ¤À¤View*>(pView);
+			break;
+		}
+	}
+
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	if (view != nullptr) {
+		UIEventHandler::SetCommand(new CGDraw2DLineSeg(view->glfwWindow())); //´´½¨»æÖÆÖ±Ïß¶ÎµÄÃüÁî¶ÔÏó
+	}
+}

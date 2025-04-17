@@ -19,9 +19,11 @@
 #ifndef SHARED_HANDLERS
 #include "CG2022112453游坤坤.h"
 #endif
-
+#include "MainFrm.h" 
+#include "UIEventHandler.h" 
 #include "CG2022112453游坤坤Doc.h"
 #include "CG2022112453游坤坤View.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -93,6 +95,17 @@ bool CCG2022112453游坤坤View::InitGLFW()
 
 	m_bGLInitialized = true;
 
+	//设置回调函数用到的指针（this-当前view） 
+	glfwSetWindowUserPointer(m_glfwWindow, this); //this也是CCGRenderContext*类型 
+	//设置键盘输入回调 
+	glfwSetKeyCallback(m_glfwWindow, UIEventHandler::KeyCallback);
+	//设置鼠标按键回调 
+	glfwSetMouseButtonCallback(m_glfwWindow, UIEventHandler::MouseButtonCallback);
+	//设置光标移动回调 
+	glfwSetCursorPosCallback(m_glfwWindow, UIEventHandler::CursorPosCallback);
+	//设置鼠标滚轮回调 
+	glfwSetScrollCallback(m_glfwWindow, UIEventHandler::ScrollCallback);
+
 	return true;
 }
 
@@ -111,8 +124,15 @@ void CCG2022112453游坤坤View::RenderScene()
 	//testLine();
 
 	//testCircle();
-	testScanPloygon();
-	testFill();
+	//testScanPloygon();
+	//testFill();
+	
+	CCG2022112453游坤坤Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (pDoc) {
+		pDoc->RenderScene((CGRenderContext*)this);
+	}
+
 	//绘制完毕，交换缓存 
 	glfwSwapBuffers(m_glfwWindow);
 }
@@ -121,6 +141,49 @@ CCG2022112453游坤坤View::CCG2022112453游坤坤View() noexcept
 {
 	// TODO: 在此处添加构造代码
 
+}
+
+void CCG2022112453游坤坤View::ShowPrompt(const std::string& str)
+{
+	CMainFrame* pMainWnd = (CMainFrame*)AfxGetMainWnd();
+	if (pMainWnd != nullptr)
+	{
+		pMainWnd->ShowPrompt(CString(str.c_str()));
+	}
+}
+
+void CCG2022112453游坤坤View::ShowCoord(double x, double y)
+{
+	CString str;
+	glm::dvec3 v = DCS2WCS(glm::dvec3(x, y, 0.0));
+	str.Format(_T("视口坐标 (%.0f, %.0f) : 世界坐标 (%.2f, %.2f) "), x, y, v.x, v.y);
+	CMainFrame* pMainWnd = (CMainFrame*)AfxGetMainWnd();
+	if (pMainWnd != nullptr)
+	{
+		pMainWnd->ShowCoord(str); //显示到状态栏 
+	}
+}
+
+glm::dvec3 CCG2022112453游坤坤View::DCS2WCS(const glm::dvec3& p)
+{
+	//暂时使用屏幕设备坐标 
+	int w, h;
+	glfwGetWindowSize(m_glfwWindow, &w, &h);
+	return glm::dvec3(p.x, double(h) - p.y, 0.0);
+}
+
+glm::dvec3 CCG2022112453游坤坤View::WCS2DCS(const glm::dvec3& p)
+{
+	return glm::dvec3();
+}
+
+bool CCG2022112453游坤坤View::AddRenderable(std::shared_ptr<CGNode> r) const
+{
+	CCG2022112453游坤坤Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return false;
+	return pDoc->AddRenderable(r);
 }
 
 CCG2022112453游坤坤View::~CCG2022112453游坤坤View()

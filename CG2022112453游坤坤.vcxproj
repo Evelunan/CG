@@ -189,6 +189,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CGDraw2DLineSeg.h" />
     <ClInclude Include="CGRenderContext.h" />
     <ClInclude Include="CCGSceneGraphView.h" />
     <ClInclude Include="CG2022112453游坤坤.h" />
@@ -211,8 +212,10 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UIEventHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGDraw2DLineSeg.cpp" />
     <ClCompile Include="CGRenderContext.cpp" />
     <ClCompile Include="CCGSceneGraphView.cpp" />
     <ClCompile Include="CG2022112453游坤坤.cpp" />
@@ -235,6 +238,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="UIEventHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CG2022112453游坤坤.reg" />

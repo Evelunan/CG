@@ -1,24 +1,24 @@
-ï»¿// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢
-// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
-// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ
-// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚
-// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚
-// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—®
+// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ
+// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
+// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ
+// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£
+// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£
+// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ
 // https://go.microsoft.com/fwlink/?LinkId=238214.
 //
-// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
-// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+// °æÈ¨ËùÓĞ(C) Microsoft Corporation
+// ±£ÁôËùÓĞÈ¨Àû¡£
 
-// MainFrm.cpp: CMainFrame ç±»çš„å®ç°
+// MainFrm.cpp: CMainFrame ÀàµÄÊµÏÖ
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "CG2022112453æ¸¸å¤å¤.h"
+#include "CG2022112453ÓÎÀ¤À¤.h"
 
 #include "MainFrm.h"
 #include "CCGSceneGraphView.h"
-#include "CG2022112453æ¸¸å¤å¤View.h"
+#include "CG2022112453ÓÎÀ¤À¤View.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -32,11 +32,11 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWndEx)
 	ON_WM_CREATE()
 END_MESSAGE_MAP()
 
-// CMainFrame æ„é€ /ææ„
+// CMainFrame ¹¹Ôì/Îö¹¹
 
 CMainFrame::CMainFrame() noexcept
 {
-	// TODO: åœ¨æ­¤æ·»åŠ æˆå‘˜åˆå§‹åŒ–ä»£ç 
+	// TODO: ÔÚ´ËÌí¼Ó³ÉÔ±³õÊ¼»¯´úÂë
 }
 
 CMainFrame::~CMainFrame()
@@ -55,8 +55,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	if (!m_wndStatusBar.Create(this))
 	{
-		TRACE0("æœªèƒ½åˆ›å»ºçŠ¶æ€æ \n");
-		return -1;      // æœªèƒ½åˆ›å»º
+		TRACE0("Î´ÄÜ´´½¨×´Ì¬À¸\n");
+		return -1;      // Î´ÄÜ´´½¨
 	}
 
 	CString strTitlePane1;
@@ -68,26 +68,40 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndStatusBar.AddElement(new CMFCRibbonStatusBarPane(ID_STATUSBAR_PANE1, strTitlePane1, TRUE), strTitlePane1);
 	m_wndStatusBar.AddExtendedElement(new CMFCRibbonStatusBarPane(ID_STATUSBAR_PANE2, strTitlePane2, TRUE), strTitlePane2);
 
-	// å¯ç”¨ Visual Studio 2005 æ ·å¼åœé çª—å£è¡Œä¸º
+	// ÆôÓÃ Visual Studio 2005 ÑùÊ½Í£¿¿´°¿ÚĞĞÎª
 	CDockingManager::SetDockingMode(DT_SMART);
-	// å¯ç”¨ Visual Studio 2005 æ ·å¼åœé çª—å£è‡ªåŠ¨éšè—è¡Œä¸º
+	// ÆôÓÃ Visual Studio 2005 ÑùÊ½Í£¿¿´°¿Ú×Ô¶¯Òş²ØĞĞÎª
 	EnableAutoHidePanes(CBRS_ALIGN_ANY);
 
-	// è®¾ç½®ç”¨äºç»˜åˆ¶æ‰€æœ‰ç”¨æˆ·ç•Œé¢å…ƒç´ çš„è§†è§‰ç®¡ç†å™¨
+	// ÉèÖÃÓÃÓÚ»æÖÆËùÓĞÓÃ»§½çÃæÔªËØµÄÊÓ¾õ¹ÜÀíÆ÷
 	CMFCVisualManager::SetDefaultManager(RUNTIME_CLASS(CMFCVisualManagerWindows));
 
 	return 0;
 }
 
+void CMainFrame::ShowPrompt(const CString& str)
+{
+	m_wndStatusBar.GetElement(0)->SetText(str);
+	m_wndStatusBar.Invalidate();
+	m_wndStatusBar.UpdateWindow();
+}
+
+void CMainFrame::ShowCoord(const CString& str)
+{
+	m_wndStatusBar.GetExElement(0)->SetText(str);
+	m_wndStatusBar.Invalidate();
+	m_wndStatusBar.UpdateWindow();
+}
+
 BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
 	CCreateContext* pContext)
 {
-	// åˆ›å»ºæ‹†åˆ†å™¨çª—å£
+	// ´´½¨²ğ·ÖÆ÷´°¿Ú
 	if (!m_wndSplitter.CreateStatic(this, 1, 2))
 		return FALSE;
 
 	if (!m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CCGSceneGraphView), CSize(100, 100), pContext) ||
-		!m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS(CCG2022112453æ¸¸å¤å¤View), CSize(100, 100), pContext))
+		!m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS(CCG2022112453ÓÎÀ¤À¤View), CSize(100, 100), pContext))
 	{
 		m_wndSplitter.DestroyWindow();
 		return FALSE;
@@ -100,13 +114,13 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if( !CFrameWndEx::PreCreateWindow(cs) )
 		return FALSE;
-	// TODO: åœ¨æ­¤å¤„é€šè¿‡ä¿®æ”¹
-	//  CREATESTRUCT cs æ¥ä¿®æ”¹çª—å£ç±»æˆ–æ ·å¼
+	// TODO: ÔÚ´Ë´¦Í¨¹ıĞŞ¸Ä
+	//  CREATESTRUCT cs À´ĞŞ¸Ä´°¿ÚÀà»òÑùÊ½
 
 	return TRUE;
 }
 
-// CMainFrame è¯Šæ–­
+// CMainFrame Õï¶Ï
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -121,5 +135,5 @@ void CMainFrame::Dump(CDumpContext& dc) const
 #endif //_DEBUG
 
 
-// CMainFrame æ¶ˆæ¯å¤„ç†ç¨‹åº
+// CMainFrame ÏûÏ¢´¦Àí³ÌĞò
 

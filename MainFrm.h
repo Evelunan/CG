@@ -1,56 +1,60 @@
-ï»¿// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢ 
-// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
-// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ 
-// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚  
-// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚  
-// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—® 
+// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ 
+// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
+// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ 
+// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£  
+// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£  
+// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ 
 // https://go.microsoft.com/fwlink/?LinkId=238214.
 //
-// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
-// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+// °æÈ¨ËùÓĞ(C) Microsoft Corporation
+// ±£ÁôËùÓĞÈ¨Àû¡£
 
-// MainFrm.h: CMainFrame ç±»çš„æ¥å£
+// MainFrm.h: CMainFrame ÀàµÄ½Ó¿Ú
 //
 
 #pragma once
-class CCG2022112453æ¸¸å¤å¤View;
+class CCG2022112453ÓÎÀ¤À¤View;
 
 class CMainFrame : public CFrameWndEx
 {
 	
-protected: // ä»…ä»åºåˆ—åŒ–åˆ›å»º
+protected: // ½ö´ÓĞòÁĞ»¯´´½¨
 	CMainFrame() noexcept;
 	DECLARE_DYNCREATE(CMainFrame)
 
-// ç‰¹æ€§
+// ÌØĞÔ
 protected:
 	CSplitterWnd m_wndSplitter;
 public:
 
-// æ“ä½œ
+// ²Ù×÷
 public:
+	// ²Ù×÷ 
+public:
+	void ShowPrompt(const CString& str);
+	void ShowCoord(const CString& str);
 
-// é‡å†™
+// ÖØĞ´
 public:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-// å®ç°
+// ÊµÏÖ
 public:
 	virtual ~CMainFrame();
-	CCG2022112453æ¸¸å¤å¤View* GetRightPane();
+	CCG2022112453ÓÎÀ¤À¤View* GetRightPane();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // æ§ä»¶æ¡åµŒå…¥æˆå‘˜
+protected:  // ¿Ø¼şÌõÇ¶Èë³ÉÔ±
 	CMFCRibbonBar     m_wndRibbonBar;
 	CMFCRibbonApplicationButton m_MainButton;
 	CMFCToolBarImages m_PanelImages;
 	CMFCRibbonStatusBar  m_wndStatusBar;
 
-// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
+// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
 protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	DECLARE_MESSAGE_MAP()

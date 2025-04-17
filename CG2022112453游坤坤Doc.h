@@ -1,34 +1,41 @@
-ï»¿// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢
-// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
-// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ
-// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚
-// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚
-// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—®
+// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ
+// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
+// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ
+// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£
+// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£
+// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ
 // https://go.microsoft.com/fwlink/?LinkId=238214.
 //
-// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
-// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+// °æÈ¨ËùÓĞ(C) Microsoft Corporation
+// ±£ÁôËùÓĞÈ¨Àû¡£
 
-// CG2022112453æ¸¸å¤å¤Doc.h: CCG2022112453æ¸¸å¤å¤Doc ç±»çš„æ¥å£
+// CG2022112453ÓÎÀ¤À¤Doc.h: CCG2022112453ÓÎÀ¤À¤Doc ÀàµÄ½Ó¿Ú
 //
 
 
 #pragma once
 
+#include <memory> 
+class CGScene;
+class CGRenderContext;
+class CGNode;
 
-class CCG2022112453æ¸¸å¤å¤Doc : public CDocument
+class CCG2022112453ÓÎÀ¤À¤Doc : public CDocument
 {
-protected: // ä»…ä»åºåˆ—åŒ–åˆ›å»º
-	CCG2022112453æ¸¸å¤å¤Doc() noexcept;
-	DECLARE_DYNCREATE(CCG2022112453æ¸¸å¤å¤Doc)
+protected: // ½ö´ÓĞòÁĞ»¯´´½¨
+	CCG2022112453ÓÎÀ¤À¤Doc() noexcept;
+	DECLARE_DYNCREATE(CCG2022112453ÓÎÀ¤À¤Doc)
 
-// ç‰¹æ€§
+// ÌØĞÔ
 public:
+	std::shared_ptr<CGScene> mScene = nullptr;
 
-// æ“ä½œ
+// ²Ù×÷
 public:
+	bool RenderScene(CGRenderContext* pRC);
+	bool AddRenderable(std::shared_ptr<CGNode> r);
 
-// é‡å†™
+// ÖØĞ´
 public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
@@ -37,9 +44,9 @@ public:
 	virtual void OnDrawThumbnail(CDC& dc, LPRECT lprcBounds);
 #endif // SHARED_HANDLERS
 
-// å®ç°
+// ÊµÏÖ
 public:
-	virtual ~CCG2022112453æ¸¸å¤å¤Doc();
+	virtual ~CCG2022112453ÓÎÀ¤À¤Doc();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -47,12 +54,15 @@ public:
 
 protected:
 
-// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
+// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
 protected:
 	DECLARE_MESSAGE_MAP()
 
 #ifdef SHARED_HANDLERS
-	// ç”¨äºä¸ºæœç´¢å¤„ç†ç¨‹åºè®¾ç½®æœç´¢å†…å®¹çš„ Helper å‡½æ•°
+	// ÓÃÓÚÎªËÑË÷´¦Àí³ÌĞòÉèÖÃËÑË÷ÄÚÈİµÄ Helper º¯Êı
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+public:
+	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
+	afx_msg void OnDraw2dLineseg();
 };

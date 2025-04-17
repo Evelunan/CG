@@ -81,6 +81,12 @@
     <ClInclude Include="CGScene.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="UIEventHandler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGDraw2DLineSeg.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -132,6 +138,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CGScene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEventHandler.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGDraw2DLineSeg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
