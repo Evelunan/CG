@@ -25,15 +25,16 @@
 #define IDR_MENU1                       313
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_32771                        32771
-#define ID_DRAW2D_LINES                 32772
+#define ID_DRAW2D_LINE_STRIP_DDA        32771
 #define ID_DRAW2D_LINESEG               32772
+#define ID_DRAW2D_LINE_STRIP            32779
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        314
-#define _APS_NEXT_COMMAND_VALUE         32773
+#define _APS_NEXT_COMMAND_VALUE         32780
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

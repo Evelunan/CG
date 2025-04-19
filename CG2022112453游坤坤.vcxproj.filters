@@ -87,6 +87,12 @@
     <ClInclude Include="CGDraw2DLineSeg.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CGDraw2DLineStrip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGLineStrip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -144,6 +150,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CGDraw2DLineSeg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGDraw2DLineStrip.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGLineStrip.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

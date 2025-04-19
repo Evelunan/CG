@@ -39,8 +39,8 @@ bool CGLineSegment::Render(CGRenderContext* pRC, CGCamera* pCamera)
 
 	glColor3f(1.0f, 1.0f, 1.0f); // °×É« 
 	glBegin(GL_LINES);
-	glVertex3f(mStart.x, mStart.y, mStart.z);
-	glVertex3f(mEnd.x, mEnd.y, mEnd.z);
+	glVertex3d(mStart.x, mStart.y, mStart.z);
+	glVertex3d(mEnd.x, mEnd.y, mEnd.z);
 	glEnd();
 
 	return true;

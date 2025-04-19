@@ -65,4 +65,7 @@ protected:
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dLineseg();
+
+	afx_msg void OnDraw2dLineStrip();
+	afx_msg void OnUpdateDraw2dLineStrip(CCmdUI* pCmdUI);
 };

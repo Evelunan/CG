@@ -102,8 +102,8 @@ int CGDraw2DLineSeg::OnMouseButton(GLFWwindow* window, int button, int action, i
                 glfwSwapBuffers(window);
 
                 //鼠标左键第二次单击，直线段创建的起点、终点已获取。
-                   //创建对象要注意坐标转换到场景，并设置相应的属性。 
-    //获取起点、终点对应的场景坐标用于创建直线段对象 
+                //创建对象要注意坐标转换到场景，并设置相应的属性。 
+                //获取起点、终点对应的场景坐标用于创建直线段对象 
                 view->AddRenderable(std::make_shared<CGLineSegment>(start, end)); //创建添加到场景 
 
                 view->Invalidate();  //客户区需要重绘 
@@ -159,6 +159,7 @@ int CGDraw2DLineSeg::OnCursorPos(GLFWwindow* window, double xpos, double ypos)
         glEnable(GL_COLOR_LOGIC_OP);
         glLogicOp(GL_XOR); // 使用异或模式实现橡皮线效果GL_XOR 
         glColor3f(0.0f, 0.0f, 1.0f);
+
         if (mMoveCount == 0) { //第一次移动 
             draw2dline(start, end); // 绘制新线 
             mPrePos1 = mEnd;
@@ -166,12 +167,14 @@ int CGDraw2DLineSeg::OnCursorPos(GLFWwindow* window, double xpos, double ypos)
             mMoveCount++;
         }
         else if (mMoveCount == 1) { //第二次移动 
+
             draw2dline(start, end); // 绘制新线 
             mPrePos2 = mPrePos1;
             mPrePos1 = mEnd;
             mMoveCount++;
         }
         else {
+
             draw2dline(start, pre2);// 擦除旧线 
             draw2dline(start, end); // 绘制新线
             mPrePos2 = mPrePos1;

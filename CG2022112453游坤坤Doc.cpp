@@ -32,7 +32,7 @@
 #include "CGRenderContext.h" 
 #include "UIEventHandler.h" 
 #include "CGDraw2DLineSeg.h" 
-
+#include "CGDraw2DLineStrip.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -47,6 +47,8 @@ IMPLEMENT_DYNCREATE(CCG2022112453游坤坤Doc, CDocument)
 BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_DRAW2D_LINESEG, &CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg)
 	ON_COMMAND(ID_DRAW2D_LINESEG, &CCG2022112453游坤坤Doc::OnDraw2dLineseg)
+	ON_COMMAND(ID_DRAW2D_LINE_STRIP, &CCG2022112453游坤坤Doc::OnDraw2dLineStrip)
+	ON_UPDATE_COMMAND_UI(ID_DRAW2D_LINE_STRIP, &CCG2022112453游坤坤Doc::OnUpdateDraw2dLineStrip)
 END_MESSAGE_MAP()
 
 
@@ -196,7 +198,6 @@ void CCG2022112453游坤坤Doc::Dump(CDumpContext& dc) const
 
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
 {
-	// TODO: 在此添加命令更新用户界面处理程序代码
 	// TODO: 在此添加命令更新用户界面处理程序代码 
 	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
 		EventType::Draw2DLineSeg);
@@ -223,3 +224,33 @@ void CCG2022112453游坤坤Doc::OnDraw2dLineseg()
 		UIEventHandler::SetCommand(new CGDraw2DLineSeg(view->glfwWindow())); //创建绘制直线段的命令对象
 	}
 }
+
+void CCG2022112453游坤坤Doc::OnDraw2dLineStrip()
+{
+	CCG2022112453游坤坤View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022112453游坤坤View))) {
+			view = dynamic_cast<CCG2022112453游坤坤View*>(pView);
+			break;
+		}
+	}
+
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	if (view != nullptr) {
+		UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->DDA_Line)); //创建绘制直线段的命令对象
+	}
+}
+
+void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineStrip(CCmdUI* pCmdUI)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码 
+	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
+		EventType::Draw2DLineStrip);
+}
+
+

@@ -22,6 +22,15 @@ public:
 	CCGRenderContext();
 	virtual ~CCGRenderContext();
 
+// 实验三
+public:
+	//static void DDA_Line(glm::dvec3 start, glm::dvec3 end);
+	//// 处理k=0和k=无穷大情况
+	//static bool kZeroOrNotExist(glm::dvec3 start, glm::dvec3 end);
+
+
+
+public:
 	// 画五角星，center为五角星中心，len为中心到顶点距离，color1和color2分别为两个三角形颜色
 	static void drawPentagram(POINT center, GLint len, glm::vec3 color1, glm::vec3 color2);
 	// 实验1-（1）
@@ -67,7 +76,6 @@ public:
 	 * @param color 直线的颜色，默认值为DEFAULT_COLOR。
 	*/
 	static void DDA_Line(int x1, int y1, int x2, int y2, glm::vec3 color = DEFAULT_COLOR);
-
 
 	/**
 	* @brief 使用中点算法绘制直线。
@@ -159,13 +167,13 @@ public:
 		std::function<bool(glm::u8vec3, glm::u8vec3)> shouldFill);
 private:
 
-	/*
+	/**
 	* @brief 入点集合，长度，画图模式，颜色，是否使用自定义颜色
-	* points 点集合
-	* len 点集合长度
-	* mode 画图模式
-	* color 自定义颜色
-	* customColor 是否使用自定义颜色
+	* @param points 点集合
+	* @param len 点集合长度
+	* @param mode 画图模式
+	* @param color 自定义颜色
+	* @param customColor 是否使用自定义颜色
 	*/
 	static void display(POINT points[], GLint len, GLenum mode, glm::vec3 color = DEFAULT_COLOR, bool customColor = false);
 
@@ -180,6 +188,8 @@ private:
 
 	// 处理k=0和k=无穷大情况
 	static bool kZeroOrNotExist(int x1, int y1, int x2, int y2, glm::vec3 color = DEFAULT_COLOR);
+	
+
 
 	// 由x，y获取对称的8个点，每获取一个坐标就画出对应8个点，避免半径太大一次画太多点
 	static void drawCirclePoints(int xc, int yc, int x, int y, glm::vec3 color = DEFAULT_COLOR);

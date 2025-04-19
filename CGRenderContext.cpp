@@ -544,7 +544,6 @@ void CCGRenderContext::fillHelper(int x, int y, glm::u8vec3 color1, glm::u8vec3 
 
 void CCGRenderContext::display(POINT points[], GLint len, GLenum mode, glm::vec3 color, bool customColor)
 {
-	//glClear(GL_COLOR_BUFFER_BIT);
 	glShadeModel(GL_FLAT);	// 单色模式
 	if (customColor)
 	{
