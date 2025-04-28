@@ -78,9 +78,9 @@ bool CCG2022112453游坤坤View::InitGLFW()
 	// 初始化OpenGL上下文 
 	glfwMakeContextCurrent(m_glfwWindow);
 #if defined(_USE_GLEW) 
-		glewInit();
+	glewInit();
 #else 
-		//使用GLAD来加载OpenGL的函数地址
+	//使用GLAD来加载OpenGL的函数地址
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		AfxMessageBox(_T("Failed to initialize GLAD"));
@@ -120,13 +120,13 @@ void CCG2022112453游坤坤View::RenderScene()
 
 	//drawTest1();
 	//draWTest2();
-	 
-	//testLine();
 
+	//testLine();
+	
 	//testCircle();
 	//testScanPloygon();
 	//testFill();
-	
+
 	CCG2022112453游坤坤Doc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (pDoc) {
@@ -169,7 +169,8 @@ glm::dvec3 CCG2022112453游坤坤View::DCS2WCS(const glm::dvec3& p)
 	//暂时使用屏幕设备坐标 
 	int w, h;
 	glfwGetWindowSize(m_glfwWindow, &w, &h);
-	return glm::dvec3(p.x, double(h) - p.y, 0.0);
+	//return glm::dvec3(p.x, double(h) - p.y, 0.0);
+	return glm::dvec3(p.x - double(w) / 2, double(h) / 2 - p.y, 0.0);
 }
 
 glm::dvec3 CCG2022112453游坤坤View::WCS2DCS(const glm::dvec3& p)
@@ -299,9 +300,13 @@ void CCG2022112453游坤坤View::OnSize(UINT nType, int cx, int cy)
 
 		//基本图形生成算法实验部分，假定观察窗口与视口一致。（左下角为原点，右上角为(cx,cy)） 
 		//使用正交平行投影 
-		glOrtho(0, cx,    //x范围 
-			0, cy,     //y范围 
-			-10000.0f, 10000.0f);  //z范围（深度） 
+		//glOrtho(0, cx,    //x范围 
+		//	0, cy,     //y范围 
+		//	-10000.0f, 10000.0f);  //z范围（深度） 
+		//调为左右对称 
+		glOrtho(-cx / 2.0f, cx / 2.0f, //x范围
+			-cy / 2.0f, cy / 2.0f,  //y范围
+			-10000.0f, 10000.0f); //z 范围（深度） 
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();

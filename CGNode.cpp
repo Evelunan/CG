@@ -7,6 +7,18 @@ IMPLEMENT_SERIAL(CGNode, CGObject, 1)
 CGNode::CGNode()
 {
 }
+CGGroup* CGNode::GetParent(unsigned int i)
+{
+	if (i < mParents.size())
+		return mParents[i];
+	return nullptr;
+}
+const CGGroup* CGNode::GetParent(unsigned int i) const
+{
+	if (i < mParents.size())
+		return mParents[i];
+	return nullptr;
+}
 CGNode::~CGNode()
 {
 }
@@ -28,4 +40,13 @@ bool CGNode::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	if (pRC == nullptr || pCamera == nullptr)
 		return false;
 	return true;
+}
+void CGNode::AddParent(CGGroup* parent)
+{
+	mParents.push_back(parent);
+}
+void CGNode::RemoveParent(CGGroup* parent)
+{
+	auto pitr = std::find(mParents.begin(), mParents.end(), parent);
+	if (pitr != mParents.end()) mParents.erase(pitr);
 }

@@ -1,22 +1,22 @@
-ï»¿// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢ 
-// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
-// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ 
-// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚  
-// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚  
-// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—® 
+// Õâ¶Î MFC Ê¾ÀýÔ´´úÂëÑÝÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ 
+// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àý½ö¹©²Î¿¼£¬
+// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ 
+// MFC C++ ¿âÈí¼þËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£  
+// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄÐí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£  
+// ÈôÒªÁË½âÓÐ¹Ø Fluent UI Ðí¿É¼Æ»®µÄÏêÏ¸ÐÅÏ¢£¬Çë·ÃÎÊ 
 // https://go.microsoft.com/fwlink/?LinkId=238214.
 //
-// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
-// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+// °æÈ¨ËùÓÐ(C) Microsoft Corporation
+// ±£ÁôËùÓÐÈ¨Àû¡£
 
-// CCGSceneGraphView.cpp: CCGSceneGraphView ç±»çš„å®žçŽ°
+// CCGSceneGraphView.cpp: CCGSceneGraphView ÀàµÄÊµÏÖ
 //
 
 #include "pch.h"
 #include "framework.h"
-#include "CG2022112453æ¸¸å¤å¤.h"
+#include "CG2022112453ÓÎÀ¤À¤.h"
 
-#include "CG2022112453æ¸¸å¤å¤Doc.h"
+#include "CG2022112453ÓÎÀ¤À¤Doc.h"
 #include "CCGSceneGraphView.h"
 
 #ifdef _DEBUG
@@ -29,23 +29,26 @@
 IMPLEMENT_DYNCREATE(CCGSceneGraphView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CCGSceneGraphView, CTreeView)
+	ON_WM_CREATE()
+	ON_NOTIFY_REFLECT(TVN_SELCHANGED, &CCGSceneGraphView::OnTvnSelchanged)
 END_MESSAGE_MAP()
 
 
-// CCGSceneGraphView æž„é€ /æžæž„
+// CCGSceneGraphView ¹¹Ôì/Îö¹¹
 
 CCGSceneGraphView::CCGSceneGraphView()
 {
-	// TODO: åœ¨æ­¤å¤„æ·»åŠ æž„é€ ä»£ç 
+	// TODO: ÔÚ´Ë´¦Ìí¼Ó¹¹Ôì´úÂë
 }
 
 CCGSceneGraphView::~CCGSceneGraphView()
 {
+	GetTreeCtrl().DeleteAllItems();
 }
 
 BOOL CCGSceneGraphView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: åœ¨æ­¤å¤„é€šè¿‡ä¿®æ”¹ CREATESTRUCT cs æ¥ä¿®æ”¹çª—å£ç±»æˆ–æ ·å¼
+	// TODO: ÔÚ´Ë´¦Í¨¹ýÐÞ¸Ä CREATESTRUCT cs À´ÐÞ¸Ä´°¿ÚÀà»òÑùÊ½
 
 	return CTreeView::PreCreateWindow(cs);
 }
@@ -54,12 +57,12 @@ void CCGSceneGraphView::OnInitialUpdate()
 {
 	CTreeView::OnInitialUpdate();
 
-	// TODO: è°ƒç”¨ GetTreeCtrl() ç›´æŽ¥è®¿é—® TreeView çš„æ ‘æŽ§ä»¶ï¼Œ
-	//  ä»Žè€Œå¯ä»¥ç”¨é¡¹å¡«å…… TreeViewã€‚
+	// TODO: µ÷ÓÃ GetTreeCtrl() Ö±½Ó·ÃÎÊ TreeView µÄÊ÷¿Ø¼þ£¬
+	//  ´Ó¶ø¿ÉÒÔÓÃÏîÌî³ä TreeView¡£
 }
 
 
-// CCGSceneGraphView è¯Šæ–­
+// CCGSceneGraphView Õï¶Ï
 
 #ifdef _DEBUG
 void CCGSceneGraphView::AssertValid() const
@@ -72,12 +75,53 @@ void CCGSceneGraphView::Dump(CDumpContext& dc) const
 	CTreeView::Dump(dc);
 }
 
-CCG2022112453æ¸¸å¤å¤Doc* CCGSceneGraphView::GetDocument() // éžè°ƒè¯•ç‰ˆæœ¬æ˜¯å†…è”çš„
+CCG2022112453ÓÎÀ¤À¤Doc* CCGSceneGraphView::GetDocument() // ·Çµ÷ÊÔ°æ±¾ÊÇÄÚÁªµÄ
 {
-	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CCG2022112453æ¸¸å¤å¤Doc)));
-	return (CCG2022112453æ¸¸å¤å¤Doc*)m_pDocument;
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CCG2022112453ÓÎÀ¤À¤Doc)));
+	return (CCG2022112453ÓÎÀ¤À¤Doc*)m_pDocument;
 }
 #endif //_DEBUG
 
 
-// CCGSceneGraphView æ¶ˆæ¯å¤„ç†ç¨‹åº
+// CCGSceneGraphView ÏûÏ¢´¦Àí³ÌÐò
+
+void CCGSceneGraphView::OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/)
+{
+	// TODO: ÔÚ´ËÌí¼Ó×¨ÓÃ´úÂëºÍ/»òµ÷ÓÃ»ùÀà
+	CCG2022112453ÓÎÀ¤À¤Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	GetTreeCtrl().SetRedraw(TRUE);
+}
+
+int CCGSceneGraphView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CTreeView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	// TODO:  ÔÚ´ËÌí¼ÓÄú×¨ÓÃµÄ´´½¨´úÂë 
+	CTreeCtrl& tree = GetTreeCtrl();
+	DWORD dwStyles = tree.GetStyle();
+	dwStyles |= TVS_HASBUTTONS | TVS_SHOWSELALWAYS | TVS_HASLINES | TVS_LINESATROOT;// | TVS_CHECKBOXES
+		tree.ModifyStyle(0, dwStyles);
+
+	CCG2022112453ÓÎÀ¤À¤Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (pDoc) {
+		pDoc->InstToSceneTree(&tree);
+	}
+	return 0;
+}
+
+void CCGSceneGraphView::OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	LPNMTREEVIEW pNMTreeView = reinterpret_cast<LPNMTREEVIEW>(pNMHDR);
+	CCG2022112453ÓÎÀ¤À¤Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	mSelectedItem = GetTreeCtrl().GetSelectedItem();
+	pDoc->OnSelectSceneTreeItem(&GetTreeCtrl(), mSelectedItem);
+	*pResult = 0;
+}

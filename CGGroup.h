@@ -18,6 +18,13 @@ public:
 	virtual bool AddChild(std::shared_ptr<CGNode> child);
 	virtual bool InsertChild(unsigned int index, std::shared_ptr<CGNode>& child);
 
+public:
+	//子节点操作 
+	virtual unsigned int GetNumChildren() const;
+	CGNode* GetChild(unsigned  int i);
+	const CGNode* GetChild(unsigned  int i) const;
+	bool ContainsNode(const CGNode* node) const;
+	unsigned int GetChildIndex(const CGNode* node) const;
 
 protected:
 	virtual ~CGGroup();

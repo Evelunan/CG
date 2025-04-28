@@ -1,5 +1,6 @@
 #include "pch.h" 
 #include "CGGroup.h" 
+#include "CGGeometry.h"
 #include <algorithm> 
 
 IMPLEMENT_SERIAL(CGGroup, CGNode, 1)
@@ -10,6 +11,10 @@ CGGroup::CGGroup()
 
 CGGroup::~CGGroup()
 {
+    //脱离父节点 
+    for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr) {
+        (*itr)->RemoveParent(this);
+    }
 }
 void CGGroup::Serialize(CArchive& ar)
 {
@@ -53,6 +58,38 @@ bool CGGroup::InsertChild(unsigned int index, std::shared_ptr<CGNode>& child)
     {
         mChildren.insert(mChildren.begin() + index, child);
     }
-
+    child->AddParent(this);
     return true;
+}
+//子节点操作 
+unsigned int CGGroup::GetNumChildren() const
+{
+    return static_cast<unsigned int>(mChildren.size());
+}
+CGNode* CGGroup::GetChild(unsigned  int i)
+{
+    if (i >= mChildren.size())
+        return nullptr;
+    return mChildren[i].get();
+}
+const CGNode* CGGroup::GetChild(unsigned  int i) const
+{
+    if (i >= mChildren.size())
+        return nullptr;
+    return mChildren[i].get();
+}
+bool CGGroup::ContainsNode(const CGNode* node) const
+{
+    for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr) {
+        if (itr->get() == node)
+            return true;
+    }
+    return false;
+}
+unsigned int CGGroup::GetChildIndex(const CGNode* node) const
+{
+    for (unsigned int childNum = 0; childNum < mChildren.size(); ++childNum) {
+        if (mChildren[childNum].get() == node) return childNum;
+    }
+    return static_cast<unsigned int>(mChildren.size()); //没找到，返回子节点个数 
 }

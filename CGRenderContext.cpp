@@ -78,6 +78,7 @@ void CCGRenderContext::draWTest2()
 	drawPentagram({ 1050, 300 }, 100, { 0.8f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.9f });
 }
 
+
 void CCGRenderContext::testLine()
 {
 
@@ -449,7 +450,7 @@ void CCGRenderContext::scanPloygon(const std::vector<glm::vec2>& points, glm::ve
 			for (int x = xStart; x <= xEnd; ++x) {
 				glVertex2i(x, y);
 			}
-		}
+		}	
 
 		// 更新 AET 中每条边的 x 值
 		for (auto& node : activeEdgeTable) {

@@ -1,42 +1,46 @@
-ï»¿// è¿™æ®µ MFC ç¤ºä¾‹æºä»£ç æ¼”ç¤ºå¦‚ä½•ä½¿ç”¨ MFC Microsoft Office Fluent ç”¨æˆ·ç•Œé¢ 
-// (â€œFluent UIâ€)ã€‚è¯¥ç¤ºä¾‹ä»…ä¾›å‚è€ƒï¼Œ
-// ç”¨ä»¥è¡¥å……ã€ŠMicrosoft åŸºç¡€ç±»å‚è€ƒã€‹å’Œ 
-// MFC C++ åº“è½¯ä»¶éšé™„çš„ç›¸å…³ç”µå­æ–‡æ¡£ã€‚  
-// å¤åˆ¶ã€ä½¿ç”¨æˆ–åˆ†å‘ Fluent UI çš„è®¸å¯æ¡æ¬¾æ˜¯å•ç‹¬æä¾›çš„ã€‚  
-// è‹¥è¦äº†è§£æœ‰å…³ Fluent UI è®¸å¯è®¡åˆ’çš„è¯¦ç»†ä¿¡æ¯ï¼Œè¯·è®¿é—® 
+// Õâ¶Î MFC Ê¾ÀıÔ´´úÂëÑİÊ¾ÈçºÎÊ¹ÓÃ MFC Microsoft Office Fluent ÓÃ»§½çÃæ 
+// (¡°Fluent UI¡±)¡£¸ÃÊ¾Àı½ö¹©²Î¿¼£¬
+// ÓÃÒÔ²¹³ä¡¶Microsoft »ù´¡Àà²Î¿¼¡·ºÍ 
+// MFC C++ ¿âÈí¼şËæ¸½µÄÏà¹Øµç×ÓÎÄµµ¡£  
+// ¸´ÖÆ¡¢Ê¹ÓÃ»ò·Ö·¢ Fluent UI µÄĞí¿ÉÌõ¿îÊÇµ¥¶ÀÌá¹©µÄ¡£  
+// ÈôÒªÁË½âÓĞ¹Ø Fluent UI Ğí¿É¼Æ»®µÄÏêÏ¸ĞÅÏ¢£¬Çë·ÃÎÊ 
 // https://go.microsoft.com/fwlink/?LinkId=238214.
 //
-// ç‰ˆæƒæ‰€æœ‰(C) Microsoft Corporation
-// ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚
+// °æÈ¨ËùÓĞ(C) Microsoft Corporation
+// ±£ÁôËùÓĞÈ¨Àû¡£
 
-// CCGSceneGraphView.h: CCGSceneGraphView ç±»çš„æ¥å£
+// CCGSceneGraphView.h: CCGSceneGraphView ÀàµÄ½Ó¿Ú
 //
 
 
 #pragma once
 
-class CCG2022112453æ¸¸å¤å¤Doc;
+class CCG2022112453ÓÎÀ¤À¤Doc;
 
 class CCGSceneGraphView : public CTreeView
 {
-protected: // ä»…ä»åºåˆ—åŒ–åˆ›å»º
+protected: // ½ö´ÓĞòÁĞ»¯´´½¨
 	CCGSceneGraphView();
 	DECLARE_DYNCREATE(CCGSceneGraphView)
 
-// ç‰¹æ€§
-public:
-	CCG2022112453æ¸¸å¤å¤Doc* GetDocument();
+protected:
+	HTREEITEM mSelectedItem = nullptr;
 
-// æ“ä½œ
+
+// ÌØĞÔ
+public:
+	CCG2022112453ÓÎÀ¤À¤Doc* GetDocument();
+
+// ²Ù×÷
 public:
 
-// é‡å†™
+// ÖØĞ´
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	protected:
-	virtual void OnInitialUpdate(); // æ„é€ åç¬¬ä¸€æ¬¡è°ƒç”¨
+	virtual void OnInitialUpdate(); // ¹¹ÔìºóµÚÒ»´Îµ÷ÓÃ
 
-// å®ç°
+// ÊµÏÖ
 public:
 	virtual ~CCGSceneGraphView();
 #ifdef _DEBUG
@@ -46,13 +50,17 @@ public:
 
 protected:
 
-// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
+// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
 protected:
 	DECLARE_MESSAGE_MAP()
+	virtual void OnUpdate(CView* /*pSender*/, LPARAM /*lHint*/, CObject* /*pHint*/);
+public:
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnTvnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
 };
 
-#ifndef _DEBUG  // CCGSceneGraphView.cpp ä¸­çš„è°ƒè¯•ç‰ˆæœ¬
-inline CCG2022112453æ¸¸å¤å¤Doc* CCGSceneGraphView::GetDocument()
-   { return reinterpret_cast<CCG2022112453æ¸¸å¤å¤Doc*>(m_pDocument); }
+#ifndef _DEBUG  // CCGSceneGraphView.cpp ÖĞµÄµ÷ÊÔ°æ±¾
+inline CCG2022112453ÓÎÀ¤À¤Doc* CCGSceneGraphView::GetDocument()
+   { return reinterpret_cast<CCG2022112453ÓÎÀ¤À¤Doc*>(m_pDocument); }
 #endif
 

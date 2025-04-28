@@ -19,6 +19,9 @@
 class CGScene;
 class CGRenderContext;
 class CGNode;
+class CGGroup;
+class CCGSceneGraphView;
+
 
 class CCG2022112453游坤坤Doc : public CDocument
 {
@@ -29,6 +32,17 @@ protected: // 仅从序列化创建
 // 特性
 public:
 	std::shared_ptr<CGScene> mScene = nullptr;
+
+
+protected:
+	CGGroup* mSelectedGroup = nullptr;
+	HTREEITEM mSelectedItem = nullptr;
+public:
+	CCGSceneGraphView* GetSceneGraphView();
+	void InstToSceneTree(CTreeCtrl* pTree);//实列节点加入场景树 
+	void InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hInst, CGNode* node);
+	void OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM hItem); //场景树中选中节点
+
 
 // 操作
 public:

@@ -1,5 +1,7 @@
 #pragma once 
-#include "CGGroup.h" 
+#include "CGGroup.h"
+
+class CGRenderable;
 class CGGeode : public CGGroup
 {
     DECLARE_SERIAL(CGGeode)
@@ -14,4 +16,12 @@ public:
     virtual CGGeode* asGeode() { return this; }
     virtual const CGGeode* asGeode() const { return this; }
 
+public:
+    //作为实例叶子节点，显示下级为模型节点 
+    unsigned int GetNumRenderables() const;
+    CGRenderable* GetRenderable(unsigned int i);
+    const CGRenderable* GetRenderable(unsigned int i) const;
+    unsigned int GetRenderableIndex(const CGRenderable* renderable) const;
+    bool ContainsRenderable(const CGRenderable* renderable) const;
+    virtual bool InsertChild(unsigned int index, std::shared_ptr<CGNode>& child);
 };

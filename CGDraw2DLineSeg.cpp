@@ -16,6 +16,8 @@ static void draw2dline(glm::dvec3& s, glm::dvec3& e)
 CGDraw2DLineSeg::CGDraw2DLineSeg(GLFWwindow* window)
 	:UIEventHandler(window), mStart(0.0, 0.0, 0.0), mEnd(0.0, 0.0, 0.0)
 {
+	mPrePos1 = mEnd;
+	mPrePos2 = mEnd;
 }
 CGDraw2DLineSeg::~CGDraw2DLineSeg()
 {

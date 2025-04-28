@@ -22,6 +22,9 @@ public:
 	CGNode* GetSceneData() { return mRoot.get(); }
 
 protected:
+	void DrawWCS(CGCamera* pCamera);
+
+protected:
 	std::shared_ptr<CGCamera> mCamera = nullptr; //场景主相机 
 	std::shared_ptr<CGNode> mRoot = nullptr;  //场景树根节点 
 
