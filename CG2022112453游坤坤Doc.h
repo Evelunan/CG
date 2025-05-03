@@ -16,12 +16,14 @@
 #pragma once
 
 #include <memory> 
+#include <functional>
 class CGScene;
 class CGRenderContext;
 class CGNode;
 class CGGroup;
 class CCGSceneGraphView;
-
+class CCG2022112453游坤坤View;
+enum class EventType;
 
 class CCG2022112453游坤坤Doc : public CDocument
 {
@@ -42,7 +44,7 @@ public:
 	void InstToSceneTree(CTreeCtrl* pTree);//实列节点加入场景树 
 	void InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hInst, CGNode* node);
 	void OnSelectSceneTreeItem(CTreeCtrl* pTree, HTREEITEM hItem); //场景树中选中节点
-
+	HTREEITEM GetSelectedItem() { return mSelectedItem; } //获取选中节点
 
 // 操作
 public:
@@ -76,10 +78,47 @@ protected:
 	// 用于为搜索处理程序设置搜索内容的 Helper 函数
 	void SetSearchContent(const CString& value);
 #endif // SHARED_HANDLERS
+
+public:
+	const double STEP = 10;
+	const double ANGLE = 10;
+	const double SCALE_UP = 1.25;
+	const double SCALE_DOWN = 0.8;
+
+	CCG2022112453游坤坤View* getView();
+	void updateHandle(CCmdUI* pCmdUI, EventType type);
+	void commandHandler();
+	void performTransformation(std::function<void(CGNode*)> transformFunc);
+	void translate2d(double x, double y);
+	void rotate2d(double angle, double cx, double cy);
+	void scale2d(double sx, double sy);
+	void shear2d(double shx, double shy);
+
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dLineseg();
 
 	afx_msg void OnDraw2dLineStrip();
 	afx_msg void OnUpdateDraw2dLineStrip(CCmdUI* pCmdUI);
+	afx_msg void OnTranslate2dLeft();
+	afx_msg void OnTranslate2dRight();
+	afx_msg void OnTranslate2dUp();
+	afx_msg void OnTranslate2dDown();
+	afx_msg void OnRotate2dCounterclockwise();
+	afx_msg void OnRotate2dClockwise();
+	afx_msg void OnScalex2dUp();
+	afx_msg void OnScalex2dDown();
+	afx_msg void OnSacley2dUp();
+	afx_msg void OnScaley2dDown();
+	afx_msg void OnScale2dUp();
+	afx_msg void OnScale2dDown();
+	afx_msg void OnShearx2dPositive();
+	afx_msg void OnShearx2dNegative();
+	afx_msg void OnSheary2dPositive();
+	afx_msg void OnSheary2dNegative();
+	afx_msg void OnMirror2dOrigin();
+	afx_msg void OnMirror2dYeqPosX();
+	afx_msg void OnMirror2dYeqNegX();
+	afx_msg void OnMirrorx2d();
+	afx_msg void OnMirrory2d();
 };

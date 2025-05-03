@@ -1,9 +1,8 @@
 #include "pch.h"
 #include "CGRenderContext.h"
-
+#include "constant.h"
 const glm::vec3 CCGRenderContext::DEFAULT_COLOR = glm::vec3(1.0f, 0.0f, 0.0f);
-// ³£Á¿ PI
-const double PI = 3.14159265358979323846;
+
 
 CCGRenderContext::CCGRenderContext()
 {

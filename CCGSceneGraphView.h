@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include "CGRenderable.h"
 class CCG2022112453游坤坤Doc;
 
 class CCGSceneGraphView : public CTreeView
@@ -26,10 +27,10 @@ protected: // 仅从序列化创建
 protected:
 	HTREEITEM mSelectedItem = nullptr;
 
-
 // 特性
 public:
 	CCG2022112453游坤坤Doc* GetDocument();
+	CGRenderable* GetSelectedObject();
 
 // 操作
 public:

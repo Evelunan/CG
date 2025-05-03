@@ -41,6 +41,29 @@ CCGSceneGraphView::CCGSceneGraphView()
 	// TODO: 在此处添加构造代码
 }
 
+CGRenderable* CCGSceneGraphView::GetSelectedObject()
+{
+	// 获取文档
+	CCG2022112453游坤坤Doc* pDoc = GetDocument();
+	if (!pDoc) {
+		return nullptr;
+	}
+
+	// 获取当前选中的节点
+	HTREEITEM hSelectedItem = pDoc->GetSelectedItem(); // 假设文档中存储了当前选中的节点
+	if (!hSelectedItem) {
+		return nullptr;
+	}
+
+	// 从场景树中获取选中的节点数据
+	CGNode* selectedNode = reinterpret_cast<CGNode*>(GetTreeCtrl().GetItemData(hSelectedItem));
+	if (!selectedNode) {
+		return nullptr;
+	}
+
+	return nullptr;
+}
+
 CCGSceneGraphView::~CCGSceneGraphView()
 {
 	GetTreeCtrl().DeleteAllItems();

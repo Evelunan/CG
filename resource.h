@@ -25,16 +25,37 @@
 #define IDR_MENU1                       313
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_32771                        32771
-#define ID_DRAW2D_LINE_STRIP_DDA        32771
 #define ID_DRAW2D_LINESEG               32772
 #define ID_DRAW2D_LINE_STRIP            32779
+#define ID_TRANSLATE2D_LEFT             32780
+#define ID_TRANSLATE2D_RIGHT            32781
+#define ID_TRANSLATE2D_DOWN             32782
+#define ID_TRANSLATE2D_UP               32785
+#define ID_ROTATE2D_COUNTERCLOCKWISE    32786
+#define ID_ROTATE2D_CLOCKWISE           32787
+#define ID_SCALEX2D_UP                  32788
+#define ID_SCALEX2D_DOWN                32789
+#define ID_SACLEY2D_UP                  32790
+#define ID_SCALEY2D_DOWN                32791
+#define ID_SCALE2D_UP                   32792
+#define ID_SCALE2D_DOWN                 32795
+#define ID_SHEARX2D_NEGATIVE            32797
+#define ID_SHEARX2D_POSITIVE            32798
+#define ID_SHEARY2D_NEGATIVE            32799
+#define ID_SHEARY2D_POSITIVE            32800
+#define ID_MIRRORX2D                    32801
+#define ID_MIRROR2D_YEQ_POS_X           32802
+#define ID_BUTTON19                     32803
+#define ID_MIRROR2D_ORIGIN              32803
+#define ID_MIRRORY2D                    32804
+#define ID_MIRROR2D_YEQ_NEG_X           32806
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        314
-#define _APS_NEXT_COMMAND_VALUE         32780
+#define _APS_NEXT_COMMAND_VALUE         32807
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

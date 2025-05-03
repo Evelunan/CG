@@ -93,6 +93,9 @@
     <ClInclude Include="CGLineStrip.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="constant.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">

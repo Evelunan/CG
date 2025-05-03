@@ -207,6 +207,7 @@
     <ClInclude Include="CGRenderable.h" />
     <ClInclude Include="CGScene.h" />
     <ClInclude Include="CGTransform.h" />
+    <ClInclude Include="constant.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="glIncludes.h" />
     <ClInclude Include="glLinks.h" />

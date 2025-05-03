@@ -38,6 +38,7 @@ bool CGGroup::Render(CGRenderContext* pRC, CGCamera* pCamera)
     {
         (*itr)->Render(pRC, pCamera);
     }
+	return true;
 }
 
 bool CGGroup::AddChild(std::shared_ptr<CGNode> child)

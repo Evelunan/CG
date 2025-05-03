@@ -65,6 +65,7 @@ bool CGScene::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	//pCamera->Projection(pCamera->ProjectionMode()); 
 
 	//»æÖÆ 
-	mRoot->Render(pRC, pCamera);
 	DrawWCS(pCamera);
+
+	mRoot->Render(pRC, pCamera);
 }

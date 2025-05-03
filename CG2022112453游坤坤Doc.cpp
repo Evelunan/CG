@@ -49,6 +49,27 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_COMMAND(ID_DRAW2D_LINESEG, &CCG2022112453游坤坤Doc::OnDraw2dLineseg)
 	ON_COMMAND(ID_DRAW2D_LINE_STRIP, &CCG2022112453游坤坤Doc::OnDraw2dLineStrip)
 	ON_UPDATE_COMMAND_UI(ID_DRAW2D_LINE_STRIP, &CCG2022112453游坤坤Doc::OnUpdateDraw2dLineStrip)
+	ON_COMMAND(ID_TRANSLATE2D_LEFT, &CCG2022112453游坤坤Doc::OnTranslate2dLeft)
+	ON_COMMAND(ID_TRANSLATE2D_RIGHT, &CCG2022112453游坤坤Doc::OnTranslate2dRight)
+	ON_COMMAND(ID_TRANSLATE2D_UP, &CCG2022112453游坤坤Doc::OnTranslate2dUp)
+	ON_COMMAND(ID_TRANSLATE2D_DOWN, &CCG2022112453游坤坤Doc::OnTranslate2dDown)
+	ON_COMMAND(ID_ROTATE2D_COUNTERCLOCKWISE, &CCG2022112453游坤坤Doc::OnRotate2dCounterclockwise)
+	ON_COMMAND(ID_ROTATE2D_CLOCKWISE, &CCG2022112453游坤坤Doc::OnRotate2dClockwise)
+	ON_COMMAND(ID_SCALEX2D_UP, &CCG2022112453游坤坤Doc::OnScalex2dUp)
+	ON_COMMAND(ID_SCALEX2D_DOWN, &CCG2022112453游坤坤Doc::OnScalex2dDown)
+	ON_COMMAND(ID_SACLEY2D_UP, &CCG2022112453游坤坤Doc::OnSacley2dUp)
+	ON_COMMAND(ID_SCALEY2D_DOWN, &CCG2022112453游坤坤Doc::OnScaley2dDown)
+	ON_COMMAND(ID_SCALE2D_UP, &CCG2022112453游坤坤Doc::OnScale2dUp)
+	ON_COMMAND(ID_SCALE2D_DOWN, &CCG2022112453游坤坤Doc::OnScale2dDown)
+	ON_COMMAND(ID_SHEARX2D_POSITIVE, &CCG2022112453游坤坤Doc::OnShearx2dPositive)
+	ON_COMMAND(ID_SHEARX2D_NEGATIVE, &CCG2022112453游坤坤Doc::OnShearx2dNegative)
+	ON_COMMAND(ID_SHEARY2D_POSITIVE, &CCG2022112453游坤坤Doc::OnSheary2dPositive)
+	ON_COMMAND(ID_SHEARY2D_NEGATIVE, &CCG2022112453游坤坤Doc::OnSheary2dNegative)
+	ON_COMMAND(ID_MIRROR2D_ORIGIN, &CCG2022112453游坤坤Doc::OnMirror2dOrigin)
+	ON_COMMAND(ID_MIRROR2D_YEQ_POS_X, &CCG2022112453游坤坤Doc::OnMirror2dYeqPosX)
+	ON_COMMAND(ID_MIRROR2D_YEQ_NEG_X, &CCG2022112453游坤坤Doc::OnMirror2dYeqNegX)
+	ON_COMMAND(ID_MIRRORX2D, &CCG2022112453游坤坤Doc::OnMirrorx2d)
+	ON_COMMAND(ID_MIRRORY2D, &CCG2022112453游坤坤Doc::OnMirrory2d)
 END_MESSAGE_MAP()
 
 
@@ -302,23 +323,108 @@ void CCG2022112453游坤坤Doc::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
+CCG2022112453游坤坤View* CCG2022112453游坤坤Doc::getView()
+{
+	CCG2022112453游坤坤View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022112453游坤坤View))) {
+			view = dynamic_cast<CCG2022112453游坤坤View*>(pView);
+			break;
+		}
+	}
+	return view;
+}
+
+void CCG2022112453游坤坤Doc::updateHandle(CCmdUI* pCmdUI, EventType type)
+{
+	// TODO: 在此添加命令更新用户界面处理程序代码 
+	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
+		type);
+}
+
+void CCG2022112453游坤坤Doc::commandHandler()
+{
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+}
+
+void CCG2022112453游坤坤Doc::performTransformation(std::function<void(CGNode*)> transformFunc)
+{
+	CCG2022112453游坤坤View* view = getView();
+	if (view == nullptr)
+		return;
+	commandHandler();
+
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CTreeCtrl* pTree = &(pSceneGraphView->GetTreeCtrl());
+	CGGeode* node = (CGGeode*)pTree->GetItemData(mSelectedItem);
+
+	if (!node)
+	{
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	CGNode* child = node->GetChild(0);
+	if (!child)
+	{
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	transformFunc(child);
+	//UpdateAllViews(NULL);
+	view->Invalidate(); // 强制视图重绘
+}
+
+void CCG2022112453游坤坤Doc::translate2d(double x, double y)
+{
+	performTransformation([x, y](CGNode* child) {
+		child->Translate(x, y);
+		});
+}
+
+void CCG2022112453游坤坤Doc::rotate2d(double angle, double cx, double cy)
+{
+	performTransformation([angle, cx, cy](CGNode* child) {
+		child->Rotate(angle, cx, cy);
+		});
+}
+
+void CCG2022112453游坤坤Doc::scale2d(double sx, double sy)
+{
+	performTransformation([sx, sy](CGNode* child) {
+		child->Scale(sx, sy);
+		});
+}
+
+void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
+{
+	performTransformation([shx, shy](CGNode* child) {
+		child->ShearXYAxis(shx, shy);
+		});
+}
+
 
 // CCG2022112453游坤坤Doc 命令
 
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
 {
 	// TODO: 在此添加命令更新用户界面处理程序代码 
-	pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
-		EventType::Draw2DLineSeg);
+	//pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
+	//	EventType::Draw2DLineSeg);
+	updateHandle(pCmdUI, EventType::Draw2DLineSeg);
 }
 
 void CCG2022112453游坤坤Doc::OnDraw2dLineseg()
-{
+{/*
 	if (!mSelectedGroup) {
 		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
 		return;
-	}
-	// TODO: 在此添加命令处理程序代码 
+	}*/
+
 	CCG2022112453游坤坤View* view = nullptr;
 	POSITION pos = GetFirstViewPosition();
 	while (pos != NULL)
@@ -340,6 +446,10 @@ void CCG2022112453游坤坤Doc::OnDraw2dLineseg()
 
 void CCG2022112453游坤坤Doc::OnDraw2dLineStrip()
 {
+	/*if (!mSelectedGroup) {
+		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
+		return;
+	}*/
 	CCG2022112453游坤坤View* view = nullptr;
 	POSITION pos = GetFirstViewPosition();
 	while (pos != NULL)
@@ -354,11 +464,11 @@ void CCG2022112453游坤坤Doc::OnDraw2dLineStrip()
 	if (UIEventHandler::CurCommand()) {
 		UIEventHandler::DelCommand();
 	}
-	if (view != nullptr) {
-		UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->DDA_Line)); //创建绘制直线段的命令对象
-		//UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->Bresenham_Line)); //创建绘制直线段的命令对象
-		//UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->Midpoint_Line)); //创建绘制直线段的命令对象
-	}
+	if (view == nullptr)
+		return;
+	UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->DDA_Line)); //创建绘制直线段的命令对象
+	//UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->Bresenham_Line)); //创建绘制直线段的命令对象
+	//UIEventHandler::SetCommand(new CGDraw2DLineStrip(view->glfwWindow(), view->Midpoint_Line)); //创建绘制直线段的命令对象
 }
 
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineStrip(CCmdUI* pCmdUI)
@@ -369,3 +479,118 @@ void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineStrip(CCmdUI* pCmdUI)
 }
 
 
+
+void CCG2022112453游坤坤Doc::OnTranslate2dLeft()
+{
+	translate2d(-STEP, 0);
+}
+
+void CCG2022112453游坤坤Doc::OnTranslate2dRight()
+{
+	translate2d(STEP, 0);
+}
+
+void CCG2022112453游坤坤Doc::OnTranslate2dUp()
+{
+	translate2d(0, STEP);
+}
+
+void CCG2022112453游坤坤Doc::OnTranslate2dDown()
+{
+	translate2d(0, -STEP);
+}
+
+void CCG2022112453游坤坤Doc::OnRotate2dCounterclockwise()
+{
+	rotate2d(ANGLE, 0, 0);
+}
+
+void CCG2022112453游坤坤Doc::OnRotate2dClockwise()
+{
+	rotate2d(-ANGLE, 0, 0);
+}
+
+void CCG2022112453游坤坤Doc::OnScalex2dUp()
+{
+	scale2d(SCALE_UP, 1);
+}
+
+void CCG2022112453游坤坤Doc::OnScalex2dDown()
+{
+	scale2d(SCALE_DOWN, 1);
+}
+
+void CCG2022112453游坤坤Doc::OnSacley2dUp()
+{
+	scale2d(1, SCALE_UP);
+}
+
+void CCG2022112453游坤坤Doc::OnScaley2dDown()
+{
+	scale2d(1, SCALE_DOWN);
+}
+
+void CCG2022112453游坤坤Doc::OnScale2dUp()
+{
+	scale2d(SCALE_UP, SCALE_UP);
+}
+
+void CCG2022112453游坤坤Doc::OnScale2dDown()
+{
+	scale2d(SCALE_DOWN, SCALE_DOWN);
+}
+
+void CCG2022112453游坤坤Doc::OnShearx2dPositive()
+{
+	shear2d(ANGLE, 0);
+}
+
+void CCG2022112453游坤坤Doc::OnShearx2dNegative()
+{
+	shear2d(-ANGLE, 0);
+}
+
+void CCG2022112453游坤坤Doc::OnSheary2dPositive()
+{
+	shear2d(0, ANGLE);
+}
+
+void CCG2022112453游坤坤Doc::OnSheary2dNegative()
+{
+	shear2d(0, -ANGLE);
+}
+
+void CCG2022112453游坤坤Doc::OnMirror2dOrigin()
+{
+	performTransformation([](CGNode* child) {
+		child->MirrorOrigin();
+		});
+}
+
+void CCG2022112453游坤坤Doc::OnMirror2dYeqPosX()
+{
+	performTransformation([](CGNode* child) {
+		child->MirrorYeqPosX();
+		});
+}
+
+void CCG2022112453游坤坤Doc::OnMirror2dYeqNegX()
+{
+	performTransformation([](CGNode* child) {
+		child->MirrorYeNegPX();
+		});
+}
+
+void CCG2022112453游坤坤Doc::OnMirrorx2d()
+{
+	performTransformation([](CGNode* child) {
+		child->MirrorXAxis();
+		});
+}
+
+void CCG2022112453游坤坤Doc::OnMirrory2d()
+{
+	performTransformation([](CGNode* child) {
+		child->MirrorYAxis();
+		});
+}

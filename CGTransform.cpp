@@ -32,4 +32,5 @@ bool CGTransform::Render(CGRenderContext* pRC, CGCamera* pCamera)
     {
         (*itr)->Render(pRC, pCamera);
     }
+    return true;
 }

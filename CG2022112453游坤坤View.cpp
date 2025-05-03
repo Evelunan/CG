@@ -126,7 +126,8 @@ void CCG2022112453”Œ¿§¿§View::RenderScene()
 	//testCircle();
 	//testScanPloygon();
 	//testFill();
-
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
 	CCG2022112453”Œ¿§¿§Doc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 	if (pDoc) {
