@@ -192,6 +192,7 @@
     <ClInclude Include="CGDraw2DLineSeg.h" />
     <ClInclude Include="CGDraw2DLineStrip.h" />
     <ClInclude Include="CGLineStrip.h" />
+    <ClInclude Include="CGModel2DTransform.h" />
     <ClInclude Include="CGRenderContext.h" />
     <ClInclude Include="CCGSceneGraphView.h" />
     <ClInclude Include="CG2022112453游坤坤.h" />
@@ -221,6 +222,7 @@
     <ClCompile Include="CGDraw2DLineSeg.cpp" />
     <ClCompile Include="CGDraw2DLineStrip.cpp" />
     <ClCompile Include="CGLineStrip.cpp" />
+    <ClCompile Include="CGModel2DTransform.cpp" />
     <ClCompile Include="CGRenderContext.cpp" />
     <ClCompile Include="CCGSceneGraphView.cpp" />
     <ClCompile Include="CG2022112453游坤坤.cpp" />

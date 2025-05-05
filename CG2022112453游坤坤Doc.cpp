@@ -34,6 +34,7 @@
 #include "CGDraw2DLineSeg.h" 
 #include "CGDraw2DLineStrip.h"
 #include "CCGSceneGraphView.h" 
+#include "CGModel2DTransform.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -70,6 +71,8 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_COMMAND(ID_MIRROR2D_YEQ_NEG_X, &CCG2022112453游坤坤Doc::OnMirror2dYeqNegX)
 	ON_COMMAND(ID_MIRRORX2D, &CCG2022112453游坤坤Doc::OnMirrorx2d)
 	ON_COMMAND(ID_MIRRORY2D, &CCG2022112453游坤坤Doc::OnMirrory2d)
+	ON_COMMAND(ID_BUTTON_TRANSFORM2D, &CCG2022112453游坤坤Doc::OnButtonTransform2d)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_TRANSFORM2D, &CCG2022112453游坤坤Doc::OnUpdateButtonTransform2d)
 END_MESSAGE_MAP()
 
 
@@ -266,7 +269,7 @@ void CCG2022112453游坤坤Doc::OnDrawThumbnail(CDC& dc, LPRECT lprcBounds)
 	CString strText = _T("TODO: implement thumbnail drawing here");
 	LOGFONT lf;
 
-	CFont* pDefaultGUIFont = CFont::FromHandle((HFONT) GetStockObject(DEFAULT_GUI_FONT));
+	CFont* pDefaultGUIFont = CFont::FromHandle((HFONT)GetStockObject(DEFAULT_GUI_FONT));
 	pDefaultGUIFont->GetLogFont(&lf);
 	lf.lfHeight = 36;
 
@@ -297,7 +300,7 @@ void CCG2022112453游坤坤Doc::SetSearchContent(const CString& value)
 	}
 	else
 	{
-		CMFCFilterChunkValueImpl *pChunk = nullptr;
+		CMFCFilterChunkValueImpl* pChunk = nullptr;
 		ATLTRY(pChunk = new CMFCFilterChunkValueImpl);
 		if (pChunk != nullptr)
 		{
@@ -412,19 +415,11 @@ void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
 
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
 {
-	// TODO: 在此添加命令更新用户界面处理程序代码 
-	//pCmdUI->SetCheck(UIEventHandler::CurCommand() && UIEventHandler::CurCommand()->GetType() ==
-	//	EventType::Draw2DLineSeg);
 	updateHandle(pCmdUI, EventType::Draw2DLineSeg);
 }
 
 void CCG2022112453游坤坤Doc::OnDraw2dLineseg()
-{/*
-	if (!mSelectedGroup) {
-		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
-		return;
-	}*/
-
+{
 	CCG2022112453游坤坤View* view = nullptr;
 	POSITION pos = GetFirstViewPosition();
 	while (pos != NULL)
@@ -593,4 +588,34 @@ void CCG2022112453游坤坤Doc::OnMirrory2d()
 	performTransformation([](CGNode* child) {
 		child->MirrorYAxis();
 		});
+}
+
+void CCG2022112453游坤坤Doc::OnButtonTransform2d()
+{
+	CCG2022112453游坤坤View* view = getView();
+	if (view == nullptr)
+		return;
+	commandHandler();
+
+	CCGSceneGraphView* pSceneGraphView = GetSceneGraphView();
+	CTreeCtrl* pTree = &(pSceneGraphView->GetTreeCtrl());
+	CGGeode* node = (CGGeode*)pTree->GetItemData(mSelectedItem);
+
+	if (!node)
+	{
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	CGNode* child = node->GetChild(0);
+	if (!child)
+	{
+		AfxMessageBox(_T("请先选择需要移动的子节点！"));
+		return;
+	}
+	UIEventHandler::SetCommand(new CGModel2DTransform(child, view->glfwWindow()));
+}
+
+void CCG2022112453游坤坤Doc::OnUpdateButtonTransform2d(CCmdUI* pCmdUI)
+{
+	updateHandle(pCmdUI, EventType::Model2DTransform);
 }

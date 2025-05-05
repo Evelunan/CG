@@ -121,4 +121,6 @@ public:
 	afx_msg void OnMirror2dYeqNegX();
 	afx_msg void OnMirrorx2d();
 	afx_msg void OnMirrory2d();
+	afx_msg void OnButtonTransform2d();
+	afx_msg void OnUpdateButtonTransform2d(CCmdUI* pCmdUI);
 };

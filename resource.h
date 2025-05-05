@@ -45,17 +45,18 @@
 #define ID_SHEARY2D_POSITIVE            32800
 #define ID_MIRRORX2D                    32801
 #define ID_MIRROR2D_YEQ_POS_X           32802
-#define ID_BUTTON19                     32803
 #define ID_MIRROR2D_ORIGIN              32803
 #define ID_MIRRORY2D                    32804
 #define ID_MIRROR2D_YEQ_NEG_X           32806
+#define ID_BUTTON2                      32807
+#define ID_BUTTON_TRANSFORM2D           32807
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        314
-#define _APS_NEXT_COMMAND_VALUE         32807
+#define _APS_NEXT_COMMAND_VALUE         32808
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
