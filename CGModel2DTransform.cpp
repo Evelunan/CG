@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "CGModel2DTransform.h"
-#include "CGDraw2DLineSeg.h" 
 #include "CG2022112453游坤坤Doc.h" //包含View之前要包含Doc 
 #include "CG2022112453游坤坤View.h" 
-CGModel2DTransform::CGModel2DTransform(CGNode* node, GLFWwindow* window)
+
+CGModel2DTransform::CGModel2DTransform(CGRenderable* node, GLFWwindow* window)
 	: UIEventHandler(window), mNode(node)
 {
 	mPivotPoint = glm::dvec3(0.0f, 0.0f, 0.0f); //初始参考点
@@ -34,14 +34,14 @@ int CGModel2DTransform::OnMouseButton(GLFWwindow* window, int button, int action
 		glfwGetCursorPos(window, &xpos, &ypos);
 		lastPoint.x = xpos;
 		lastPoint.y = ypos;
-		
+		lastPoint = view->DCS2WCS(lastPoint); //转换到场景坐标
 		if (button == GLFW_MOUSE_BUTTON_LEFT)
 		{
 			if (mods & GLFW_MOD_SHIFT)
 			{
 				mPivotPoint.x = xpos;
 				mPivotPoint.y = ypos;
-				//mPivotPoint = view->DCS2WCS(mPivotPoint); //转换到场景坐标
+				mPivotPoint = view->DCS2WCS(mPivotPoint); //转换到场景坐标
 
 				std::string str = "Pivot Point: (" + std::to_string(mPivotPoint.x) + ", " + std::to_string(mPivotPoint.y) + ")";
 				view->ShowPrompt(str); //状态栏显示
@@ -70,13 +70,11 @@ int CGModel2DTransform::OnCursorPos(GLFWwindow* window, double xpos, double ypos
 	CCG2022112453游坤坤View* view = (CCG2022112453游坤坤View*)glfwGetWindowUserPointer(window);
 	if (view == nullptr)
 		return -1;
-	dvec3 lastPos = view->DCS2WCS(lastPoint);
 	dvec3 currentPos = view->DCS2WCS(glm::vec3(xpos, ypos, 0.0));
-	dvec3 pivotPos = view->DCS2WCS(mPivotPoint);
 	if (transformType == TransformType::Translate)
 	{
-		double dx = currentPos.x - lastPos.x;
-		double dy = currentPos.y - lastPos.y;
+		double dx = currentPos.x - lastPoint.x;
+		double dy = currentPos.y - lastPoint.y;
 
 		std::string str = "Translate: (" + std::to_string(dx) + ", " + std::to_string(dy) + ")";
 		view->ShowPrompt(str); //状态栏显示
@@ -85,15 +83,19 @@ int CGModel2DTransform::OnCursorPos(GLFWwindow* window, double xpos, double ypos
 	}
 	else if (transformType == TransformType::Rotate)
 	{
-		dvec3 seg1 = lastPos - pivotPos;
-		dvec3 seg2 = currentPos - pivotPos;
+		dvec3 seg1 = lastPoint - mPivotPoint;
+		dvec3 seg2 = currentPos - mPivotPoint;
 
 		double angle = atan2(seg2.y, seg2.x) - atan2(seg1.y, seg1.x);
 		angle = degrees(angle);
-		mNode->Rotate(angle, pivotPos.x, pivotPos.y);
+		mNode->Rotate(angle, mPivotPoint.x, mPivotPoint.y);
+
+		std::string str = "Pivot Point: (" + std::to_string(mPivotPoint.x) + ", " + std::to_string(mPivotPoint.y) + ")";
+		view->ShowPrompt(str); //状态栏显示
 	}
 	lastPoint.x = xpos;
 	lastPoint.y = ypos;
+	lastPoint = view->DCS2WCS(lastPoint); //转换到场景坐标
 	view->Invalidate(); //强制视图重绘
 	return 0;
 }
@@ -111,9 +113,10 @@ int CGModel2DTransform::OnMouseScroll(GLFWwindow* window, double xoffset, double
 	if (!ctrlPressed)
 		return 0;
 	// 计算缩放因子（滚轮向上放大，向下缩小）
+	std::string str = "Pivot Point: (" + std::to_string(mPivotPoint.x) + ", " + std::to_string(mPivotPoint.y) + ")";
+	view->ShowPrompt(str); //状态栏显示
 	double factor = (yoffset > 0) ? 1.1 : 0.9; // 10% 缩放
-	dvec3 pivotPos = view->DCS2WCS(mPivotPoint);
-	mNode->Scale(factor, factor);
+	mNode->Scale(factor, factor, mPivotPoint.x, mPivotPoint.y);
 	view->Invalidate();
 	return 0;
 }

@@ -24,6 +24,7 @@ class CGGroup;
 class CCGSceneGraphView;
 class CCG2022112453”Œ¿§¿§View;
 enum class EventType;
+class CGRenderable;
 
 class CCG2022112453”Œ¿§¿§Doc : public CDocument
 {
@@ -88,7 +89,7 @@ public:
 	CCG2022112453”Œ¿§¿§View* getView();
 	void updateHandle(CCmdUI* pCmdUI, EventType type);
 	void commandHandler();
-	void performTransformation(std::function<void(CGNode*)> transformFunc);
+	void performTransformation(std::function<void(CGRenderable*)> transformFunc);
 	void translate2d(double x, double y);
 	void rotate2d(double angle, double cx, double cy);
 	void scale2d(double sx, double sy);

@@ -25,6 +25,8 @@ public:
 	virtual void Rotate(double angle, double cx, double cy); 
 	//缩放（关于坐标原点缩放）
 	virtual void Scale(double sx, double sy);
+	//缩放（关于指定点缩放）
+	virtual void Scale(double sx, double sy, double cx, double cy);
 	//关于X轴对称（二维） ）
 	virtual void MirrorXAxis();
 	//关于Y轴对称（二维） 

@@ -1,11 +1,12 @@
 #pragma once
 #include "UIEventHandler.h"
-#include "CGNode.h"
+#include "CGRenderable.h"
+class CCG2022112453游坤坤View; //前向声明
 class CGModel2DTransform :public UIEventHandler
 {
 public:
 	//构造函数传入要施加变换的对象，如已绘制的直线段、折线等 
-	CGModel2DTransform(CGNode* node, GLFWwindow* window = nullptr);
+	CGModel2DTransform(CGRenderable* node, GLFWwindow* window = nullptr);
 	~CGModel2DTransform();
 	virtual EventType GetType() override;
 
@@ -18,7 +19,7 @@ public:
 	//取消正在执行的命令（如按ESC键） 
 	virtual int Cancel(GLFWwindow* window) override;
 protected:
-	CGNode* mNode; //被操纵的模型 
+	CGRenderable* mNode; //被操纵的模型 
 	glm::dvec3 mPivotPoint; //变换参考点，假定按住Shift+左键单击获取
 	glm::dvec3 lastPoint; //上次鼠标位置
 	enum class TransformType

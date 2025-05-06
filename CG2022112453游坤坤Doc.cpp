@@ -355,7 +355,7 @@ void CCG2022112453游坤坤Doc::commandHandler()
 	}
 }
 
-void CCG2022112453游坤坤Doc::performTransformation(std::function<void(CGNode*)> transformFunc)
+void CCG2022112453游坤坤Doc::performTransformation(std::function<void(CGRenderable*)> transformFunc)
 {
 	CCG2022112453游坤坤View* view = getView();
 	if (view == nullptr)
@@ -366,46 +366,45 @@ void CCG2022112453游坤坤Doc::performTransformation(std::function<void(CGNode*)> 
 	CTreeCtrl* pTree = &(pSceneGraphView->GetTreeCtrl());
 	CGGeode* node = (CGGeode*)pTree->GetItemData(mSelectedItem);
 
-	if (!node)
+	if (!node || node->GetNumRenderables() <= 0)
 	{
 		AfxMessageBox(_T("请先选择需要移动的子节点！"));
 		return;
 	}
-	CGNode* child = node->GetChild(0);
+	CGRenderable* child = node->GetRenderable(0);
 	if (!child)
 	{
 		AfxMessageBox(_T("请先选择需要移动的子节点！"));
 		return;
 	}
 	transformFunc(child);
-	//UpdateAllViews(NULL);
 	view->Invalidate(); // 强制视图重绘
 }
 
 void CCG2022112453游坤坤Doc::translate2d(double x, double y)
 {
-	performTransformation([x, y](CGNode* child) {
+	performTransformation([x, y](CGRenderable* child) {
 		child->Translate(x, y);
 		});
 }
 
 void CCG2022112453游坤坤Doc::rotate2d(double angle, double cx, double cy)
 {
-	performTransformation([angle, cx, cy](CGNode* child) {
+	performTransformation([angle, cx, cy](CGRenderable* child) {
 		child->Rotate(angle, cx, cy);
 		});
 }
 
 void CCG2022112453游坤坤Doc::scale2d(double sx, double sy)
 {
-	performTransformation([sx, sy](CGNode* child) {
+	performTransformation([sx, sy](CGRenderable* child) {
 		child->Scale(sx, sy);
 		});
 }
 
 void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
 {
-	performTransformation([shx, shy](CGNode* child) {
+	performTransformation([shx, shy](CGRenderable* child) {
 		child->ShearXYAxis(shx, shy);
 		});
 }
@@ -557,35 +556,35 @@ void CCG2022112453游坤坤Doc::OnSheary2dNegative()
 
 void CCG2022112453游坤坤Doc::OnMirror2dOrigin()
 {
-	performTransformation([](CGNode* child) {
+	performTransformation([](CGRenderable* child) {
 		child->MirrorOrigin();
 		});
 }
 
 void CCG2022112453游坤坤Doc::OnMirror2dYeqPosX()
 {
-	performTransformation([](CGNode* child) {
+	performTransformation([](CGRenderable* child) {
 		child->MirrorYeqPosX();
 		});
 }
 
 void CCG2022112453游坤坤Doc::OnMirror2dYeqNegX()
 {
-	performTransformation([](CGNode* child) {
+	performTransformation([](CGRenderable* child) {
 		child->MirrorYeNegPX();
 		});
 }
 
 void CCG2022112453游坤坤Doc::OnMirrorx2d()
 {
-	performTransformation([](CGNode* child) {
+	performTransformation([](CGRenderable* child) {
 		child->MirrorXAxis();
 		});
 }
 
 void CCG2022112453游坤坤Doc::OnMirrory2d()
 {
-	performTransformation([](CGNode* child) {
+	performTransformation([](CGRenderable* child) {
 		child->MirrorYAxis();
 		});
 }
@@ -606,7 +605,9 @@ void CCG2022112453游坤坤Doc::OnButtonTransform2d()
 		AfxMessageBox(_T("请先选择需要移动的子节点！"));
 		return;
 	}
-	CGNode* child = node->GetChild(0);
+	if (node->GetNumRenderables() <= 0)
+		return;
+	CGRenderable* child = node->GetRenderable(0);
 	if (!child)
 	{
 		AfxMessageBox(_T("请先选择需要移动的子节点！"));

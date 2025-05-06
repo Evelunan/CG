@@ -67,7 +67,11 @@ int CGDraw2DLineStrip::OnMouseButton(GLFWwindow* window, int button, int action,
 		end.x = xpos;
 		end.y = ypos;
 		glfwSwapBuffers(window);
-
+		if (points.size() <= 1)
+		{
+			points.clear();
+			return  0;
+		}
 		for ( auto& point : points)
 		{
 			point = view->DCS2WCS(point); //转换到场景坐标

@@ -75,9 +75,9 @@ void CGLineStrip::Rotate(double angle, double cx, double cy)
 {
 	using namespace glm;
 	auto mat = dmat4(1.0);
-	mat = translate(mat, dvec3(-cx, -cy, 0));
-	mat = rotate(mat, radians(angle), dvec3(0, 0, 1.0));
 	mat = translate(mat, dvec3(cx, cy, 0));
+	mat = rotate(mat, radians(angle), dvec3(0, 0, 1.0));
+	mat = translate(mat, dvec3(-cx, -cy, 0));
 	Transform(mat);
 }
 
@@ -86,6 +86,16 @@ void CGLineStrip::Scale(double sx, double sy)
 	using namespace glm;
 	auto mat = dmat4(1.0);
 	mat = scale(mat, dvec3(sx, sy, 1.0));
+	Transform(mat);
+}
+
+void CGLineStrip::Scale(double sx, double sy, double cx, double cy)
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat = translate(mat, dvec3(cx, cy, 0));
+	mat = scale(mat, dvec3(sx, sy, 1.0));
+	mat = translate(mat, dvec3(-cx, -cy, 0));
 	Transform(mat);
 }
 
