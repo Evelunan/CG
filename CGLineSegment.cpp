@@ -46,11 +46,13 @@ bool CGLineSegment::Render(CGRenderContext* pRC, CGCamera* pCamera)
 	return true;
 }
 
-void CGLineSegment::Translate(double tx, double ty)
+void CGLineSegment::Transform(const glm::dmat4& mat)
 {
-	mStart.x += tx;
-	mStart.y += ty;
-
-	mEnd.x += tx;
-	mEnd.y += ty;
+	using namespace glm;
+	auto p1 = mat * dvec4(mStart, 1);
+	auto p2 = mat * dvec4(mEnd, 1);
+	mStart = dvec3(p1.x, p1.y, p1.z);
+	mEnd = dvec3(p2.x, p2.y, p2.z);
+	//this->Translate()
 }
+

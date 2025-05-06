@@ -33,3 +33,132 @@ bool CGRenderable::Render(CGRenderContext* pRC, CGCamera* pCamera)
 
 	return true;
 }
+
+void CGRenderable::Translate(double tx, double ty)
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat = translate(mat, dvec3(tx, ty, 0));
+	Transform(mat);
+}
+
+void CGRenderable::Rotate(double angle, double cx, double cy)
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat = translate(mat, dvec3(cx, cy, 0));
+	mat = rotate(mat, radians(angle), dvec3(0, 0, 1.0));
+	mat = translate(mat, dvec3(-cx, -cy, 0));
+	Transform(mat);
+}
+
+void CGRenderable::Scale(double sx, double sy)
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat = scale(mat, dvec3(sx, sy, 1.0));
+	Transform(mat);
+}
+
+void CGRenderable::Scale(double sx, double sy, double cx, double cy)
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat = translate(mat, dvec3(cx, cy, 0));
+	mat = scale(mat, dvec3(sx, sy, 1.0));
+	mat = translate(mat, dvec3(-cx, -cy, 0));
+	Transform(mat);
+
+}
+
+void CGRenderable::MirrorXAxis()
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat[1][1] = -1.0;
+	Transform(mat);
+}
+
+void CGRenderable::MirrorYAxis()
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat[0][0] = -1.0;
+	Transform(mat);
+}
+
+void CGRenderable::MirrorYeqPosX()
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat[0][0] = 0;
+	mat[1][1] = 0;
+	mat[0][1] = 1;
+	mat[1][0] = 1;
+	Transform(mat);
+}
+
+void CGRenderable::MirrorYeNegPX()
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat[0][0] = 0;
+	mat[1][1] = 0;
+	mat[0][1] = -1;
+	mat[1][0] = -1;
+	Transform(mat);
+}
+
+void CGRenderable::MirrorOrigin()
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat[0][0] = -1.0;
+	mat[1][1] = -1.0;
+	Transform(mat);
+}
+
+void CGRenderable::Mirror(const glm::dvec3& vs, const glm::dvec3& ve)
+{
+	using namespace glm;
+	dmat4 mat = dmat4(1.0);
+	// 平移到原点
+	mat = translate(mat, -vs);
+
+	dvec2 dir = dvec2(ve.x - vs.x, ve.y - vs.y);
+
+	dir = normalize(dir);
+	double angle = atan2(dir.y, dir.x);
+	// 旋转到X轴
+	mat = rotate(mat, -angle, dvec3(0, 0, 1));
+
+	dmat4 mirrorMat = dmat4(1.0);
+	mirrorMat[1][1] = -1.0;
+	// 镜像
+	mat = mirrorMat * mat;
+	// 旋转回去
+	mat = rotate(mat, angle, dvec3(0, 0, 1));
+	// 平移回去
+	mat = translate(mat, vs);
+	// 变换
+	Transform(mat);
+}
+
+void CGRenderable::ShearXAxis(double shx)
+{
+	ShearXYAxis(shx, 0);
+}
+
+void CGRenderable::ShearYAxis(double shy)
+{
+	ShearXYAxis(0, shy);
+}
+
+void CGRenderable::ShearXYAxis(double shx, double shy)
+{
+	using namespace glm;
+	auto mat = dmat4(1.0);
+	mat[0][1] = tan(radians(shx));
+	mat[1][0] = tan(radians(shy));
+	Transform(mat);
+}

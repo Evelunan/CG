@@ -249,6 +249,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CG2022112453游坤坤.reg" />
+    <None Include="readme.md">
+      <SubType>
+      </SubType>
+    </None>
     <None Include="res\CG2022112453.rc2" />
     <None Include="res\ribbon.mfcribbon-ms" />
   </ItemGroup>

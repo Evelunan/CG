@@ -176,6 +176,7 @@
     <None Include="res\CG2022112453.rc2">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CG2022112453.rc">
