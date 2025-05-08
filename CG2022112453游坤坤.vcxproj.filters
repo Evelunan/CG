@@ -108,6 +108,12 @@
     <ClInclude Include="CGCube.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CGSphere.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -183,6 +189,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CGCube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGSphere.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereDialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

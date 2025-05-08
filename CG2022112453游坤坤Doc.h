@@ -17,6 +17,7 @@
 
 #include <memory> 
 #include <functional>
+#include "glIncludes.h"
 class CGScene;
 class CGRenderContext;
 class CGNode;
@@ -95,6 +96,11 @@ public:
 	void scale2d(double sx, double sy);
 	void shear2d(double shx, double shy);
 
+
+	void drawSphere(glm::vec3 point, float radius, int slice, int stack);
+	void draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center);
+
+
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dLineseg();
@@ -124,4 +130,6 @@ public:
 	afx_msg void OnMirrory2d();
 	afx_msg void OnButtonTransform2d();
 	afx_msg void OnUpdateButtonTransform2d(CCmdUI* pCmdUI);
+	afx_msg void OnButtonDraw3dSphere();
+	afx_msg void OnButtonCube();
 };
