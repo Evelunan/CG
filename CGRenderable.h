@@ -46,4 +46,32 @@ public:
 	virtual void ShearXYAxis(double shx, double shy);
 	//几何变换（左乘给定矩阵） 
 	virtual void Transform(const glm::dmat3& mat) {}
+
+
+protected:
+	CGRenderable(const CGRenderable& other) : CGNode(other)
+	{
+	}
+	CGRenderable& operator=(const CGRenderable&) = default;
+	virtual void buildDisplayList() {} //派生类中重写 
+
+public:
+	bool isDisplayListEnabled() const { return mDisplayListEnabled; }
+	void setDisplayListEnabled(bool enabled) { mDisplayListEnabled = enabled; }
+	bool displayListDirty() const { return mDisplayListDirty; }
+	void setDisplayListDirty(bool dirty) { mDisplayListDirty = dirty; }
+	GLuint displayList() const { return mDisplayList; }
+	void setDisplayList(unsigned int disp_list) { mDisplayList = disp_list; }
+	void deleteDisplayList()
+	{
+		if (displayList())
+			glDeleteLists(displayList(), 1);
+		mDisplayList = 0;
+	}
+
+
+protected:
+	bool mDisplayListEnabled = false;
+	bool mDisplayListDirty = true;
+	GLuint mDisplayList = 0;
 };

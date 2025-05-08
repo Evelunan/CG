@@ -1,5 +1,6 @@
 #pragma once 
 #include "CGObject.h" 
+#include "CGRenderState.h"
 #include <vector> 
 
 //预声明（本文件中只用到相关类指针，为避免交叉包含） 
@@ -52,6 +53,8 @@ protected:
 	std::shared_ptr<CGCallback> mUpdateCallback = nullptr;
 	friend class CGGroup;
 	friend class CGRenderable;
+
+
 protected:
 	//支持共享子节点 
 	ParentList mParents;    //一个模型关联到多个图形节点（产生多个实例节点） 
@@ -59,6 +62,20 @@ protected:
 	void RemoveParent(CGGroup* parent);
 
 
+protected:
+	bool mBoundsDirty = true;
+	std::shared_ptr<CGRenderStateSet> mRenderStateSet;
+	//对象包围盒是否需要重新计算 
 public:
-	
+	bool boundDirty() const { return mBoundsDirty; } //对象包围盒是否需要重新计算 
+	void dirtyBound();   //设置包围盒变化需要重新计算 
+	//计算到世界坐标系矩阵（到场景根节点）
+	virtual glm::mat4 worldMatrix();
+	CGRenderStateSet* gocRenderStateSet() {
+		if (!mRenderStateSet)
+			mRenderStateSet = std::make_shared<CGRenderStateSet>();
+		return mRenderStateSet.get();
+	}
+	CGRenderStateSet* getRenderStateSet() { return mRenderStateSet.get(); }
+	const CGRenderStateSet* getRenderStateSet() const { return mRenderStateSet.get(); }
 };

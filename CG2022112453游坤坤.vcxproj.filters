@@ -99,6 +99,15 @@
     <ClInclude Include="CGModel2DTransform.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CGRenderState.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="TessellationHints.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGCube.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -165,6 +174,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CGModel2DTransform.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGRenderState.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TessellationHints.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGCube.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

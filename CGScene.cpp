@@ -8,6 +8,8 @@ IMPLEMENT_SERIAL(CGScene, CGObject, 1)
 
 CGScene::CGScene()
 {
+	SetMainCamera(std::make_shared<CGCamera>());
+	SetSceneData(std::make_shared<CGTransform>());
 }
 CGScene::~CGScene()
 {
@@ -56,6 +58,9 @@ void CGScene::DrawWCS(CGCamera* pCamera)
 //‰÷»æ≥°æ∞ 
 bool CGScene::Render(CGRenderContext* pRC, CGCamera* pCamera)
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	if (pRC == nullptr || pCamera == nullptr)
 		return false;
 

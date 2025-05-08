@@ -1,7 +1,7 @@
 #include "pch.h" 
 #include "CGNode.h" 
 #include "CGGroup.h" 
-
+#include "CGTransform.h" 
 IMPLEMENT_SERIAL(CGNode, CGObject, 1)
 
 CGNode::CGNode()
@@ -49,4 +49,22 @@ void CGNode::RemoveParent(CGGroup* parent)
 {
 	auto pitr = std::find(mParents.begin(), mParents.end(), parent);
 	if (pitr != mParents.end()) mParents.erase(pitr);
+}
+void CGNode::dirtyBound()
+{
+	if (!mBoundsDirty) {
+		mBoundsDirty = true;
+		for (auto itr = mParents.begin(); itr != mParents.end(); ++itr) {
+			(*itr)->dirtyBound();
+		}
+	}
+}
+glm::mat4 CGNode::worldMatrix()
+{
+	glm::mat4 mat(1.0f);
+	if (GetParent(0) && GetParent(0)->asTransform()) { //场景实例节点只有一个父节点 
+		CGTransform* trans = GetParent(0)->asTransform();
+		mat = trans->worldMatrix() * mat;
+	}
+	return mat;
 }
