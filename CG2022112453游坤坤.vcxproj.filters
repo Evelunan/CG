@@ -111,7 +111,7 @@
     <ClInclude Include="CGSphere.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="SphereDialog.h">
+    <ClInclude Include="MyDialog.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -194,7 +194,7 @@
     <ClCompile Include="CGSphere.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="SphereDialog.cpp">
+    <ClCompile Include="MyDialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

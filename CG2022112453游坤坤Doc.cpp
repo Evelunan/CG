@@ -38,7 +38,7 @@
 #include "TessellationHints.h"
 #include "CGCube.h"
 #include "CGSphere.h"
-#include "SphereDialog.h"
+#include "MyDialog.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -416,51 +416,6 @@ void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
 		});
 }
 
-void CCG2022112453游坤坤Doc::drawSphere(glm::vec3 point, float radius, int slice, int stack)
-{
-	auto c = std::make_shared<CGSphere>();
-	auto h = std::make_shared<TessellationHints>();
-
-	c->setRadius(radius);
-	h->setTargetSlices(slice);
-	h->setTargetStacks(stack);
-
-	c->setTessellationHints(h);
-	c->setDisplayListEnabled(true);
-
-	//右长方体实例节点 
-	auto t1 = std::make_shared<CGTransform>(); //实列组节点 
-	auto e1 = std::make_shared<CGGeode>();  //实列叶节点 
-	auto color1 = std::make_shared<CGColor>(); //属性 
-	color1->setValue(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f)); //黄色 
-	e1->gocRenderStateSet()->setRenderState(color1, -1); //设置节点属性
-
-	t1->translate(point.x, point.y, point.z);
-	//t1->translate(100, 0, 0);
-	t1->rotate(45, 1, 1, 1);
-	t1->scale(100, 100, 100);
-	e1->AddChild(c);
-	t1->AddChild(e1);
-
-	mScene->GetSceneData()->asGroup()->AddChild(t1);
-
-	//左长方体节点 
-	auto t2 = std::make_shared<CGTransform>(); //实列组节点 
-	auto e2 = std::make_shared<CGGeode>();  //实列叶节点 
-	auto color2 = std::make_shared<CGColor>(); //属性 
-	color2->setValue(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)); //蓝色 
-	e2->gocRenderStateSet()->setRenderState(color2, -1); //设置节点属性 
-	auto p = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
-	e2->gocRenderStateSet()->setRenderState(p, -1); //设置节点属性 
-
-	t2->translate(-point.x, point.y, point.z);
-	//t2->translate(-100, 0, 0);
-	t2->rotate(45, 1, 1, 1);
-	t2->scale(100, 100, 100);
-	e2->AddChild(c);
-	t2->AddChild(e2);
-	mScene->GetSceneData()->asGroup()->AddChild(t2);
-}
 
 void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center)
 {
@@ -707,7 +662,7 @@ void CCG2022112453游坤坤Doc::OnUpdateButtonTransform2d(CCmdUI* pCmdUI)
 void CCG2022112453游坤坤Doc::OnButtonDraw3dSphere()
 {
 	using namespace std;
-	SphereDialog dialog;
+	MyDialog dialog;
 	dialog.setDrawType(DrawType::SPHERE);
 	if (dialog.DoModal() == IDOK)
 	{
@@ -729,7 +684,6 @@ void CCG2022112453游坤坤Doc::OnButtonDraw3dSphere()
 		sphere->setTessellationHints(hints);
 		sphere->setDisplayListEnabled(true);
 		draw3D(sphere, point);
-		//drawSphere(point, radius, slice,stack);
 		UpdateAllViews(NULL);
 	}
 }
@@ -737,7 +691,7 @@ void CCG2022112453游坤坤Doc::OnButtonDraw3dSphere()
 void CCG2022112453游坤坤Doc::OnButtonCube()
 {
 	using namespace std;
-	SphereDialog dialog;
+	MyDialog dialog;
 	dialog.setDrawType(DrawType::CUBE);
 	if (dialog.DoModal() == IDOK)
 	{
@@ -747,18 +701,12 @@ void CCG2022112453游坤坤Doc::OnButtonCube()
 		float width = dialog.width;
 		float height = dialog.height;
 
-		int slice = dialog.slice;
-		int stack = dialog.mstack;
-
 		point.x = dialog.xpos;
 		point.y = dialog.ypos;
 		point.z = dialog.zpos;
 
 		auto cube = make_shared<CGCube>(len, width, height);
 		auto hints = make_shared< TessellationHints>();
-
-		hints->setTargetSlices(slice);
-		hints->setTargetStacks(stack);
 
 		cube->setTessellationHints(hints);
 		cube->setDisplayListEnabled(true);

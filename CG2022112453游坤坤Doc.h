@@ -97,7 +97,6 @@ public:
 	void shear2d(double shx, double shy);
 
 
-	void drawSphere(glm::vec3 point, float radius, int slice, int stack);
 	void draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center);
 
 

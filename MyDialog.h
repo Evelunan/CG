@@ -2,19 +2,19 @@
 #include "afxdialogex.h"
 #include "glIncludes.h"
 
-// SphereDialog 对话框
+// MyDialog 对话框
 enum class DrawType
 {
 	SPHERE,
 	CUBE
 };
-class SphereDialog : public CDialogEx
+class MyDialog : public CDialogEx
 {
-	DECLARE_DYNAMIC(SphereDialog)
+	DECLARE_DYNAMIC(MyDialog)
 
 public:
-	SphereDialog(CWnd* pParent = nullptr);   // 标准构造函数
-	virtual ~SphereDialog();
+	MyDialog(CWnd* pParent = nullptr);   // 标准构造函数
+	virtual ~MyDialog();
 
 	// 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -32,18 +32,22 @@ public:
 
 	void drawSphere();
 	void drawCube();
-
+	void hideItem(int nId);
+	void hideItems(int nIds[], int len);
 public:
 	afx_msg void OnBnClickedOk();
 	virtual BOOL OnInitDialog();
-	float radius;
-	int slice;
-	int mstack;
+
+	DrawType type = DrawType::CUBE;
+
 	float xpos;
 	float ypos;
 	float zpos;
 
-	DrawType type = DrawType::CUBE;
+	float radius;
+	int slice;
+	int mstack;
+
 	float height;
 	float len;
 	float width;
