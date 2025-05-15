@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤View, CView)
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
 	ON_WM_SIZE()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CCG2022112453游坤坤View 构造/析构
@@ -144,6 +145,18 @@ CCG2022112453游坤坤View::CCG2022112453游坤坤View() noexcept
 
 }
 
+UINT CCG2022112453游坤坤View::toggleFrameTimer()
+{
+	if (!mTimer) {
+		mTimer = SetTimer(1, 20, NULL);// 启动50FPS定时器（20毫秒间隔） 
+	}
+	else {
+		KillTimer(mTimer);
+		mTimer = 0;
+	}
+	return mTimer;
+}
+
 void CCG2022112453游坤坤View::ShowPrompt(const std::string& str)
 {
 	CMainFrame* pMainWnd = (CMainFrame*)AfxGetMainWnd();
@@ -190,6 +203,7 @@ bool CCG2022112453游坤坤View::AddRenderable(std::shared_ptr<CGNode> r) const
 
 CCG2022112453游坤坤View::~CCG2022112453游坤坤View()
 {
+	if (mTimer) KillTimer(mTimer);  //关闭定时器 
 	if (m_glfwWindow) {
 		glfwDestroyWindow(m_glfwWindow);
 		glfwTerminate();
@@ -312,4 +326,13 @@ void CCG2022112453游坤坤View::OnSize(UINT nType, int cx, int cy)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 	}
+}
+
+void CCG2022112453游坤坤View::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	if (nIDEvent == mTimer) {
+		RenderScene();
+	}
+	__super::OnTimer(nIDEvent);
 }

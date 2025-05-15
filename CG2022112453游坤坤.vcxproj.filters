@@ -114,6 +114,9 @@
     <ClInclude Include="MyDialog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="RobotBodyTransform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -195,6 +198,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="MyDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="RobotBodyTransform.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

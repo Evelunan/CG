@@ -13,7 +13,7 @@ class CGGeode;
 class CGRenderable;
 class CGGeometry;
 
-class CGNode : public CGObject
+class CGNode : public CGCallback
 {
 	DECLARE_SERIAL(CGNode)
 public:
@@ -78,4 +78,7 @@ public:
 	}
 	CGRenderStateSet* getRenderStateSet() { return mRenderStateSet.get(); }
 	const CGRenderStateSet* getRenderStateSet() const { return mRenderStateSet.get(); }
+// สตั้5
+public:
+	virtual void update() { if (mUpdateCallback) mUpdateCallback->run(this, mUpdateCallback->userData()); }
 };

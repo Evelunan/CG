@@ -49,6 +49,14 @@ public:
 protected:
     virtual ~CGCallback() = default;
     bool mEnabled;
+
+//ÊµÑé5
+public:
+    const CGObject* userData() const { return mUserData.get(); }
+    CGObject* userData() { return mUserData.get(); }
+    void setUserData(std::shared_ptr<CGObject> user_data) { mUserData = user_data; }
+private:
+    std::shared_ptr<CGObject> mUserData = nullptr;
 };
 
-#endif //_CGObject_H_INCLUDED
+#endif //_CGObject_H_INCLUDED¡¤

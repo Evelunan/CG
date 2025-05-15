@@ -32,6 +32,9 @@ class CCG2022112453游坤坤Doc : public CDocument
 protected: // 仅从序列化创建
 	CCG2022112453游坤坤Doc() noexcept;
 	DECLARE_DYNCREATE(CCG2022112453游坤坤Doc)
+// 实验5
+protected:
+	UINT mTimer = 0; //定时器 
 
 // 特性
 public:
@@ -131,4 +134,7 @@ public:
 	afx_msg void OnUpdateButtonTransform2d(CCmdUI* pCmdUI);
 	afx_msg void OnButtonDraw3dSphere();
 	afx_msg void OnButtonCube();
+	afx_msg void OnButtonTimer();
+	afx_msg void OnUpdateButtonTimer(CCmdUI* pCmdUI);
+	afx_msg void OnButtonRobot();
 };

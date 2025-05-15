@@ -37,6 +37,12 @@ protected: // 仅从序列化创建
 	CCG2022112453游坤坤View() noexcept;
 	DECLARE_DYNCREATE(CCG2022112453游坤坤View)
 
+// 实验5
+protected:
+	UINT mTimer = 0;  //定时器 
+public:
+	UINT toggleFrameTimer();  //触发/关闭定时器 
+
 // 特性
 public:
 	CCG2022112453游坤坤Doc* GetDocument() const;
@@ -79,6 +85,7 @@ public:
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 #ifndef _DEBUG  // CG2022112453游坤坤View.cpp 中的调试版本

@@ -39,6 +39,7 @@
 #include "CGCube.h"
 #include "CGSphere.h"
 #include "MyDialog.h"
+#include "RobotBodyTransform.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -79,6 +80,9 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_BUTTON_TRANSFORM2D, &CCG2022112453游坤坤Doc::OnUpdateButtonTransform2d)
 	ON_COMMAND(ID_BUTTON_DRAW3D_SPHERE, &CCG2022112453游坤坤Doc::OnButtonDraw3dSphere)
 	ON_COMMAND(ID_BUTTON_CUBE, &CCG2022112453游坤坤Doc::OnButtonCube)
+	ON_COMMAND(ID_BUTTON_TIMER, &CCG2022112453游坤坤Doc::OnButtonTimer)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_TIMER, &CCG2022112453游坤坤Doc::OnUpdateButtonTimer)
+	ON_COMMAND(ID_BUTTON_ROBOT, &CCG2022112453游坤坤Doc::OnButtonRobot)
 END_MESSAGE_MAP()
 
 
@@ -445,6 +449,11 @@ void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::v
 	geode->AddChild(render);
 	tran1->AddChild(geode);
 	mScene->GetSceneData()->asGroup()->AddChild(tran1);
+
+	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+	//tran1->setUserData(data);
+	//tran1->SetUpdateCallback(rc);
 }
 
 
@@ -713,4 +722,32 @@ void CCG2022112453游坤坤Doc::OnButtonCube()
 		draw3D(cube, point);
 		UpdateAllViews(NULL);
 	}
+}
+
+void CCG2022112453游坤坤Doc::OnButtonTimer()
+{
+	// TODO: 在此添加命令处理程序代码 
+	CCG2022112453游坤坤View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022112453游坤坤View))) {
+			view = dynamic_cast<CCG2022112453游坤坤View*>(pView);
+			break;
+		}
+	}
+	if (view != nullptr) {
+		mTimer = view->toggleFrameTimer();// 启动定时器 
+	}
+}
+
+void CCG2022112453游坤坤Doc::OnUpdateButtonTimer(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(mTimer != 0);
+}
+
+void CCG2022112453游坤坤Doc::OnButtonRobot()
+{
+	
 }

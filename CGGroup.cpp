@@ -9,6 +9,18 @@ CGGroup::CGGroup()
 {
 }
 
+void CGGroup::update()
+{
+    if (mUpdateCallback)
+        mUpdateCallback->run(this, userData());
+    for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr)
+    {
+        if ((*itr)->GetUpdateCallback()) {
+            (*itr)->GetUpdateCallback()->run((*itr).get(), (*itr)->userData());
+        }
+    }
+}
+
 CGGroup::~CGGroup()
 {
     //ÍÑÀë¸¸½Úµã 

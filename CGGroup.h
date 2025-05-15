@@ -25,7 +25,9 @@ public:
 	const CGNode* GetChild(unsigned  int i) const;
 	bool ContainsNode(const CGNode* node) const;
 	unsigned int GetChildIndex(const CGNode* node) const;
-
+//สตั้5
+public:
+	virtual void update() override;
 protected:
 	virtual ~CGGroup();
 	NodeList mChildren;
