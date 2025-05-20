@@ -38,31 +38,39 @@ public:
 };
 
 
-class ArmSwingParam : public RobotBodyTransformParam {
+class ArmSwingParam : public CGObject
+{
 public:
 	void setArmAngle(float angle) { mArmAngle = angle; }
 	float armAngle() const { return mArmAngle; }
 
 	void setStep(float s) { mStep = s; }
-	float getStep() const { return mStep; }
+	float step() const { return mStep; }
 
+	void setMaxAngle(float angel) { mMaxAngle = angel; }
+	float maxAngle()const { return mMaxAngle; }
+
+	void setAxis(glm::vec3 axis) { mAxis = axis; }
+	glm::vec3 Axis() { return mAxis; }
 protected:
 	float mArmAngle = -45.0f; // 初始角度
 	float mStep = 2.0f;
+	float mMaxAngle = 45.0f;
+	// 默认z轴
+	glm::vec3 mAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 };
 
-class ArmSwingCallback : public RobotBodyRotate {
+class ArmSwingCallback : public CGCallback {
 public:
 	virtual bool run(CGObject* object, void* data) override {
 
-		RobotBodyRotate::run(object, data);
 
-		auto leftUpperArm = dynamic_cast<CGTransform*>(object);
-		if (!leftUpperArm) {
+
+		auto node = dynamic_cast<CGTransform*>(object);
+		if (!node) {
 
 			return false;
 		}
-
 		// 直接转换 data 到 ArmSwingParam*
 		ArmSwingParam* param = nullptr;
 		if (data) {
@@ -73,65 +81,25 @@ public:
 
 		// 更新角度
 		if (param) { // 确保 param 不为 nullptr
-			float currentStep = param->getStep();
+			float currentStep = param->step();
 			float newAngle = angle + currentStep;
 
-			if (newAngle >= 45.0f) {
-				newAngle = 45.0f;
-				currentStep = -2.0f;
+			if (newAngle >= param->maxAngle()) {
+				newAngle = param->maxAngle();
+				param->setStep(-param->step());
 			}
-			else if (newAngle <= -45.0f) {
-				newAngle = -45.0f;
-				currentStep = 2.0f;
+			else if (newAngle <= -param->maxAngle()) {
+				newAngle = -param->maxAngle();
+				param->setStep(-param->step());
 			}
-			param->setStep(currentStep);
+			//param->setStep(currentStep);
 			param->setArmAngle(newAngle);
 		}
 		// 如果 param 为 nullptr，使用默认角度 -45.0f
-		leftUpperArm->rotate(glm::radians(param ? param->armAngle() : 2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-		//leftUpperArm->rotate(glm::radians( param->armAngle()), glm::vec3(0.0f, 0.0f, 1.0f));
+		node->rotate(glm::radians(param ? param->armAngle() : 2.0f), param->Axis());
+		//node->rotate(glm::radians( param->armAngle()), glm::vec3(0.0f, 0.0f, 1.0f));
 
 
 		return true;
 	}
 };
-
-//class WalkingCallback : public CGCallback {
-//public:
-//	virtual bool run(CGObject* object, void* data) override {
-//		if (!mEnabled || !object)
-//			return false;
-//
-//		auto rightLeg = dynamic_cast<CGTransform*>(object->getChildByName("rightLeg"));
-//		auto leftLeg = dynamic_cast<CGTransform*>(object->getChildByName("leftLeg"));
-//
-//		WalkingParam* param = nullptr;
-//		if (data) {
-//			param = dynamic_cast<WalkingParam*>((RobotBodyTransformParam*)data);
-//		}
-//
-//		float stepHeight = param ? param->stepHeight() : -15.0f; // 默认步高
-//
-//		if (stepHeight >= 15.0f) {
-//			stepHeight = -15.0f; // 反向
-//		}
-//		else {
-//			stepHeight += 1.0f; // 增加步高
-//		}
-//
-//		if (param) {
-//			param->setStepHeight(stepHeight);
-//		}
-//
-//		if (rightLeg && leftLeg) {
-//			// 左腿抬起，右腿放下
-//			leftLeg->translate(0.0f, stepHeight, 0.0f);
-//			leftLeg->rotate(glm::radians(-30.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-//			rightLeg->translate(0.0f, -stepHeight, 0.0f);
-//			rightLeg->rotate(glm::radians(30.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-//
-//			return true;
-//		}
-//		return false;
-//	}
-//};

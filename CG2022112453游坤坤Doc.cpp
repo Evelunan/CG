@@ -553,8 +553,8 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	rightUpperArm->AddChild(rightLowerArm);
 
 	rightArm->AddChild(rightUpperArm);
-	rightArm->translate(60, 30, 0);
-	rightArm->rotate(45, 0, 0, 1); // 将手臂旋转45度
+	rightArm->translate(60, 50, 0);
+	rightArm->rotate(145, 0, 0, 1); // 将手臂旋转45度
 	root->AddChild(rightArm);
 
 	// create leftArm
@@ -567,8 +567,8 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	leftUpperArm->AddChild(leftLowerArm);
 
 	leftArm->AddChild(leftUpperArm);
-	leftArm->translate(-60, 30, 0);
-	leftArm->rotate(-45, 0, 0, 1); // 将手臂旋转45度
+	leftArm->translate(-60, 50, 0);
+	leftArm->rotate(-145, 0, 0, 1); // 将手臂旋转45度
 	root->AddChild(leftArm);
 
 
@@ -605,19 +605,33 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 
 	root->AddChild(leftLeg);
 
-
-	//root->rotate(45, 1, 1, 1);
 	AddNode(root);
 
-	std::shared_ptr<ArmSwingParam> armParam = std::make_shared<ArmSwingParam>();
-	std::shared_ptr<ArmSwingCallback> armCallback = std::make_shared<ArmSwingCallback>();
-	root->setUserData(armParam);
-	root->SetUpdateCallback(armCallback);
+	std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+	std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+	root->setUserData(data);
+	root->SetUpdateCallback(rc);
 
-	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
-	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
-	//root->setUserData(data);
-	//root->SetUpdateCallback(rc);
+	shared_ptr<ArmSwingParam> leftArmParam = make_shared<ArmSwingParam>();
+	shared_ptr<ArmSwingParam> rightArmParam = make_shared< ArmSwingParam>();
+	rightArmParam->setMaxAngle(45);
+	rightArmParam->setArmAngle(45);
+	rightArmParam->setStep(-2);
+
+	shared_ptr<ArmSwingCallback> armCallback = make_shared<ArmSwingCallback>();
+
+	leftArm->setUserData(leftArmParam);
+	leftArm->SetUpdateCallback(armCallback);
+
+	rightArm->setUserData(rightArmParam);
+	rightArm->SetUpdateCallback(armCallback);
+
+
+	leftLeg->setUserData(leftArmParam);
+	leftLeg->SetUpdateCallback(armCallback);
+
+	rightLeg->setUserData(rightArmParam);
+	rightLeg->SetUpdateCallback(armCallback);
 
 	// 刷新视图
 	UpdateAllViews(NULL);
