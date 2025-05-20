@@ -612,26 +612,26 @@ void CCG2022112453”Œ¿§¿§Doc::buildRobot() {
 	root->setUserData(data);
 	root->SetUpdateCallback(rc);
 
-	shared_ptr<ArmSwingParam> leftArmParam = make_shared<ArmSwingParam>();
-	shared_ptr<ArmSwingParam> rightArmParam = make_shared< ArmSwingParam>();
-	rightArmParam->setMaxAngle(45);
-	rightArmParam->setArmAngle(45);
-	rightArmParam->setStep(-2);
+	shared_ptr<RotateParam> leftParam = make_shared<RotateParam>();
+	shared_ptr<RotateParam> rightParam = make_shared< RotateParam>();
+	rightParam->setMaxAngle(45);
+	rightParam->setAngle(45);
+	rightParam->setStep(-2);
 
-	shared_ptr<ArmSwingCallback> armCallback = make_shared<ArmSwingCallback>();
+	shared_ptr<RotateCallback> callback = make_shared<RotateCallback>();
 
-	leftArm->setUserData(leftArmParam);
-	leftArm->SetUpdateCallback(armCallback);
+	leftArm->setUserData(leftParam);
+	leftArm->SetUpdateCallback(callback);
 
-	rightArm->setUserData(rightArmParam);
-	rightArm->SetUpdateCallback(armCallback);
+	rightArm->setUserData(rightParam);
+	rightArm->SetUpdateCallback(callback);
 
 
-	leftLeg->setUserData(leftArmParam);
-	leftLeg->SetUpdateCallback(armCallback);
+	leftLeg->setUserData(leftParam);
+	leftLeg->SetUpdateCallback(callback);
 
-	rightLeg->setUserData(rightArmParam);
-	rightLeg->SetUpdateCallback(armCallback);
+	rightLeg->setUserData(rightParam);
+	rightLeg->SetUpdateCallback(callback);
 
 	// À¢–¬ ”Õº
 	UpdateAllViews(NULL);

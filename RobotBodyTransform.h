@@ -37,12 +37,11 @@ public:
 	}
 };
 
-
-class ArmSwingParam : public CGObject
+class RotateParam : public CGObject
 {
 public:
-	void setArmAngle(float angle) { mArmAngle = angle; }
-	float armAngle() const { return mArmAngle; }
+	void setAngle(float angle) { mAngle = angle; }
+	float armAngle() const { return mAngle; }
 
 	void setStep(float s) { mStep = s; }
 	float step() const { return mStep; }
@@ -53,14 +52,14 @@ public:
 	void setAxis(glm::vec3 axis) { mAxis = axis; }
 	glm::vec3 Axis() { return mAxis; }
 protected:
-	float mArmAngle = -45.0f; // 初始角度
+	float mAngle = -45.0f; // 初始角度
 	float mStep = 2.0f;
 	float mMaxAngle = 45.0f;
 	// 默认z轴
 	glm::vec3 mAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 };
 
-class ArmSwingCallback : public CGCallback {
+class RotateCallback : public CGCallback {
 public:
 	virtual bool run(CGObject* object, void* data) override {
 
@@ -72,9 +71,9 @@ public:
 			return false;
 		}
 		// 直接转换 data 到 ArmSwingParam*
-		ArmSwingParam* param = nullptr;
+		RotateParam* param = nullptr;
 		if (data) {
-			param = static_cast<ArmSwingParam*>(data); // 假设 data 指向的是 ArmSwingParam
+			param = static_cast<RotateParam*>(data); // 假设 data 指向的是 ArmSwingParam
 		}
 
 		float angle = param ? param->armAngle() : -45.0f; // 默认角度
@@ -93,13 +92,11 @@ public:
 				param->setStep(-param->step());
 			}
 			//param->setStep(currentStep);
-			param->setArmAngle(newAngle);
+			param->setAngle(newAngle);
 		}
 		// 如果 param 为 nullptr，使用默认角度 -45.0f
 		node->rotate(glm::radians(param ? param->armAngle() : 2.0f), param->Axis());
 		//node->rotate(glm::radians( param->armAngle()), glm::vec3(0.0f, 0.0f, 1.0f));
-
-
 		return true;
 	}
 };
