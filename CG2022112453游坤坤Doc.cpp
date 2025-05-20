@@ -557,6 +557,43 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	rightArm->rotate(145, 0, 0, 1); // 将手臂旋转45度
 	root->AddChild(rightArm);
 
+	// 创建右手掌
+	auto rightPalm = createBoxPart(25, 10, 20, gray, "rightPalm");
+	rightPalm->translate(0, -30, 0); // 根据手臂长度调整位置
+	rightLowerArm->AddChild(rightPalm);
+
+	// 定义手指的基本参数
+	float fingerWidth = 4.0f; // 手指宽度
+	float fingerHeight = 20.0f; // 手指长度
+	float fingerSpacing = 6.0f; // 手指之间的间距
+
+	// 创建右手的手指
+	// 拇指
+	auto thumb = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "thumb");
+	thumb->translate(-8.0f, -15.0f, 10.0f); // 调整到合适的位置
+	rightPalm->AddChild(thumb);
+
+	// 食指
+	auto indexFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "indexFinger");
+	indexFinger->translate(-(fingerSpacing * 2), -15.0f, 0.0f);
+	rightPalm->AddChild(indexFinger);
+
+	// 中指
+	auto middleFinger = createBoxPart(fingerWidth, fingerHeight + 5.0f, fingerWidth, gray, "middleFinger"); // 中指稍长一些
+	middleFinger->translate(-(fingerSpacing), -15.0f, 0.0f);
+	rightPalm->AddChild(middleFinger);
+
+	// 无名指
+	auto ringFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "ringFinger");
+	ringFinger->translate(0.0f, -15.0f, 0.0f);
+	rightPalm->AddChild(ringFinger);
+
+	// 小指
+	auto littleFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "littleFinger");
+	littleFinger->translate((fingerSpacing), -15.0f, 0.0f);
+	rightPalm->AddChild(littleFinger);
+
+
 	// create leftArm
 	auto leftArm = createTransfrom("leftArm");
 
@@ -571,6 +608,36 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	leftArm->rotate(-145, 0, 0, 1); // 将手臂旋转45度
 	root->AddChild(leftArm);
 
+	// 创建左手掌
+	auto leftPalm = createBoxPart(25, 10, 20, gray, "leftPalm");
+	leftPalm->translate(0, -30, 0); // 根据手臂长度调整位置
+	leftLowerArm->AddChild(leftPalm);
+
+	// 创建左手的手指
+	// 拇指
+	auto leftThumb = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftThumb");
+	leftThumb->translate(8.0f, -15.0f, 10.0f); // 调整到合适的位置
+	leftPalm->AddChild(leftThumb);
+
+	// 食指
+	auto leftIndexFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftIndexFinger");
+	leftIndexFinger->translate((fingerSpacing * 2), -15.0f, 0.0f);
+	leftPalm->AddChild(leftIndexFinger);
+
+	// 中指
+	auto leftMiddleFinger = createBoxPart(fingerWidth, fingerHeight + 5.0f, fingerWidth, gray, "leftMiddleFinger");
+	leftMiddleFinger->translate((fingerSpacing), -15.0f, 0.0f);
+	leftPalm->AddChild(leftMiddleFinger);
+
+	// 无名指
+	auto leftRingFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftRingFinger");
+	leftRingFinger->translate(0.0f, -15.0f, 0.0f);
+	leftPalm->AddChild(leftRingFinger);
+
+	// 小指
+	auto leftLittleFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftLittleFinger");
+	leftLittleFinger->translate(-(fingerSpacing), -15.0f, 0.0f);
+	leftPalm->AddChild(leftLittleFinger);
 
 	// right leg
 	auto rightLeg = createTransfrom("rightLeg");
@@ -588,6 +655,12 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	rightLeg->AddChild(rightUpperLeg);
 	root->AddChild(rightLeg);
 
+
+	// 创建右脚掌
+	auto rightFoot = createBoxPart(25, 10, 40, gray, "rightFoot"); // 尺寸适合脚掌
+	rightFoot->translate(0, -35, 0); // 调整到合适的位置
+	rightLowerLeg->AddChild(rightFoot);
+
 	// left leg
 	auto leftLeg = createTransfrom("leftLeg");
 	auto leftUpperLeg = createBoxPart(20, 60, 20, gray, "leftUpperLeg");
@@ -604,6 +677,11 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	leftLeg->AddChild(leftUpperLeg);
 
 	root->AddChild(leftLeg);
+
+	// 创建左脚掌
+	auto leftFoot = createBoxPart(25, 10, 40, gray, "leftFoot");
+	leftFoot->translate(0, -35, 0);
+	leftLowerLeg->AddChild(leftFoot);
 
 	AddNode(root);
 
