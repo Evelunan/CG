@@ -26,16 +26,14 @@ class CCGSceneGraphView;
 class CCG2022112453游坤坤View;
 enum class EventType;
 class CGRenderable;
+class CGTransform;
+class CGGeode;
 
 class CCG2022112453游坤坤Doc : public CDocument
 {
 protected: // 仅从序列化创建
 	CCG2022112453游坤坤Doc() noexcept;
 	DECLARE_DYNCREATE(CCG2022112453游坤坤Doc)
-// 实验5
-protected:
-	UINT mTimer = 0; //定时器 
-
 // 特性
 public:
 	std::shared_ptr<CGScene> mScene = nullptr;
@@ -55,7 +53,7 @@ public:
 public:
 	bool RenderScene(CGRenderContext* pRC);
 	bool AddRenderable(std::shared_ptr<CGNode> r);
-
+	bool AddNode(std::shared_ptr<CGNode>  node);
 // 重写
 public:
 	virtual BOOL OnNewDocument();
@@ -99,9 +97,14 @@ public:
 	void scale2d(double sx, double sy);
 	void shear2d(double shx, double shy);
 
-
 	void draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center);
+	// 实验5
+protected:
+	UINT mTimer = 0; //定时器 
+	std::shared_ptr<CGTransform> createTransfrom(CString name);
+	std::shared_ptr<CGTransform> createBoxPart(float len, float width, float height, const glm::vec4& color, const CString name = "" );
 
+	void CCG2022112453游坤坤Doc::buildRobot();
 
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);

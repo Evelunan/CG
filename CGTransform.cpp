@@ -95,6 +95,13 @@ void CGTransform::rotate(float degrees, float x, float y, float z)
     postMultiply(rotationMatrix);
 }
 
+void CGTransform::rotate(float degrees, glm::vec3 t)
+{// 创建一个表示旋转变换的矩阵
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(degrees), t);
+    // 将该旋转矩阵与当前局部矩阵相乘（右乘）
+    postMultiply(rotationMatrix);
+}
+
 void CGTransform::preMultiply(const glm::mat4& m)
 {
     // 更新局部矩阵：将传入的矩阵左乘到局部矩阵上

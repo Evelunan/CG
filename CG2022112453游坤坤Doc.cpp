@@ -157,6 +157,8 @@ void CCG2022112453游坤坤Doc::InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hParent
 	tvinsert.item.lParam = LPARAM(&node);// 
 	if (node->asGeode()) {
 		CString str(_T("Geode"));
+		if (node->Name())
+			str = node->Name();
 		tvinsert.item.pszText = str.GetBuffer();
 		str.ReleaseBuffer();
 		hTree = pTree->InsertItem(&tvinsert);
@@ -165,6 +167,8 @@ void CCG2022112453游坤坤Doc::InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hParent
 	}
 	else if (node->asTransform()) {
 		CString str(_T("Trans"));
+		if (node->Name())
+			str = node->Name();
 		tvinsert.item.pszText = str.GetBuffer();
 		str.ReleaseBuffer();
 		hTree = pTree->InsertItem(&tvinsert);
@@ -176,6 +180,8 @@ void CCG2022112453游坤坤Doc::InstToSceneTree(CTreeCtrl* pTree, HTREEITEM hParent
 	}
 	else if (node->asGroup()) {
 		CString str(_T("Group"));
+		if (node->Name())
+			str = node->Name();
 		tvinsert.item.pszText = str.GetBuffer();
 		str.ReleaseBuffer();
 		hTree = pTree->InsertItem(&tvinsert);
@@ -239,6 +245,19 @@ bool CCG2022112453游坤坤Doc::AddRenderable(std::shared_ptr<CGNode> r)
 		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
 	}
 	return false;
+}
+
+bool CCG2022112453游坤坤Doc::AddNode(std::shared_ptr<CGNode>  node)
+{
+	if (node.get() == nullptr)
+		return false;
+	if (mSelectedGroup) {
+		mSelectedGroup->AddChild(node);
+	}
+	else{
+		mScene->GetSceneData()->asGroup()->AddChild(node);
+	}
+	return true;
 }
 
 BOOL CCG2022112453游坤坤Doc::OnNewDocument()
@@ -456,6 +475,153 @@ void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::v
 	//tran1->SetUpdateCallback(rc);
 }
 
+
+std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createTransfrom(CString name)
+{
+	auto tran = std::make_shared<CGTransform>();
+	tran->setName(name);
+	return tran;
+}
+
+std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createBoxPart(float len, float width, float height, const glm::vec4& color,const  CString name)
+{
+	using namespace std;
+	auto cube = make_shared<CGCube>(len, width, height);
+	auto hints = make_shared<TessellationHints>();
+
+	cube->setTessellationHints(hints);
+	cube->setDisplayListEnabled(true);
+
+	auto geode = make_shared<CGGeode>();
+	geode->AddChild(cube);
+	geode->setName(name);
+
+	// 设置颜色
+	auto colorState = make_shared<CGColor>();
+	colorState->setValue(color);
+	geode->gocRenderStateSet()->setRenderState(colorState, -1);
+
+	 //设置线框模式
+	auto mode = make_shared<CGPolygonMode>(PM_LINE, PM_LINE);
+	geode->gocRenderStateSet()->setRenderState(mode, -1);
+
+	auto tran = make_shared<CGTransform>();
+	tran->AddChild(geode);
+	tran->setName(name);
+	return tran;
+}
+void CCG2022112453游坤坤Doc::buildRobot() {
+	using namespace std;
+	using namespace glm;
+	// 定义常用颜色常量
+	auto red = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // 红色
+
+	auto gray = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f); // 灰色
+
+	// 创建根节点（可选）
+	auto root = createTransfrom("root");
+
+	// create trunk 
+	auto trunk = createTransfrom("trunk");
+
+	auto middleTrunk = createBoxPart(80, 30, 50, gray, "middleTrunk");
+	auto upperTrunk = createBoxPart(100, 40, 50, gray, "upperTrunk");
+	auto lowerTrunk = createBoxPart(60, 20, 50, gray, "lowerTrunk");
+
+	upperTrunk->translate(0, 35, 0); 
+	lowerTrunk->translate(0, -25, 0);
+
+	trunk->AddChild(middleTrunk);
+	trunk->AddChild(upperTrunk);
+	trunk->AddChild(lowerTrunk);
+	root->AddChild(trunk);
+
+
+	//  head
+	auto head = createBoxPart(40, 40, 40, red, "head");
+	head->translate(0, 75, 0);
+	//head->rotate(45, 1, 1, 0); 
+	root->AddChild(head);
+
+	// create rightArm
+	auto rightArm = createTransfrom("rightArm");
+
+	auto rightUpperArm = createBoxPart(20, 50, 20, gray, "rightUpperArm");
+	auto rightLowerArm = createBoxPart(20, 50, 20, gray, "rightLowerArm");
+	
+	rightLowerArm->translate( 0, -40, 0);
+	rightUpperArm->AddChild(rightLowerArm);
+
+	rightArm->AddChild(rightUpperArm);
+	rightArm->translate(60, 30, 0);
+	rightArm->rotate(45, 0, 0, 1); // 将手臂旋转45度
+	root->AddChild(rightArm);
+
+	// create leftArm
+	auto leftArm = createTransfrom("leftArm");
+
+	auto leftUpperArm = createBoxPart(20, 50, 20, gray, "leftUpperArm");
+	auto leftLowerArm = createBoxPart(20, 50, 20, gray, "leftLowerArm");
+
+	leftLowerArm->translate(0, -40, 0);
+	leftUpperArm->AddChild(leftLowerArm);
+
+	leftArm->AddChild(leftUpperArm);
+	leftArm->translate(-60, 30, 0);
+	leftArm->rotate(-45, 0, 0, 1); // 将手臂旋转45度
+	root->AddChild(leftArm);
+
+
+	// right leg
+	auto rightLeg = createTransfrom("rightLeg");
+	auto rightUpperLeg = createBoxPart(20, 60, 20, gray, "rightUpperLeg");
+	auto rightLowerLeg = createBoxPart(20, 60, 20, gray, "rightLowerLeg");
+
+	rightLowerLeg->translate(-15, -55, 0);
+	rightLowerLeg->rotate(-30, 0, 0, 1);
+
+	rightUpperLeg->AddChild(rightLowerLeg);
+	rightLeg->rotate(30, 0, 0, 1);
+
+	rightLeg->translate(10, -70, 0);
+
+	rightLeg->AddChild(rightUpperLeg);
+	root->AddChild(rightLeg);
+
+	// left leg
+	auto leftLeg = createTransfrom("leftLeg");
+	auto leftUpperLeg = createBoxPart(20, 60, 20, gray, "leftUpperLeg");
+	auto leftLowerLeg = createBoxPart(20, 60, 20, gray, "leftLowerLeg");
+
+	leftLowerLeg->translate(15, -55, 0);
+	leftLowerLeg->rotate(30, 0, 0, 1);
+
+	leftUpperLeg->AddChild(leftLowerLeg);
+	leftLeg->rotate(-30, 0, 0, 1);
+
+	leftLeg->translate(-10, -70, 0);
+
+	leftLeg->AddChild(leftUpperLeg);
+
+	root->AddChild(leftLeg);
+
+
+	//root->rotate(45, 1, 1, 1);
+	AddNode(root);
+
+	std::shared_ptr<ArmSwingParam> armParam = std::make_shared<ArmSwingParam>();
+	std::shared_ptr<ArmSwingCallback> armCallback = std::make_shared<ArmSwingCallback>();
+	root->setUserData(armParam);
+	root->SetUpdateCallback(armCallback);
+
+	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+	//root->setUserData(data);
+	//root->SetUpdateCallback(rc);
+
+	// 刷新视图
+	UpdateAllViews(NULL);
+}
 
 // CCG2022112453游坤坤Doc 命令
 
@@ -749,5 +915,8 @@ void CCG2022112453游坤坤Doc::OnUpdateButtonTimer(CCmdUI* pCmdUI)
 
 void CCG2022112453游坤坤Doc::OnButtonRobot()
 {
-	
+	buildRobot();
+	//auto tran1 = createBoxPart(100, 100, 100, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	//mScene->GetSceneData()->asGroup()->AddChild(tran1);
+	UpdateAllViews(NULL);
 }

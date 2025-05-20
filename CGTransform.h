@@ -25,6 +25,8 @@ public:
 	void translate(const glm::vec3& t);  //Æ½ÒÆ 
 	void scale(float sx, float sy, float sz); //Ëõ·Å 
 	void rotate(float degrees, float x, float y, float z); //Ğı×ª 
+	void rotate(float degrees, glm::vec3 t); //Ğı×ª 
+
 	void preMultiply(const glm::mat4& m); //×ó³Ë¾ØÕóm 
 	void postMultiply(const glm::mat4& m); //ÓÒ³Ë¾ØÕóm
 
