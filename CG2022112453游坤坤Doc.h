@@ -106,6 +106,10 @@ protected:
 
 	void CCG2022112453”Œ¿§¿§Doc::buildRobot();
 
+	//  µ—È6
+public:
+	void OnViewResize(int cx, int cy);
+
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dLineseg();

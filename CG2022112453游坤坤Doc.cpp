@@ -518,7 +518,7 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 
 	auto gray = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f); // 灰色
 
-	// 创建根节点（可选）
+	// 创建根节点
 	auto root = createTransfrom("root");
 
 	// create trunk 
@@ -716,6 +716,12 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 }
 
 // CCG2022112453游坤坤Doc 命令
+
+void CCG2022112453游坤坤Doc::OnViewResize(int cx, int cy)
+{
+	//mScene->GetMainCamera()->viewport()->set(0, 0, cx, cy); 
+	mScene->GetMainCamera()->viewport()->set(0, 0, cx, cy);
+}
 
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
 {

@@ -41,7 +41,7 @@ class RotateParam : public CGObject
 {
 public:
 	void setAngle(float angle) { mAngle = angle; }
-	float armAngle() const { return mAngle; }
+	float angle() const { return mAngle; }
 
 	void setStep(float s) { mStep = s; }
 	float step() const { return mStep; }
@@ -63,20 +63,17 @@ class RotateCallback : public CGCallback {
 public:
 	virtual bool run(CGObject* object, void* data) override {
 
-
-
 		auto node = dynamic_cast<CGTransform*>(object);
 		if (!node) {
 
 			return false;
 		}
-		// 直接转换 data 到 ArmSwingParam*
 		RotateParam* param = nullptr;
 		if (data) {
-			param = static_cast<RotateParam*>(data); // 假设 data 指向的是 ArmSwingParam
+			param = static_cast<RotateParam*>(data); 
 		}
 
-		float angle = param ? param->armAngle() : -45.0f; // 默认角度
+		float angle = param ? param->angle() : -45.0f; // 默认角度
 
 		// 更新角度
 		if (param) { // 确保 param 不为 nullptr
@@ -95,8 +92,7 @@ public:
 			param->setAngle(newAngle);
 		}
 		// 如果 param 为 nullptr，使用默认角度 -45.0f
-		node->rotate(glm::radians(param ? param->armAngle() : 2.0f), param->Axis());
-		//node->rotate(glm::radians( param->armAngle()), glm::vec3(0.0f, 0.0f, 1.0f));
+		node->rotate(glm::radians(param ? param->angle() : -45.0f), param->Axis());
 		return true;
 	}
 };
