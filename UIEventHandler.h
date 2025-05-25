@@ -33,7 +33,7 @@ enum class EventType : int    //操作命令类型，参考如下定义，可根据需要修改
     Draw2DTriangle = 26,    //三角形（不等边scalene, 等边equilateral,等腰isosceles）、直角三角形 
 
 	Model2DTransform = 120, //模型变换（平移、旋转、缩放）
-
+    CGBasicCameraControl = 121,   //相机控制（平移、旋转、缩放）
     EventUnknown = 2000
 };
 

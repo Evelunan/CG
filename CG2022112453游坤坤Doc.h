@@ -144,4 +144,6 @@ public:
 	afx_msg void OnButtonTimer();
 	afx_msg void OnUpdateButtonTimer(CCmdUI* pCmdUI);
 	afx_msg void OnButtonRobot();
+	afx_msg void OnButtonCameraControl();
+	afx_msg void OnUpdateButtonCameraControl(CCmdUI* pCmdUI);
 };

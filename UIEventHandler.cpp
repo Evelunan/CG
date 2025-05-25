@@ -20,15 +20,6 @@ UIEventHandler::~UIEventHandler()
 //按键输入 
 void UIEventHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//CCG20XX110001张三View* pCtx = (CCG20XX110001张三View*)glfwGetWindowUserPointer(window); 
-	//if (pCtx) { 
-	//} 
-	//if (mods == GLFW_MOD_CONTROL) { 
-	// //按下ctrl的同时，按下了key 
-	//} 
-	//if (mods == GLFW_MOD_SHIFT) { 
-	// //按下shift的同时，按下了key 
-	//} 
 	if (action == GLFW_PRESS) { //键位按下 
 		if (key == GLFW_KEY_ESCAPE) { //触发了ESC，取消当前正在执行的命令 
 			if (sCommand) {
@@ -65,9 +56,6 @@ void UIEventHandler::CharModsCallback(GLFWwindow * window, unsigned int codepoin
 //鼠标按键 
 void UIEventHandler::MouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
 {
-	//CCG20XX110001张三View* pCtx = (CCG20XX110001张三View*)glfwGetWindowUserPointer(window); 
-	//if (pCtx) { 
-	//} 
 	if (sCommand) {//命令模式，转发到对应命令对象去处理该事件 
 		sCommand->OnMouseButton(window, button, action, mods);
 	}

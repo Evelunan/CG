@@ -77,6 +77,7 @@ public:
 	virtual void Projection(int mode);
 
 	int ProjectionMode() { return mProjectionMode; }
+ 
 	void SetProjectionMode(int mode) { if (mode >= 0 && mode <= 2) mProjectionMode = mode; }
 
 protected:
@@ -87,6 +88,35 @@ public:
 	void setViewport(Viewport* viewport) { mViewport = std::shared_ptr<Viewport>(viewport); }
 	Viewport* viewport() { return mViewport.get(); }
 	const Viewport* viewport() const { return mViewport.get(); }
+
+// 实验6函数
+public:
+	void ScaleWindow(float factor); // 缩放窗口
+	void ScaleDistance(float factor); // 缩放距离
+	void AdjustLeft(float delta);
+	void AdjustRight(float delta);
+	void AdjustBottom(float delta);
+	void AdjustTop(float delta);
+
+	void SetLeftView();
+	void SetRightView();
+	void SetFrontView();
+	void SetBackView();
+	void SetTopView();
+	void SetBottomView();
+
+	void RotateAroundTarget(float yaw, float pitch);
+
+// 实验6 (2)
+public:
+	void UpdatePosition(); // 根据角度更新相机位置
+	void ArcballRotate(float dx, float dy); // 球面旋转
+	void ArcballZoom(float dy);            // 缩放
+private:
+	float mDistance = 100.0f;             // 相机与目标点的距离
+	float mYaw = 0.0f;                    // 纬线旋转角（水平）
+	float mPitch = 0.0f;                  // 经线旋转角（垂直）
+
 
 protected:
 	std::shared_ptr<Viewport> mViewport;
@@ -100,4 +130,5 @@ protected:
 	glm::vec3 mEye = glm::vec3(0, 0, 200); //相机位置（影响透视投影） 
 	glm::vec3 mTarget = glm::vec3(0, 0, 0); //被观察点 
 	glm::vec3 mUp = glm::vec3(0, 1, 0); //向上方向（相机坐标系Y轴对应向量）
+
 };

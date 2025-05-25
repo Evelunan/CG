@@ -40,6 +40,7 @@
 #include "CGSphere.h"
 #include "MyDialog.h"
 #include "RobotBodyTransform.h"
+#include "CGBasicCameraControl.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -83,6 +84,8 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_COMMAND(ID_BUTTON_TIMER, &CCG2022112453游坤坤Doc::OnButtonTimer)
 	ON_UPDATE_COMMAND_UI(ID_BUTTON_TIMER, &CCG2022112453游坤坤Doc::OnUpdateButtonTimer)
 	ON_COMMAND(ID_BUTTON_ROBOT, &CCG2022112453游坤坤Doc::OnButtonRobot)
+	ON_COMMAND(ID_BUTTON_CAMERA_CONTROL, &CCG2022112453游坤坤Doc::OnButtonCameraControl)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_CAMERA_CONTROL, &CCG2022112453游坤坤Doc::OnUpdateButtonCameraControl)
 END_MESSAGE_MAP()
 
 
@@ -685,31 +688,35 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 
 	AddNode(root);
 
-	std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
-	std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
-	root->setUserData(data);
-	root->SetUpdateCallback(rc);
+	//// 设置机器人身体的变换参数和旋转回调
+	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+	//
+	//root->setUserData(data);
+	//root->SetUpdateCallback(rc);
 
-	shared_ptr<RotateParam> leftParam = make_shared<RotateParam>();
-	shared_ptr<RotateParam> rightParam = make_shared< RotateParam>();
-	rightParam->setMaxAngle(45);
-	rightParam->setAngle(45);
-	rightParam->setStep(-2);
+	//// 设置手臂和腿的旋转参数和回调
+	//shared_ptr<RotateParam> leftParam = make_shared<RotateParam>();
+	//shared_ptr<RotateParam> rightParam = make_shared< RotateParam>();
+	//shared_ptr<RotateCallback> callback = make_shared<RotateCallback>();
 
-	shared_ptr<RotateCallback> callback = make_shared<RotateCallback>();
-
-	leftArm->setUserData(leftParam);
-	leftArm->SetUpdateCallback(callback);
-
-	rightArm->setUserData(rightParam);
-	rightArm->SetUpdateCallback(callback);
+	//rightParam->setMaxAngle(45);
+	//rightParam->setAngle(45);
+	//rightParam->setStep(-2);
 
 
-	leftLeg->setUserData(leftParam);
-	leftLeg->SetUpdateCallback(callback);
+	//leftArm->setUserData(leftParam);
+	//leftArm->SetUpdateCallback(callback);
 
-	rightLeg->setUserData(rightParam);
-	rightLeg->SetUpdateCallback(callback);
+	//rightArm->setUserData(rightParam);
+	//rightArm->SetUpdateCallback(callback);
+
+
+	//leftLeg->setUserData(leftParam);
+	//leftLeg->SetUpdateCallback(callback);
+
+	//rightLeg->setUserData(rightParam);
+	//rightLeg->SetUpdateCallback(callback);
 
 	// 刷新视图
 	UpdateAllViews(NULL);
@@ -751,10 +758,6 @@ void CCG2022112453游坤坤Doc::OnDraw2dLineseg()
 
 void CCG2022112453游坤坤Doc::OnDraw2dLineStrip()
 {
-	/*if (!mSelectedGroup) {
-		AfxMessageBox(_T("请先选择添加子节点的组节点！"));
-		return;
-	}*/
 	CCG2022112453游坤坤View* view = nullptr;
 	POSITION pos = GetFirstViewPosition();
 	while (pos != NULL)
@@ -1017,4 +1020,32 @@ void CCG2022112453游坤坤Doc::OnButtonRobot()
 	//auto tran1 = createBoxPart(100, 100, 100, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	//mScene->GetSceneData()->asGroup()->AddChild(tran1);
 	UpdateAllViews(NULL);
+}
+
+void CCG2022112453游坤坤Doc::OnButtonCameraControl()
+{
+	CCG2022112453游坤坤View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022112453游坤坤View))) {
+			view = dynamic_cast<CCG2022112453游坤坤View*>(pView);
+			break;
+		}
+	}
+
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	if (view == nullptr)
+		return;
+	auto window = view->glfwWindow();
+	auto camera = mScene->GetMainCamera();
+	UIEventHandler::SetCommand(new CGBasicCameraControl(window, camera)); //创建绘制直线段的命令对象
+}
+
+void CCG2022112453游坤坤Doc::OnUpdateButtonCameraControl(CCmdUI* pCmdUI)
+{
+	updateHandle(pCmdUI, EventType::CGBasicCameraControl);
 }

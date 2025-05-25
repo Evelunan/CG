@@ -189,6 +189,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CGBasicCameraControl.h" />
     <ClInclude Include="CGCube.h" />
     <ClInclude Include="CGDraw2DLineSeg.h" />
     <ClInclude Include="CGDraw2DLineStrip.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="UIEventHandler.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGBasicCameraControl.cpp" />
     <ClCompile Include="CGCube.cpp" />
     <ClCompile Include="CGDraw2DLineSeg.cpp" />
     <ClCompile Include="CGDraw2DLineStrip.cpp" />
