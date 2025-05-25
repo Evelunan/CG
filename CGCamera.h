@@ -92,7 +92,6 @@ public:
 // 实验6函数
 public:
 	void ScaleWindow(float factor); // 缩放窗口
-	void ScaleDistance(float factor); // 缩放距离
 	void AdjustLeft(float delta);
 	void AdjustRight(float delta);
 	void AdjustBottom(float delta);
@@ -105,15 +104,16 @@ public:
 	void SetTopView();
 	void SetBottomView();
 
+	void ScaleDistance(float factor); // 缩放距离
 	void RotateAroundTarget(float yaw, float pitch);
 
 // 实验6 (2)
 public:
 	void UpdatePosition(); // 根据角度更新相机位置
-	void ArcballRotate(float dx, float dy); // 球面旋转
-	void ArcballZoom(float dy);            // 缩放
+	void ArcballRotate(float yaw, float pitch); // 球面旋转
+	void ArcballZoom(float factor);            // 缩放
 private:
-	float mDistance = 100.0f;             // 相机与目标点的距离
+	float mDistance = 200.0f;             // 相机与目标点的距离
 	float mYaw = 0.0f;                    // 纬线旋转角（水平）
 	float mPitch = 0.0f;                  // 经线旋转角（垂直）
 

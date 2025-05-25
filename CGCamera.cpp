@@ -139,27 +139,6 @@ void CGCamera::ScaleWindow(float factor)
     Projection(mProjectionMode); // 更新投影矩阵
 }
 
-void CGCamera::ScaleDistance(float factor)
-{
-    // 计算从观察目标点到相机位置的方向向量
-    glm::vec3 direction = mEye - mTarget;
-
-    // 当前距离
-    float currentDistance = glm::length(direction);
-    if (currentDistance < 1e-4f) return; // 防止方向长度为0
-
-    // 缩放方向
-    direction *= factor;
-
-    // 限制最小最大距离
-    float newDistance = glm::length(direction);
-    if (newDistance < 10.0f || newDistance > 10000.0f) return;
-
-    // 更新相机位置
-    mEye = mTarget + direction;
-
-    this->Projection(mProjectionMode);
-}
 
 // 调整各边界的方法
 void CGCamera::AdjustLeft(float delta) {
@@ -224,6 +203,25 @@ void CGCamera::SetBottomView() {
     mUp = glm::vec3(0, 0, 1);
     Projection(mProjectionMode);
 }
+
+void CGCamera::ScaleDistance(float factor)
+{
+    // 计算从观察目标点到相机位置的方向向量
+    glm::vec3 direction = mEye - mTarget;
+
+    // 当前距离
+    float currentDistance = glm::length(direction);
+    if (currentDistance < 1e-4f) return; // 防止方向长度为0
+
+    // 缩放方向
+    direction *= factor;
+
+    // 更新相机位置
+    mEye = mTarget + direction;
+
+    this->Projection(mProjectionMode);
+}
+
 void CGCamera::RotateAroundTarget(float yaw, float pitch) 
 {
     // 计算从目标点到相机位置的向量
@@ -244,10 +242,6 @@ void CGCamera::RotateAroundTarget(float yaw, float pitch)
     currentYaw += glm::radians(yaw);
     currentPitch += glm::radians(pitch);
 
-    // 限制 pitch（避免翻转）
-    float pitchLimit = glm::radians(89.0f); // 避免万向锁
-    currentPitch = glm::clamp(currentPitch, -pitchLimit, pitchLimit);
-
     // 重新计算方向
     glm::vec3 newDirection;
     newDirection.x = radius * cos(currentPitch) * sin(currentYaw);
@@ -262,37 +256,36 @@ void CGCamera::RotateAroundTarget(float yaw, float pitch)
 
 void CGCamera::UpdatePosition()
 {
-    // pitch 是绕 X 轴的上下角，yaw 是绕 Y 轴的左右角
-    float x = mDistance * cosf(mPitch) * sinf(mYaw);
-    float y = mDistance * sinf(mPitch);
-    float z = mDistance * cosf(mPitch) * cosf(mYaw);
+    // 将角度转换为弧度
+    float yawRad = glm::radians(mYaw);
+    float pitchRad = glm::radians(mPitch);
 
-    mEye = mTarget + glm::vec3(-x, -y, -z); // 相机在球面上观察目标
+    // 球坐标转笛卡尔坐标，计算新相机位置
+    glm::vec3 direction;
+    direction.x = mDistance * cos(pitchRad) * sin(yawRad);
+    direction.y = mDistance * sin(pitchRad);
+    direction.z = mDistance * cos(pitchRad) * cos(yawRad);
 
-	this->Projection(mProjectionMode); // 更新投影矩阵
+    mEye = mTarget + direction;
+
+    // 重新设置相机方向
+    Projection(mProjectionMode);
 }
 
-void CGCamera::ArcballRotate(float dx, float dy)
+void CGCamera::ArcballRotate(float yaw, float pitch)
 {
-    const float sensitivity = 0.01f; // 控制旋转速度
-    mYaw += dx * sensitivity;
-    mPitch += dy * sensitivity;
+    // 更新 yaw 和 pitch 角度
+    mYaw += yaw;
+    mPitch += pitch;
 
-    // 限制 pitch 避免翻转
-    float limit = glm::radians(89.0f);
-    mPitch = std::clamp(mPitch, -limit, limit);
-    this->Projection(mProjectionMode); // 更新投影矩阵
+    // 根据新的 yaw 和 pitch 更新相机位置
+    UpdatePosition();
 }
 
-void CGCamera::ArcballZoom(float dy)
+void CGCamera::ArcballZoom(float factor)
 {
-    const float zoomFactor = 1.05f;
-    if (dy > 0)
-        mDistance *= zoomFactor;
-    else
-        mDistance /= zoomFactor;
-
+     mDistance *= factor;
     // 限制距离范围
     mDistance = std::clamp(mDistance, 10.0f, 10000.0f);
-    this->Projection(mProjectionMode); // 更新投影矩阵
+    UpdatePosition();
 }

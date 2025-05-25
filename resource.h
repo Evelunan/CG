@@ -80,15 +80,16 @@
 #define ID_BUTTON_CUBE                  32809
 #define ID_BUTTON_TIMER                 32810
 #define ID_BUTTON_ROBOT                 32811
-#define ID_BUTTON_CAMERACONTROL         32812
 #define ID_BUTTON_CAMERA_CONTROL        32812
+#define ID_BUTTON2                      32813
+#define ID_BUTTON_ARCBALL_CONTROL       32813
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        319
-#define _APS_NEXT_COMMAND_VALUE         32813
+#define _APS_NEXT_COMMAND_VALUE         32814
 #define _APS_NEXT_CONTROL_VALUE         1039
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

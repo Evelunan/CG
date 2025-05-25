@@ -41,6 +41,7 @@
 #include "MyDialog.h"
 #include "RobotBodyTransform.h"
 #include "CGBasicCameraControl.h"
+#include "CGArcballCameraControl.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -86,6 +87,8 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_COMMAND(ID_BUTTON_ROBOT, &CCG2022112453游坤坤Doc::OnButtonRobot)
 	ON_COMMAND(ID_BUTTON_CAMERA_CONTROL, &CCG2022112453游坤坤Doc::OnButtonCameraControl)
 	ON_UPDATE_COMMAND_UI(ID_BUTTON_CAMERA_CONTROL, &CCG2022112453游坤坤Doc::OnUpdateButtonCameraControl)
+	ON_COMMAND(ID_BUTTON_ARCBALL_CONTROL, &CCG2022112453游坤坤Doc::OnButtonArcballControl)
+	ON_UPDATE_COMMAND_UI(ID_BUTTON_ARCBALL_CONTROL, &CCG2022112453游坤坤Doc::OnUpdateButtonArcballControl)
 END_MESSAGE_MAP()
 
 
@@ -1048,4 +1051,32 @@ void CCG2022112453游坤坤Doc::OnButtonCameraControl()
 void CCG2022112453游坤坤Doc::OnUpdateButtonCameraControl(CCmdUI* pCmdUI)
 {
 	updateHandle(pCmdUI, EventType::CGBasicCameraControl);
+}
+
+void CCG2022112453游坤坤Doc::OnButtonArcballControl()
+{
+	CCG2022112453游坤坤View* view = nullptr;
+	POSITION pos = GetFirstViewPosition();
+	while (pos != NULL)
+	{
+		CView* pView = GetNextView(pos);
+		if (pView->IsKindOf(RUNTIME_CLASS(CCG2022112453游坤坤View))) {
+			view = dynamic_cast<CCG2022112453游坤坤View*>(pView);
+			break;
+		}
+	}
+
+	if (UIEventHandler::CurCommand()) {
+		UIEventHandler::DelCommand();
+	}
+	if (view == nullptr)
+		return;
+	auto window = view->glfwWindow();
+	auto camera = mScene->GetMainCamera();
+	UIEventHandler::SetCommand(new CGArcballCameraControl(window, camera)); //创建绘制直线段的命令对象
+}
+
+void CCG2022112453游坤坤Doc::OnUpdateButtonArcballControl(CCmdUI* pCmdUI)
+{
+	updateHandle(pCmdUI, EventType::CGArcballCameraControl);
 }

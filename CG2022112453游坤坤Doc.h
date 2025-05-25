@@ -146,4 +146,6 @@ public:
 	afx_msg void OnButtonRobot();
 	afx_msg void OnButtonCameraControl();
 	afx_msg void OnUpdateButtonCameraControl(CCmdUI* pCmdUI);
+	afx_msg void OnButtonArcballControl();
+	afx_msg void OnUpdateButtonArcballControl(CCmdUI* pCmdUI);
 };
