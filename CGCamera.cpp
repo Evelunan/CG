@@ -142,22 +142,22 @@ void CGCamera::ScaleWindow(float factor)
 
 // 调整各边界的方法
 void CGCamera::AdjustLeft(float delta) {
-    mLeft += delta * 5.0f;
+    mLeft += delta;
     Projection(mProjectionMode);
 }
 
 void CGCamera::AdjustRight(float delta) {
-    mRight += delta * 5.0f;
+    mRight += delta;
     Projection(mProjectionMode);
 }
 
 void CGCamera::AdjustBottom(float delta) {
-    mBottom += delta * 5.0f;
+    mBottom += delta;
     Projection(mProjectionMode);
 }
 
 void CGCamera::AdjustTop(float delta) {
-    mTop += delta * 5.0f;
+    mTop += delta;
     Projection(mProjectionMode);
 }
 
@@ -211,8 +211,6 @@ void CGCamera::ScaleDistance(float factor)
 
     // 当前距离
     float currentDistance = glm::length(direction);
-    if (currentDistance < 1e-4f) return; // 防止方向长度为0
-
     // 缩放方向
     direction *= factor;
 
@@ -229,12 +227,11 @@ void CGCamera::RotateAroundTarget(float yaw, float pitch)
 
     // 将方向向量转换为球坐标（半径、俯仰角pitch、偏航角yaw）
     float radius = glm::length(direction);
-    if (radius < 1e-4f) return; // 避免除零
 
     // 归一化方向
     direction = glm::normalize(direction);
 
-    // 获取当前的 pitch 和 yaw（从方向向量反推）
+    // 获取当前的 pitch 和 yaw
     float currentYaw = atan2(direction.x, direction.z);
     float currentPitch = asin(direction.y);
 
@@ -285,7 +282,5 @@ void CGCamera::ArcballRotate(float yaw, float pitch)
 void CGCamera::ArcballZoom(float factor)
 {
      mDistance *= factor;
-    // 限制距离范围
-    mDistance = std::clamp(mDistance, 10.0f, 10000.0f);
     UpdatePosition();
 }

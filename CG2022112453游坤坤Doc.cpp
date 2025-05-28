@@ -729,7 +729,6 @@ void CCG2022112453ÓÎÀ¤À¤Doc::buildRobot() {
 
 void CCG2022112453ÓÎÀ¤À¤Doc::OnViewResize(int cx, int cy)
 {
-	//mScene->GetMainCamera()->viewport()->set(0, 0, cx, cy); 
 	mScene->GetMainCamera()->viewport()->set(0, 0, cx, cy);
 }
 

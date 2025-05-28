@@ -26,6 +26,7 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 		return -1;
 	if (mCamera == nullptr)
 		return -1;
+	float detal = 5.0f; // 调整的步长
 	if (action == GLFW_PRESS || action == GLFW_REPEAT) {
 		switch (key) {
 
@@ -33,11 +34,11 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 			if (mods & GLFW_MOD_SHIFT) {
 				mCamera->ScaleWindow(1.25); // 放大
 			}
-			view->ShowPrompt("Zoom In");
+			view->ShowPrompt("放大窗口");
 			break;
 		case GLFW_KEY_MINUS:
 			mCamera->ScaleWindow(0.8); // 缩小
-			view->ShowPrompt("缩小相机");
+			view->ShowPrompt("缩小窗口");
 			break;
 		case GLFW_KEY_L:
 			if ((mods & GLFW_MOD_CONTROL)) {
@@ -46,7 +47,7 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 			}
 			else {
 				// L -> 左边界左移, l->右移
-				mCamera->AdjustLeft((mods & GLFW_MOD_SHIFT) ? 1.0f : -1.0f);
+				mCamera->AdjustLeft((mods & GLFW_MOD_SHIFT) ? detal : -detal);
 			}
 			break;
 
@@ -57,7 +58,7 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 			}
 			else {
 				// R -> 右边界左移， r 右移
-				mCamera->AdjustRight((mods & GLFW_MOD_SHIFT) ? -1.0f : 1.0f);
+				mCamera->AdjustRight((mods & GLFW_MOD_SHIFT) ? -detal : detal);
 			}
 			break;
 
@@ -75,7 +76,7 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 			}
 			else {
 				// B -> 下边界下移， b 上移
-				mCamera->AdjustBottom((mods & GLFW_MOD_SHIFT) ? -1.0f : 1.0f);
+				mCamera->AdjustBottom((mods & GLFW_MOD_SHIFT) ? -detal : detal);
 			}
 			break;
 
@@ -86,7 +87,7 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 			}
 			else {
 				// T -> 上边界下移， t上移
-				mCamera->AdjustTop((mods & GLFW_MOD_SHIFT) ? -1.0f : 1.0f);
+				mCamera->AdjustTop((mods & GLFW_MOD_SHIFT) ? -detal : detal);
 			}
 			break;
 
@@ -104,9 +105,9 @@ int CGBasicCameraControl::OnKey(GLFWwindow* window, int key, int scancode, int a
 
 		case GLFW_KEY_O:
 		{
-			// o 正交投影（二维） 2 ， O 三维 0
+			 //o 正交投影（二维） 2 ， O 三维 0
 			int mode = (mods & GLFW_MOD_SHIFT) ? 0 : 2;
-			//int mode = 2;
+			//int mode = 0;
 			mCamera->SetProjectionMode(mode);
 			mCamera->Projection(mode);
 		}
