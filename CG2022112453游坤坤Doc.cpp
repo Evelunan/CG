@@ -42,6 +42,8 @@
 #include "RobotBodyTransform.h"
 #include "CGBasicCameraControl.h"
 #include "CGArcballCameraControl.h"
+#include "CGMaterial.h"
+#include "CGLightModel.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -446,41 +448,122 @@ void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
 }
 
 
+//void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center)
+//{
+//	auto material = std::make_shared<CGMaterial>();
+//	material->setAmbient(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+//	material->setDiffuse(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
+//	material->setSpecular(glm::vec4(0.7f, 0.7f, 0.7f, 1.0f));
+//	material->setShininess(32.0f);
+//
+//	using namespace std;
+//	auto tran1 = make_shared<CGTransform>();
+//	auto geode = make_shared<CGGeode>();
+//	auto color = make_shared<CGColor>();
+//	color->setValue(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
+//	geode->gocRenderStateSet()->setRenderState(color, -1);
+//	geode->gocRenderStateSet()->setRenderState(material, -1);
+//
+//	tran1->translate(center.x, center.y, center.z);
+//	tran1->rotate(45, 1, 1, 1);
+//	tran1->scale(100, 100, 100);
+//	geode->AddChild(render);
+//	tran1->AddChild(geode);
+//	mScene->GetSceneData()->asGroup()->AddChild(tran1);
+//
+//	color = make_shared<CGColor>();
+//	tran1 = make_shared<CGTransform>();
+//	geode = make_shared<CGGeode>();
+//	color->setValue((glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))); //蓝色
+//	geode->gocRenderStateSet()->setRenderState(color, -1);
+//	auto mode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
+//	geode->gocRenderStateSet()->setRenderState(mode, -1);
+//	geode->gocRenderStateSet()->setRenderState(material, -1);
+//
+//	tran1->translate(-center.x, center.y, center.z);
+//	tran1->rotate(45, 1, 1, 1);
+//	tran1->scale(100, 100, 100);
+//	geode->AddChild(render);
+//	tran1->AddChild(geode);
+//	mScene->GetSceneData()->asGroup()->AddChild(tran1);
+//
+//
+//	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+//	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+//	//tran1->setUserData(data);
+//	//tran1->SetUpdateCallback(rc);
+//}
 void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center)
 {
-	using namespace std;
-	auto tran1 = make_shared<CGTransform>();
-	auto geode = make_shared<CGGeode>();
-	auto color = make_shared<CGColor>();
-	color->setValue(glm::vec4(1.0f, 1.0f, 0.0f, 1.0f));
-	geode->gocRenderStateSet()->setRenderState(color, -1);
-	tran1->translate(center.x, center.y, center.z);
-	tran1->rotate(45, 1, 1, 1);
-	tran1->scale(100, 100, 100);
-	geode->AddChild(render);
-	tran1->AddChild(geode);
-	mScene->GetSceneData()->asGroup()->AddChild(tran1);
+	//using namespace std;
+	////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glEnable(GL_NORMALIZE); // 确保法线正确
+	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	color = make_shared<CGColor>();
-	tran1 = make_shared<CGTransform>();
-	geode = make_shared<CGGeode>();
-	color->setValue((glm::vec4(0.0f, 0.0f, 1.0f, 1.0f))); //蓝色
-	geode->gocRenderStateSet()->setRenderState(color, -1);
-	auto mode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
-	geode->gocRenderStateSet()->setRenderState(mode, -1);
-	tran1->translate(-center.x, center.y, center.z);
-	tran1->rotate(45, 1, 1, 1);
-	tran1->scale(100, 100, 100);
-	geode->AddChild(render);
-	tran1->AddChild(geode);
-	mScene->GetSceneData()->asGroup()->AddChild(tran1);
+	//// 启用光照与深度测试（必须）
+	//glEnable(GL_LIGHTING);
+	//glEnable(GL_LIGHT0);
+	//glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_COLOR_MATERIAL);
 
-	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
-	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
-	//tran1->setUserData(data);
-	//tran1->SetUpdateCallback(rc);
+	//// 设置光源（点光源）
+	//GLfloat light0_position[] = { 200.0f, 300.0f, 400.0f, 1.0f }; // w=1 表示点光源
+	//GLfloat light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // 合理白光强度
+	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+	//glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+	////glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+
+	//// 创建光照模型（设置一次即可）
+	//auto lightModel = std::make_shared<CGLightModel>();
+	//lightModel->setAmbientColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)); // 更暗的环境光
+	//lightModel->setLocalViewer(true);  // 启用局部观察者
+	//lightModel->setTwoSide(true);      // 启用双面光照
+
+	//// 将光照模型设置到场景根节点（防止多次覆盖）
+	//mScene->GetSceneData()->asGroup()->gocRenderStateSet()->setRenderState(lightModel, -1);
+
+	//// 定义一个函数来创建带材质和颜色的对象
+	//auto createObject = [&](glm::vec3 pos, glm::vec4 color, glm::vec4 diffuseColor, float shininess) {
+	//	auto geode = make_shared<CGTransform>();
+	//	geode->AddChild(render); // 添加可渲染对象
+
+	//	// 设置颜色
+	//	auto colorState = make_shared<CGColor>();
+	//	colorState->setValue(color);
+	//	geode->gocRenderStateSet()->setRenderState(colorState, -1);
+
+	//	// 设置材质（每个对象可以不同，比如金属/塑料）
+	//	auto material = std::make_shared<CGMaterial>();
+	//	material->setEmission(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+	//	material->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
+	//	material->setDiffuse(diffuseColor);
+	//	material->setSpecular(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	//	material->setShininess(shininess);
+	//	material->setColorMaterial(CM_DIFFUSE);
+
+	//	geode->gocRenderStateSet()->setRenderState(material, -1);
+
+	//	// 变换节点
+	//
+	//	geode->translate(pos.x, pos.y, pos.z);
+	//	geode->rotate(45, 1, 1, 1);
+	//	geode->scale(100, 100, 100);
+
+	//	return geode;
+	//	};
+
+	//// 创建第一个对象：黄色，塑料质感
+	//auto obj1 = createObject(center, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
+	//	glm::vec4(0.9f, 0.9f, 0.7f, 1.0f), 32.0f);
+	//mScene->GetSceneData()->asGroup()->AddChild(obj1);
+
+	//// 创建第二个对象：蓝色，金属质感
+	//auto obj2 = createObject(glm::vec3(-center.x, center.y, center.z),
+	//	glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+	//	glm::vec4(0.9f, 0.9f, 0.7f, 1.0f), 100.0f);
+	//mScene->GetSceneData()->asGroup()->AddChild(obj2);
 }
-
 
 std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createTransfrom(CString name)
 {

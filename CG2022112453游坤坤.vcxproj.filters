@@ -123,6 +123,15 @@
     <ClInclude Include="CGArcballCameraControl.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CGLightModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGShadeModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CGMaterial.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -213,6 +222,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="CGArcballCameraControl.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGLightModel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGShadeModel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGMaterial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

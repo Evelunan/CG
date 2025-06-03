@@ -194,7 +194,9 @@
     <ClInclude Include="CGCube.h" />
     <ClInclude Include="CGDraw2DLineSeg.h" />
     <ClInclude Include="CGDraw2DLineStrip.h" />
+    <ClInclude Include="CGLightModel.h" />
     <ClInclude Include="CGLineStrip.h" />
+    <ClInclude Include="CGMaterial.h" />
     <ClInclude Include="CGModel2DTransform.h" />
     <ClInclude Include="CGRenderContext.h" />
     <ClInclude Include="CCGSceneGraphView.h" />
@@ -211,6 +213,7 @@
     <ClInclude Include="CGRenderable.h" />
     <ClInclude Include="CGRenderState.h" />
     <ClInclude Include="CGScene.h" />
+    <ClInclude Include="CGShadeModel.h" />
     <ClInclude Include="CGSphere.h" />
     <ClInclude Include="CGTransform.h" />
     <ClInclude Include="constant.h" />
@@ -232,7 +235,9 @@
     <ClCompile Include="CGCube.cpp" />
     <ClCompile Include="CGDraw2DLineSeg.cpp" />
     <ClCompile Include="CGDraw2DLineStrip.cpp" />
+    <ClCompile Include="CGLightModel.cpp" />
     <ClCompile Include="CGLineStrip.cpp" />
+    <ClCompile Include="CGMaterial.cpp" />
     <ClCompile Include="CGModel2DTransform.cpp" />
     <ClCompile Include="CGRenderContext.cpp" />
     <ClCompile Include="CCGSceneGraphView.cpp" />
@@ -249,6 +254,7 @@
     <ClCompile Include="CGRenderable.cpp" />
     <ClCompile Include="CGRenderState.cpp" />
     <ClCompile Include="CGScene.cpp" />
+    <ClCompile Include="CGShadeModel.cpp" />
     <ClCompile Include="CGSphere.cpp" />
     <ClCompile Include="CGTransform.cpp" />
     <ClCompile Include="MainFrm.cpp" />
