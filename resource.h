@@ -1,6 +1,6 @@
-﻿//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ 生成的包含文件。
-// 供 CG2022112453.rc 使用
+//{{NO_DEPENDENCIES}}
+// Microsoft Visual C++ ���ɵİ����ļ���
+// �� CG2022112453.rc ʹ��
 //
 #define IDD_ABOUTBOX                    100
 #define IDP_OLE_INIT_FAILED             100
