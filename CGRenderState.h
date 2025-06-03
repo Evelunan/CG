@@ -249,7 +249,7 @@ typedef enum
 } EFrontFace;
 
 
-class CGRenderState : public CGObject
+class CGRenderState : public CGCallback
 {
 public:
     CGRenderState() {}
@@ -257,6 +257,11 @@ public:
     virtual ERenderState type() const { return RS_NONE; }
     //需重写的虚函数,index用于多属性比如多光源
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const = 0;
+public:
+    void SetUpdateCallback(std::shared_ptr<CGCallback> uc) { mUpdateCallback = uc; }
+    inline CGCallback* GetUpdateCallback() { return mUpdateCallback.get(); }
+protected:
+    std::shared_ptr<CGCallback> mUpdateCallback = nullptr;
 };
 
 //颜色属性

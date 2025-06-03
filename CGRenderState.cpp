@@ -76,6 +76,7 @@ void CGRenderStateSet::apply(const CGCamera* camera, CGRenderContext* ctx)
 {
 	for (auto itr = mModes.begin(); itr != mModes.end(); ++itr)
 	{
+
 		if (itr->second) {
 			glEnable(itr->first);
 		}
@@ -84,6 +85,9 @@ void CGRenderStateSet::apply(const CGCamera* camera, CGRenderContext* ctx)
 		}
 	}
 	for (auto itr = mRenderStates.begin(); itr != mRenderStates.end(); ++itr) {
+		if (itr->mRS->GetUpdateCallback()) {
+			itr->mRS->GetUpdateCallback()->run(itr->mRS.get(), itr->mRS->userData());
+		}
 		itr->apply(camera, ctx);
 	}
 }
