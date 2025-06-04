@@ -24,7 +24,7 @@
 #define IDR_RIBBON                      307
 #define IDR_MENU1                       313
 #define IDD_DIALOG_Sphere               316
-#define IDCANCEL                        1004
+#define IDD_DIALOG_LIGHT                319
 #define IDC_EDIT2                       1006
 #define IDC_EDIT_Y                      1006
 #define IDC_EDIT3                       1007
@@ -50,6 +50,8 @@
 #define IDC_STATIC_WIDTH                1037
 #define IDC_STATIC_HEGIHT               1038
 #define IDC_STATIC_HEIGHT               1038
+#define IDC_MFCCOLORBUTTON1             1039
+#define IDC_COMBO1                      1040
 #define ID_WRITE_PASTEASHYPERLINK       32770
 #define ID_32771                        32771
 #define ID_DRAW2D_LINESEG               32772
@@ -81,16 +83,22 @@
 #define ID_BUTTON_TIMER                 32810
 #define ID_BUTTON_ROBOT                 32811
 #define ID_BUTTON_CAMERA_CONTROL        32812
-#define ID_BUTTON2                      32813
 #define ID_BUTTON_ARCBALL_CONTROL       32813
+#define ID_BUTTON_POINT_LIGHT           32813
+#define ID_BUTTON_LIGHT_CONTROL         32815
+#define ID_BUTTON_LIGHT_SETTING         32816
+#define ID_BUTTON_DIRECTIONAL_LIGHT     32818
+#define ID_BUTTON_SPOT_LIGHT            32819
+#define ID_BUTTON5                      32820
+#define ID_BUTTON_TURN_OFF_LIGHT        32820
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        319
-#define _APS_NEXT_COMMAND_VALUE         32814
-#define _APS_NEXT_CONTROL_VALUE         1039
+#define _APS_NEXT_RESOURCE_VALUE        322
+#define _APS_NEXT_COMMAND_VALUE         32821
+#define _APS_NEXT_CONTROL_VALUE         1041
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

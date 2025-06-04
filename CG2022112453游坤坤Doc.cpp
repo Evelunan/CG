@@ -44,6 +44,7 @@
 #include "CGArcballCameraControl.h"
 #include "CGMaterial.h"
 #include "CGLightModel.h"
+#include "LightDialog.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -91,6 +92,11 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_UPDATE_COMMAND_UI(ID_BUTTON_CAMERA_CONTROL, &CCG2022112453游坤坤Doc::OnUpdateButtonCameraControl)
 	ON_COMMAND(ID_BUTTON_ARCBALL_CONTROL, &CCG2022112453游坤坤Doc::OnButtonArcballControl)
 	ON_UPDATE_COMMAND_UI(ID_BUTTON_ARCBALL_CONTROL, &CCG2022112453游坤坤Doc::OnUpdateButtonArcballControl)
+	ON_COMMAND(ID_BUTTON_LIGHT_CONTROL, &CCG2022112453游坤坤Doc::OnButtonLightControl)
+	ON_COMMAND(ID_BUTTON_POINT_LIGHT, &CCG2022112453游坤坤Doc::OnButtonPointLight)
+	ON_COMMAND(ID_BUTTON_DIRECTIONAL_LIGHT, &CCG2022112453游坤坤Doc::OnButtonDirectionalLight)
+	ON_COMMAND(ID_BUTTON_SPOT_LIGHT, &CCG2022112453游坤坤Doc::OnButtonSpotLight)
+	ON_COMMAND(ID_BUTTON_TURN_OFF_LIGHT, &CCG2022112453游坤坤Doc::OnButtonTurnOffLight)
 END_MESSAGE_MAP()
 
 
@@ -495,75 +501,44 @@ void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
 //}
 void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center)
 {
-	//using namespace std;
-	////glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glEnable(GL_NORMALIZE); // 确保法线正确
-	//glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	using namespace std;
 
-	//// 启用光照与深度测试（必须）
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
-	//glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_COLOR_MATERIAL);
+	// 创建光照模型（设置一次即可）
+	auto lightModel = std::make_shared<CGLightModel>();
+	lightModel->setAmbientColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)); // 更暗的环境光
+	lightModel->setLocalViewer(true);  // 启用局部观察者
+	lightModel->setTwoSide(true);      // 启用双面光照
 
-	//// 设置光源（点光源）
-	//GLfloat light0_position[] = { 200.0f, 300.0f, 400.0f, 1.0f }; // w=1 表示点光源
-	//GLfloat light0_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; // 合理白光强度
-	//glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
-	//glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-	////glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
 
-	//// 创建光照模型（设置一次即可）
-	//auto lightModel = std::make_shared<CGLightModel>();
-	//lightModel->setAmbientColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)); // 更暗的环境光
-	//lightModel->setLocalViewer(true);  // 启用局部观察者
-	//lightModel->setTwoSide(true);      // 启用双面光照
+	vector<shared_ptr<CGRenderState>> states;
+	auto blue = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+	auto material = make_shared<CGMaterial>(CGMaterial::Metallic);
 
-	//// 将光照模型设置到场景根节点（防止多次覆盖）
-	//mScene->GetSceneData()->asGroup()->gocRenderStateSet()->setRenderState(lightModel, -1);
+	material->setDiffuse(blue);
 
-	//// 定义一个函数来创建带材质和颜色的对象
-	//auto createObject = [&](glm::vec3 pos, glm::vec4 color, glm::vec4 diffuseColor, float shininess) {
-	//	auto geode = make_shared<CGTransform>();
-	//	geode->AddChild(render); // 添加可渲染对象
+	states.push_back(material);
+	//states.push_back(lightModel);
 
-	//	// 设置颜色
-	//	auto colorState = make_shared<CGColor>();
-	//	colorState->setValue(color);
-	//	geode->gocRenderStateSet()->setRenderState(colorState, -1);
-
-	//	// 设置材质（每个对象可以不同，比如金属/塑料）
-	//	auto material = std::make_shared<CGMaterial>();
-	//	material->setEmission(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-	//	material->setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-	//	material->setDiffuse(diffuseColor);
-	//	material->setSpecular(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	//	material->setShininess(shininess);
-	//	material->setColorMaterial(CM_DIFFUSE);
-
-	//	geode->gocRenderStateSet()->setRenderState(material, -1);
-
-	//	// 变换节点
-	//
-	//	geode->translate(pos.x, pos.y, pos.z);
-	//	geode->rotate(45, 1, 1, 1);
-	//	geode->scale(100, 100, 100);
-
-	//	return geode;
-	//	};
-
-	//// 创建第一个对象：黄色，塑料质感
-	//auto obj1 = createObject(center, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f),
-	//	glm::vec4(0.9f, 0.9f, 0.7f, 1.0f), 32.0f);
-	//mScene->GetSceneData()->asGroup()->AddChild(obj1);
-
-	//// 创建第二个对象：蓝色，金属质感
-	//auto obj2 = createObject(glm::vec3(-center.x, center.y, center.z),
-	//	glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
-	//	glm::vec4(0.9f, 0.9f, 0.7f, 1.0f), 100.0f);
-	//mScene->GetSceneData()->asGroup()->AddChild(obj2);
+	auto tran = createGeometry(render, center, states);
+	tran->scale(100, 100, 100);
+	AddNode(tran);
 }
+
+std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createGeometry(const std::shared_ptr<CGRenderable>& render, const glm::vec3& center, const std::vector<std::shared_ptr<CGRenderState>>& states, const CString& name)
+{
+	using namespace std;
+	auto tran = make_shared<CGTransform>();
+	tran->setName(name);
+	tran->AddChild(render); // 添加可渲染对象
+	
+	for (auto state : states)
+	{
+		tran->gocRenderStateSet()->setRenderState(state, -1);
+	}
+	tran->translate(center);
+	return tran;
+}
+
 
 std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createTransfrom(CString name)
 {
@@ -1161,4 +1136,66 @@ void CCG2022112453游坤坤Doc::OnButtonArcballControl()
 void CCG2022112453游坤坤Doc::OnUpdateButtonArcballControl(CCmdUI* pCmdUI)
 {
 	updateHandle(pCmdUI, EventType::CGArcballCameraControl);
+}
+
+
+
+void CCG2022112453游坤坤Doc::OnButtonLightControl()
+{
+	LightDialog dialog;
+	if (dialog.DoModal() == IDOK)
+	{
+
+	}
+}
+
+
+void CCG2022112453游坤坤Doc::OnButtonPointLight()
+{
+	glEnable(GL_NORMALIZE); // 确保法线正确
+
+	// 启用光照与深度测试（必须）
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_COLOR_MATERIAL);
+
+	auto light = LightPresets::PointLight;
+	//light.setPosition(glm::vec3(100, 100, 100));
+	light.apply(0);
+}
+
+void CCG2022112453游坤坤Doc::OnButtonDirectionalLight()
+{
+	glEnable(GL_NORMALIZE); // 确保法线正确
+
+	// 启用光照与深度测试（必须）
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_COLOR_MATERIAL);
+
+	auto light = LightPresets::Directional;
+	//light.setPosition(glm::vec3(100, 100, 100));
+	light.apply(0);
+}
+
+void CCG2022112453游坤坤Doc::OnButtonSpotLight()
+{
+	glEnable(GL_NORMALIZE); // 确保法线正确
+
+	// 启用光照与深度测试（必须）
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_COLOR_MATERIAL);
+
+	auto light = LightPresets::SpotLight;
+	//light.setPosition(glm::vec3(100, 100, 100));
+	light.apply(0);
+}
+
+void CCG2022112453游坤坤Doc::OnButtonTurnOffLight()
+{
+	// TODO: 在此添加命令处理程序代码
 }

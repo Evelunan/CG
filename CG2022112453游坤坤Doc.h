@@ -28,7 +28,7 @@ enum class EventType;
 class CGRenderable;
 class CGTransform;
 class CGGeode;
-
+class CGRenderState;
 class CCG2022112453游坤坤Doc : public CDocument
 {
 protected: // 仅从序列化创建
@@ -98,12 +98,19 @@ public:
 	void shear2d(double shx, double shy);
 
 	void draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center);
+
+	std::shared_ptr< CGTransform> createGeometry(
+		const std::shared_ptr<CGRenderable> &render,	// 几何体
+		const glm::vec3 &center,						// 中心
+		const std::vector<std::shared_ptr<CGRenderState>> &states, 		// 状态集合
+		const CString &name = "几何体"							// 节点名称
+	);
+
 	// 实验5
 protected:
 	UINT mTimer = 0; //定时器 
 	std::shared_ptr<CGTransform> createTransfrom(CString name);
 	std::shared_ptr<CGTransform> createBoxPart(float len, float width, float height, const glm::vec4& color, const CString name = "" );
-
 	void CCG2022112453游坤坤Doc::buildRobot();
 
 	// 实验6
@@ -148,4 +155,9 @@ public:
 	afx_msg void OnUpdateButtonCameraControl(CCmdUI* pCmdUI);
 	afx_msg void OnButtonArcballControl();
 	afx_msg void OnUpdateButtonArcballControl(CCmdUI* pCmdUI);
+	afx_msg void OnButtonLightControl();
+	afx_msg void OnButtonPointLight();
+	afx_msg void OnButtonDirectionalLight();
+	afx_msg void OnButtonSpotLight();
+	afx_msg void OnButtonTurnOffLight();
 };

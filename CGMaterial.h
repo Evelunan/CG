@@ -3,57 +3,49 @@
 
 class CGMaterial : public CGRenderState {
 public:
-    CGMaterial()
-        : mEmission(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f))
-        , mAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f))
-        , mDiffuse(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f))
-        , mSpecular(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f))
-        , mShininess(0.0f)
-        , mColorMaterial(CM_AMBIENT_AND_DIFFUSE)
-    {
-    }
-
+    CGMaterial();
     virtual ~CGMaterial() = default;
 
     virtual ERenderState type() const override { return RS_Material; }
+    // 设置材质的自发光颜色（即使没有光照也会显示该颜色）
+    void setEmission(const glm::vec4& emission);
 
-    void setEmission(const glm::vec4& emission) { mEmission = emission; }
-    void setAmbient(const glm::vec4& ambient) { mAmbient = ambient; }
-    void setDiffuse(const glm::vec4& diffuse) { mDiffuse = diffuse; }
-    void setSpecular(const glm::vec4& specular) { mSpecular = specular; }
-    void setShininess(float shininess) { mShininess = shininess; }
-    void setColorMaterial(EColorMaterial cm) { mColorMaterial = cm; }
+    // 设置材质对环境光的反射颜色（影响物体在全局环境光下的基础亮度）
+    void setAmbient(const glm::vec4& ambient);
 
-    const glm::vec4& emission() const { return mEmission; }
-    const glm::vec4& ambient() const { return mAmbient; }
-    const glm::vec4& diffuse() const { return mDiffuse; }
-    const glm::vec4& specular() const { return mSpecular; }
-    float shininess() const { return mShininess; }
-    EColorMaterial colorMaterial() const { return mColorMaterial; }
+    // 设置材质的漫反射颜色（决定物体在光照下的主要视觉颜色）
+    void setDiffuse(const glm::vec4& diffuse);
 
-    virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const override {
-        // 设置启用颜色作为材质参数
-        if (mColorMaterial != CM_AMBIENT_AND_DIFFUSE) {
-            glEnable(GL_COLOR_MATERIAL);
-            glColorMaterial(GL_FRONT_AND_BACK, static_cast<GLenum>(mColorMaterial));
-        }
-        else {
-            glDisable(GL_COLOR_MATERIAL);
-        }
+    // 设置材质的镜面反射颜色（控制高光区域的颜色和强度）
+    void setSpecular(const glm::vec4& specular);
 
-        // 设置材质参数
-        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, &mEmission[0]);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &mAmbient[0]);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &mDiffuse[0]);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, &mSpecular[0]);
-        glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
-    }
+    // 设置材质的光泽度（shininess），值越大高光越集中、越小越分散（范围 0~128）
+    void setShininess(float shininess);
+
+    // 设置是否启用颜色追踪材质模式（材质某些属性跟随 glColor 的变化）
+    void setColorMaterial(EColorMaterial cm);
+
+    const glm::vec4& emission() const;
+    const glm::vec4& ambient() const;
+    const glm::vec4& diffuse() const;
+    const glm::vec4& specular() const;
+    float shininess() const;
+    EColorMaterial colorMaterial() const;
+
+    virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const override;
+
+    // 静态常量材质
+    static const CGMaterial Metallic;
+    static const CGMaterial PlasticGreen;
+    static const CGMaterial Wood;
+    static const CGMaterial Glass;
+    static const CGMaterial Default;
 
 protected:
-    glm::vec4 mEmission;   // 材质自发光强度
-    glm::vec4 mAmbient;    // 材质环境光反射系数
-    glm::vec4 mDiffuse;    // 材质漫反射系数
-    glm::vec4 mSpecular;   // 材质镜面反射系数
-    float mShininess;      // 材质光泽度
-    EColorMaterial mColorMaterial; // 颜色作为哪种反射系数
+    glm::vec4 mEmission;
+    glm::vec4 mAmbient;
+    glm::vec4 mDiffuse;
+    glm::vec4 mSpecular;
+    float mShininess;
+    EColorMaterial mColorMaterial;
 };
