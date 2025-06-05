@@ -30,7 +30,8 @@ EColorMaterial CGMaterial::colorMaterial() const { return mColorMaterial; }
 
 // 应用材质到 OpenGL
 void CGMaterial::apply(const CGCamera* camera, CGRenderContext* ctx, int index) const {
-    if (mColorMaterial != CM_AMBIENT_AND_DIFFUSE) {
+    // 启用或禁用颜色材质追踪
+    if (mColorMaterial != CM_None) {
         glEnable(GL_COLOR_MATERIAL);
         glColorMaterial(GL_FRONT_AND_BACK, static_cast<GLenum>(mColorMaterial));
     }
@@ -38,49 +39,10 @@ void CGMaterial::apply(const CGCamera* camera, CGRenderContext* ctx, int index) 
         glDisable(GL_COLOR_MATERIAL);
     }
 
-    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, &mEmission[0]);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, &mAmbient[0]);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, &mDiffuse[0]);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, &mSpecular[0]);
+    // 设置固定管线材质属性
+    glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, glm::value_ptr(mEmission));
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, glm::value_ptr(mAmbient));
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, glm::value_ptr(mDiffuse));
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, glm::value_ptr(mSpecular));
     glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
 }
-
-// 定义静态常量材质
-
-const CGMaterial CGMaterial::Default = CGMaterial();
-// 金属
-const CGMaterial CGMaterial::Metallic = []() {
-    CGMaterial mat;
-    mat.setAmbient(glm::vec4(0.2f, 0.2f, 0.2f, 1.0f));
-    mat.setDiffuse(glm::vec4(0.8f, 0.8f, 0.8f, 1.0f));
-    mat.setSpecular(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    mat.setShininess(64.0f);
-    return mat;
-    }();
-// 塑料
-const CGMaterial CGMaterial::PlasticGreen = []() {
-    CGMaterial mat;
-    mat.setAmbient(glm::vec4(0.0f, 0.1f, 0.06f, 1.0f));
-    mat.setDiffuse(glm::vec4(0.0f, 0.50980392f, 0.50980392f, 1.0f));
-    mat.setSpecular(glm::vec4(0.50196078f, 0.50196078f, 0.50196078f, 1.0f));
-    mat.setShininess(32.0f);
-    return mat;
-    }();
-// 木材
-const CGMaterial CGMaterial::Wood = []() {
-    CGMaterial mat;
-    mat.setAmbient(glm::vec4(0.3f, 0.15f, 0.1f, 1.0f));
-    mat.setDiffuse(glm::vec4(0.4f, 0.25f, 0.2f, 1.0f));
-    mat.setSpecular(glm::vec4(0.3f, 0.2f, 0.15f, 1.0f));
-    mat.setShininess(10.0f);
-    return mat;
-    }();
-// 玻璃
-const CGMaterial CGMaterial::Glass = []() {
-    CGMaterial mat;
-    mat.setAmbient(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-    mat.setDiffuse(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-    mat.setSpecular(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    mat.setShininess(128.0f);
-    return mat;
-    }();

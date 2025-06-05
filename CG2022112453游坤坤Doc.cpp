@@ -93,10 +93,11 @@ BEGIN_MESSAGE_MAP(CCG2022112453游坤坤Doc, CDocument)
 	ON_COMMAND(ID_BUTTON_ARCBALL_CONTROL, &CCG2022112453游坤坤Doc::OnButtonArcballControl)
 	ON_UPDATE_COMMAND_UI(ID_BUTTON_ARCBALL_CONTROL, &CCG2022112453游坤坤Doc::OnUpdateButtonArcballControl)
 	ON_COMMAND(ID_BUTTON_LIGHT_CONTROL, &CCG2022112453游坤坤Doc::OnButtonLightControl)
-	ON_COMMAND(ID_BUTTON_POINT_LIGHT, &CCG2022112453游坤坤Doc::OnButtonPointLight)
 	ON_COMMAND(ID_BUTTON_DIRECTIONAL_LIGHT, &CCG2022112453游坤坤Doc::OnButtonDirectionalLight)
 	ON_COMMAND(ID_BUTTON_SPOT_LIGHT, &CCG2022112453游坤坤Doc::OnButtonSpotLight)
 	ON_COMMAND(ID_BUTTON_TURN_OFF_LIGHT, &CCG2022112453游坤坤Doc::OnButtonTurnOffLight)
+	ON_COMMAND(ID_BUTTON_POINT_LIGHT, &CCG2022112453游坤坤Doc::OnButtonPointLight)
+
 END_MESSAGE_MAP()
 
 
@@ -106,7 +107,13 @@ CCG2022112453游坤坤Doc::CCG2022112453游坤坤Doc() noexcept
 {
 	mScene = std::make_shared<CGScene>();
 
+	auto lightModel = std::make_shared<CGLightModel>();
+	lightModel->setAmbientColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // 更暗的环境光
+	lightModel->setLocalViewer(true);  // 启用局部观察者，意味着视点位置会影响高光计算（更真实）
+	lightModel->setTwoSide(true);      // 启用双面光照，使物体背面也能被正确照亮（否则背面可能看起来是黑的）。
 
+	// 将光照模型设置到场景根节点（防止多次覆盖）
+	mScene->GetSceneData()->asGroup()->gocRenderStateSet()->setRenderState(lightModel, -1);
 	//mScene->SetMainCamera(std::make_shared<CGCamera>());
 	//auto e = std::make_shared<CGGeode>();
 	////auto line = std::make_shared<CGLineSegment>(glm::dvec3(100, 100, 0), glm::dvec3(400, 300, 0));
@@ -501,27 +508,18 @@ void CCG2022112453游坤坤Doc::shear2d(double shx, double shy)
 //}
 void CCG2022112453游坤坤Doc::draw3D(std::shared_ptr<CGRenderable> render, glm::vec3 center)
 {
-	using namespace std;
+	//using namespace std;
 
-	// 创建光照模型（设置一次即可）
-	auto lightModel = std::make_shared<CGLightModel>();
-	lightModel->setAmbientColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)); // 更暗的环境光
-	lightModel->setLocalViewer(true);  // 启用局部观察者
-	lightModel->setTwoSide(true);      // 启用双面光照
+	//vector<shared_ptr<CGRenderState>> states;
+	//auto blue = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	//auto metal = SceneMaterials::CreateMaterialWithColor(blue, SceneMaterials::MaterialType::Metal);
+	//auto material = make_shared<CGMaterial>(metal);
 
-
-	vector<shared_ptr<CGRenderState>> states;
-	auto blue = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
-	auto material = make_shared<CGMaterial>(CGMaterial::Metallic);
-
-	material->setDiffuse(blue);
-
-	states.push_back(material);
-	//states.push_back(lightModel);
-
-	auto tran = createGeometry(render, center, states);
-	tran->scale(100, 100, 100);
-	AddNode(tran);
+	//states.push_back(material);
+	//glColor4fv((glm::value_ptr(blue)));
+	//auto tran = createGeometry(render, center, states);
+	//tran->scale(100, 100, 100);
+	//AddNode(tran);
 }
 
 std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createGeometry(const std::shared_ptr<CGRenderable>& render, const glm::vec3& center, const std::vector<std::shared_ptr<CGRenderState>>& states, const CString& name)
@@ -565,9 +563,12 @@ std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createBoxPart(float len, fl
 	colorState->setValue(color);
 	geode->gocRenderStateSet()->setRenderState(colorState, -1);
 
+	auto metal = SceneMaterials::CreateMaterialWithColor(color, SceneMaterials::MaterialType::Metal);
+	auto material = make_shared<CGMaterial>(metal);
+
 	 //设置线框模式
-	auto mode = make_shared<CGPolygonMode>(PM_LINE, PM_LINE);
-	geode->gocRenderStateSet()->setRenderState(mode, -1);
+	//auto mode = make_shared<CGPolygonMode>(PM_LINE, PM_LINE);
+	//geode->gocRenderStateSet()->setRenderState(mode, -1);
 
 	auto tran = make_shared<CGTransform>();
 	tran->AddChild(geode);
@@ -790,6 +791,21 @@ void CCG2022112453游坤坤Doc::OnViewResize(int cx, int cy)
 	mScene->GetMainCamera()->viewport()->set(0, 0, cx, cy);
 }
 
+void CCG2022112453游坤坤Doc::setLight(CGLight& light)
+{
+	glEnable(GL_NORMALIZE); // 确保法线正确
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_COLOR_MATERIAL);
+	// 关闭其他光源
+	for (int i = 0; i < 8; ++i)
+	{
+		glDisable(GL_LIGHT0 + i);
+	}
+	light.apply();
+	UpdateAllViews(NULL);
+}
+
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
 {
 	updateHandle(pCmdUI, EventType::Draw2DLineSeg);
@@ -1002,6 +1018,8 @@ void CCG2022112453游坤坤Doc::OnButtonDraw3dSphere()
 	dialog.setDrawType(DrawType::SPHERE);
 	if (dialog.DoModal() == IDOK)
 	{
+		
+
 		glm::vec3 point;
 		float radius = dialog.radius;
 		int slice = dialog.slice;
@@ -1019,7 +1037,41 @@ void CCG2022112453游坤坤Doc::OnButtonDraw3dSphere()
 		sphere->setRadius(radius);
 		sphere->setTessellationHints(hints);
 		sphere->setDisplayListEnabled(true);
-		draw3D(sphere, point);
+
+		vector<shared_ptr<CGRenderState>> states;
+		auto color = dialog.getColor();
+		//auto type = dialog.materialType;
+		auto type = SceneMaterials::MaterialType::Plastic;
+
+		CString index;
+		index.Format(_T("%d"), int(type));
+
+		AfxMessageBox(_T("index: ") + index);
+
+		auto colorState = make_shared<CGColor>();
+		colorState->setValue(color);
+		states.push_back(colorState);
+
+		auto metal = SceneMaterials::CreateMaterialWithColor(color, type);
+		auto material = make_shared<CGMaterial>(metal);
+		states.push_back(material);
+
+		auto tran1 = createGeometry(sphere, point, states, "球体");
+
+
+		auto mode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
+		states.push_back(mode);
+		auto tran2 = createGeometry(sphere, { -point.x, point.y, point.z }, states, "球体-线框");
+
+		auto tran = createTransfrom("立方体");
+		tran1->scale(50, 50, 50);
+		tran2->scale(50, 50, 50);
+
+		tran->AddChild(tran1);
+		tran->AddChild(tran2);
+
+		AddNode(tran);
+
 		UpdateAllViews(NULL);
 	}
 }
@@ -1046,7 +1098,38 @@ void CCG2022112453游坤坤Doc::OnButtonCube()
 
 		cube->setTessellationHints(hints);
 		cube->setDisplayListEnabled(true);
-		draw3D(cube, point);
+
+
+		vector<shared_ptr<CGRenderState>> states;
+		auto color = dialog.getColor();
+		auto type = dialog.getMaterialType();
+		
+
+
+		auto colorState = make_shared<CGColor>();
+		colorState->setValue(color);
+		states.push_back(colorState);
+
+		auto metal = SceneMaterials::CreateMaterialWithColor(color, type);
+		auto material = make_shared<CGMaterial>(metal);
+		states.push_back(material);
+
+		auto tran1 = createGeometry(cube, point, states, "立方体");
+
+
+		auto mode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
+		states.push_back(mode);
+		auto tran2 = createGeometry(cube, { -point.x, point.y, point.z }, states, "立方体-线框");
+
+		auto tran = createTransfrom("立方体");
+		tran1->scale(50, 50, 50);
+		tran2->scale(50, 50, 50);
+
+		tran->AddChild(tran1);
+		tran->AddChild(tran2);
+
+		AddNode(tran);
+
 		UpdateAllViews(NULL);
 	}
 }
@@ -1142,60 +1225,40 @@ void CCG2022112453游坤坤Doc::OnUpdateButtonArcballControl(CCmdUI* pCmdUI)
 
 void CCG2022112453游坤坤Doc::OnButtonLightControl()
 {
-	LightDialog dialog;
-	if (dialog.DoModal() == IDOK)
-	{
-
-	}
+	
 }
-
-
 void CCG2022112453游坤坤Doc::OnButtonPointLight()
 {
-	glEnable(GL_NORMALIZE); // 确保法线正确
+	auto& light = SceneLights::PointLight;
+	light.setPosition(glm::vec4(0, 100, 100, 1));
+	setLight(light);
 
-	// 启用光照与深度测试（必须）
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_COLOR_MATERIAL);
-
-	auto light = LightPresets::PointLight;
-	//light.setPosition(glm::vec3(100, 100, 100));
-	light.apply(0);
 }
-
 void CCG2022112453游坤坤Doc::OnButtonDirectionalLight()
 {
-	glEnable(GL_NORMALIZE); // 确保法线正确
+	auto& light = SceneLights::DirectionalLight;
+	light.setPosition(glm::vec4(0, 100, 100, 0));
+	setLight(light);
 
-	// 启用光照与深度测试（必须）
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_COLOR_MATERIAL);
-
-	auto light = LightPresets::Directional;
-	//light.setPosition(glm::vec3(100, 100, 100));
-	light.apply(0);
 }
 
 void CCG2022112453游坤坤Doc::OnButtonSpotLight()
 {
-	glEnable(GL_NORMALIZE); // 确保法线正确
+	auto& light = SceneLights::SpotLight;
 
-	// 启用光照与深度测试（必须）
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_COLOR_MATERIAL);
+	glm::vec3 pos = glm::vec3(0, 100, 100);
+	glm::vec3 target = glm::vec3(0, 0, 0);
+	light.setPosition(glm::vec4(pos, 1.0f));
+	light.setSpotDirection(glm::normalize(target - pos));
 
-	auto light = LightPresets::SpotLight;
-	//light.setPosition(glm::vec3(100, 100, 100));
-	light.apply(0);
+	setLight(light);
 }
 
 void CCG2022112453游坤坤Doc::OnButtonTurnOffLight()
 {
-	// TODO: 在此添加命令处理程序代码
+	for (int i = 0; i < 8; ++i)
+	{
+		glDisable(GL_LIGHT0 + i);
+	}
+	UpdateAllViews(NULL);
 }

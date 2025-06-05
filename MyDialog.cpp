@@ -17,7 +17,7 @@ MyDialog::MyDialog(CWnd* pParent)
 	, radius(0.5)
 	, slice(40)
 	, mstack(20)
-	, xpos(0)
+	, xpos(50)
 	, ypos(0)
 	, zpos(0)
 	, len(0.5)
@@ -44,11 +44,15 @@ void MyDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_HEIGHT, height);
 	DDX_Text(pDX, IDC_EDIT_LEN, len);
 	DDX_Text(pDX, IDC_EDIT_WIDTH, width);
+	DDX_Control(pDX, IDC_MFCCOLORBUTTON_COLOR, colorButton);
+	DDX_Control(pDX, IDC_COMBO_MATERIALS, materialCombox);
 }
 
 
 BEGIN_MESSAGE_MAP(MyDialog, CDialogEx)
 	ON_BN_CLICKED(IDOK, &MyDialog::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_MFCCOLORBUTTON_COLOR, &MyDialog::OnBnClickedMfccolorbuttonColor)
+	ON_CBN_SELCHANGE(IDC_COMBO_MATERIALS, &MyDialog::OnCbnSelchangeComboMaterials)
 END_MESSAGE_MAP()
 
 
@@ -91,8 +95,32 @@ void MyDialog::hideItems(int nIds[], int len)
 	}
 }
 
+glm::vec4 MyDialog::getColor()
+{
+	COLORREF cref = colorButton.GetColor();
+	float r = GetRValue(cref) / 255.0f;
+	float g = GetGValue(cref) / 255.0f;
+	float b = GetBValue(cref) / 255.0f;
+
+	return glm::vec4(r, g, b, 1.0f);
+}
+
+SceneMaterials::MaterialType MyDialog::getMaterialType()
+{
+	int sel = materialCombox.GetCurSel();
+	return static_cast<SceneMaterials::MaterialType>(sel);
+}
+
+int MyDialog::getSel()
+{
+	int sel = materialCombox.GetCurSel();
+	return sel;
+}
+
 void MyDialog::OnBnClickedOk()
 {
+	materialType = getMaterialType();
+	mSel = getSel();
 	CDialogEx::OnOK();
 }
 
@@ -109,7 +137,27 @@ BOOL MyDialog::OnInitDialog()
 	{
 		drawCube();
 	}
+	materialCombox.AddString(_T("塑料"));
+	materialCombox.AddString(_T("金属"));
+	materialCombox.AddString(_T("木制"));
+	materialCombox.AddString(_T("陶瓷"));
+	materialCombox.SetCurSel(0);
 
+	colorButton.SetColor(RGB(0, 0, 255));
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
+}
+
+
+void MyDialog::OnBnClickedMfccolorbuttonColor()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+void MyDialog::OnCbnSelchangeComboMaterials()
+{
+	//int sel = materialCombox.GetCurSel();
+	//CString str;
+	//materialCombox.GetLBText(sel, str);
+	//AfxMessageBox(_T("选择了: ") + str);
 }

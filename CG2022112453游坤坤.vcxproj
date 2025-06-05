@@ -93,12 +93,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\library\opengl\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\code\CG\opengl\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\library\opengl\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\code\CG\opengl\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -168,14 +168,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\library\opengl\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>F:\code\CG\opengl\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\library\opengl\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>F:\code\CG\opengl\lib</AdditionalLibraryDirectories>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -212,6 +212,7 @@
     <ClInclude Include="CGObject.h" />
     <ClInclude Include="CGRenderable.h" />
     <ClInclude Include="CGRenderState.h" />
+    <ClInclude Include="CGRenderStateCallback.h" />
     <ClInclude Include="CGScene.h" />
     <ClInclude Include="CGShadeModel.h" />
     <ClInclude Include="CGSphere.h" />
@@ -254,6 +255,7 @@
     <ClCompile Include="CGObject.cpp" />
     <ClCompile Include="CGRenderable.cpp" />
     <ClCompile Include="CGRenderState.cpp" />
+    <ClCompile Include="CGRenderStateCallback.cpp" />
     <ClCompile Include="CGScene.cpp" />
     <ClCompile Include="CGShadeModel.cpp" />
     <ClCompile Include="CGSphere.cpp" />

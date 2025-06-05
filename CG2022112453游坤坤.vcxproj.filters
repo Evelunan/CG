@@ -135,6 +135,9 @@
     <ClInclude Include="LightDialog.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CGRenderStateCallback.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CG2022112453游坤坤.cpp">
@@ -237,6 +240,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="LightDialog.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CGRenderStateCallback.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 #include "afxdialogex.h"
 #include "glIncludes.h"
-
+#include "CGMaterial.h"
 // MyDialog ¶Ô»°¿ò
 enum class DrawType
 {
@@ -34,6 +34,9 @@ public:
 	void drawCube();
 	void hideItem(int nId);
 	void hideItems(int nIds[], int len);
+	glm::vec4 getColor();
+	SceneMaterials::MaterialType getMaterialType();
+	int getSel();
 public:
 	afx_msg void OnBnClickedOk();
 	virtual BOOL OnInitDialog();
@@ -51,4 +54,10 @@ public:
 	float height;
 	float len;
 	float width;
+	CMFCColorButton colorButton;
+	CComboBox materialCombox;
+	SceneMaterials::MaterialType  materialType = SceneMaterials::MaterialType::Metal;
+	int mSel = 0;
+	afx_msg void OnBnClickedMfccolorbuttonColor();
+	afx_msg void OnCbnSelchangeComboMaterials();
 };

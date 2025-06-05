@@ -2,6 +2,7 @@
 #include "CGRenderState.h"
 
 class CGMaterial : public CGRenderState {
+
 public:
     CGMaterial();
     virtual ~CGMaterial() = default;
@@ -34,13 +35,6 @@ public:
 
     virtual void apply(const CGCamera* camera, CGRenderContext* ctx, int index = 0) const override;
 
-    // 静态常量材质
-    static const CGMaterial Metallic;
-    static const CGMaterial PlasticGreen;
-    static const CGMaterial Wood;
-    static const CGMaterial Glass;
-    static const CGMaterial Default;
-
 protected:
     glm::vec4 mEmission;
     glm::vec4 mAmbient;
@@ -49,3 +43,41 @@ protected:
     float mShininess;
     EColorMaterial mColorMaterial;
 };
+
+namespace SceneMaterials {
+    enum class MaterialType {
+        Plastic,
+        Metal,
+        Wood,
+        Ceramic // 陶瓷
+    };
+
+    inline CGMaterial CreateMaterialWithColor(const glm::vec4& color, MaterialType type) {
+        CGMaterial mat;
+
+        mat.setDiffuse(color);              // 设置主色（物体自身颜色）
+        mat.setAmbient(color * 0.3f);       // 环境光弱反射色，可调节
+        mat.setEmission(glm::vec4(0.0f));   // 默认无自发光
+        mat.setColorMaterial(CM_None);      // 不使用 glColor 自动干扰
+
+        switch (type) {
+        case MaterialType::Plastic:
+            mat.setSpecular(glm::vec4(0.3f));   // 轻微镜面高光
+            mat.setShininess(32.0f);
+            break;
+        case MaterialType::Metal:
+            mat.setSpecular(glm::vec4(0.8f));   // 明显金属反光
+            mat.setShininess(96.0f);
+            break;
+        case MaterialType::Wood:
+            mat.setSpecular(glm::vec4(0.1f));   // 木材较少高光
+            mat.setShininess(8.0f);
+            break;
+        case MaterialType::Ceramic:
+            mat.setSpecular(glm::vec4(0.5f));   // 柔和高光
+            mat.setShininess(48.0f);
+            break;
+        }
+        return mat;
+    }
+}

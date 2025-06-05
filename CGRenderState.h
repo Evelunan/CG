@@ -222,6 +222,7 @@ typedef enum
 
 typedef enum
 {
+    CM_None = 0,               // 不使用颜色材质追踪
     CM_EMISSION = GL_EMISSION,
     CM_AMBIENT = GL_AMBIENT,
     CM_DIFFUSE = GL_DIFFUSE,

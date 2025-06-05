@@ -29,6 +29,7 @@ class CGRenderable;
 class CGTransform;
 class CGGeode;
 class CGRenderState;
+class CGLight;
 class CCG2022112453游坤坤Doc : public CDocument
 {
 protected: // 仅从序列化创建
@@ -117,6 +118,8 @@ protected:
 public:
 	void OnViewResize(int cx, int cy);
 
+// 实现7
+	void setLight(CGLight &light);
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dLineseg();
@@ -156,8 +159,8 @@ public:
 	afx_msg void OnButtonArcballControl();
 	afx_msg void OnUpdateButtonArcballControl(CCmdUI* pCmdUI);
 	afx_msg void OnButtonLightControl();
-	afx_msg void OnButtonPointLight();
 	afx_msg void OnButtonDirectionalLight();
 	afx_msg void OnButtonSpotLight();
 	afx_msg void OnButtonTurnOffLight();
+	afx_msg void OnButtonPointLight();
 };
