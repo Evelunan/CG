@@ -73,6 +73,11 @@ void CGLight::enable(bool enable) {
     mEnabled = enable;
 }
 
+void CGLight::apply(const CGCamera*, CGRenderContext*, int) const
+{
+    apply();
+}
+
 int CGLight::Index() const {
     return index;
 }
@@ -81,11 +86,12 @@ void CGLight::setIndex(int idx) {
     index = idx;
 }
 
-CGLight::LightType CGLight::type() const {
+CGLight::LightType CGLight::lightType() const {
     return mType;
 }
 
-void CGLight::apply() {
+void CGLight::apply() const
+{
     if (index < 0 || index > 7) return;
 
     GLenum lightEnum = GL_LIGHT0 + index;

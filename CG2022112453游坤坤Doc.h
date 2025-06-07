@@ -18,6 +18,7 @@
 #include <memory> 
 #include <functional>
 #include "glIncludes.h"
+#include "CGMaterial.h"
 class CGScene;
 class CGRenderContext;
 class CGNode;
@@ -30,6 +31,7 @@ class CGTransform;
 class CGGeode;
 class CGRenderState;
 class CGLight;
+class CGShape;
 class CCG2022112453游坤坤Doc : public CDocument
 {
 protected: // 仅从序列化创建
@@ -111,7 +113,7 @@ public:
 protected:
 	UINT mTimer = 0; //定时器 
 	std::shared_ptr<CGTransform> createTransfrom(CString name);
-	std::shared_ptr<CGTransform> createBoxPart(float len, float width, float height, const glm::vec4& color, const CString name = "" );
+	std::shared_ptr<CGTransform> createBoxPart(float len, float width, float height, const glm::vec4& color ,const CString name = "", MaterialPreset preset = MaterialPreset::Metal_Gold);
 	void CCG2022112453游坤坤Doc::buildRobot();
 
 	// 实验6
@@ -120,6 +122,13 @@ public:
 
 // 实现7
 	void setLight(CGLight &light);
+	std::shared_ptr<CGTransform> createSolidAndWireframeObject(
+		std::shared_ptr<CGRenderable> shape,
+		const glm::vec3& position,
+		const glm::vec4& color,
+		MaterialPreset preset,
+		const CString& name);
+
 public:
 	afx_msg void OnUpdateDraw2dLineseg(CCmdUI* pCmdUI);
 	afx_msg void OnDraw2dLineseg();

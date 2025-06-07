@@ -45,6 +45,7 @@
 #include "CGMaterial.h"
 #include "CGLightModel.h"
 #include "LightDialog.h"
+#include "CGRenderStateCallback.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -108,12 +109,14 @@ CCG2022112453游坤坤Doc::CCG2022112453游坤坤Doc() noexcept
 	mScene = std::make_shared<CGScene>();
 
 	auto lightModel = std::make_shared<CGLightModel>();
-	lightModel->setAmbientColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // 更暗的环境光
+	lightModel->setAmbientColor(glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); 
 	lightModel->setLocalViewer(true);  // 启用局部观察者，意味着视点位置会影响高光计算（更真实）
 	lightModel->setTwoSide(true);      // 启用双面光照，使物体背面也能被正确照亮（否则背面可能看起来是黑的）。
 
 	// 将光照模型设置到场景根节点（防止多次覆盖）
 	mScene->GetSceneData()->asGroup()->gocRenderStateSet()->setRenderState(lightModel, -1);
+	
+
 	//mScene->SetMainCamera(std::make_shared<CGCamera>());
 	//auto e = std::make_shared<CGGeode>();
 	////auto line = std::make_shared<CGLineSegment>(glm::dvec3(100, 100, 0), glm::dvec3(400, 300, 0));
@@ -545,7 +548,7 @@ std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createTransfrom(CString nam
 	return tran;
 }
 
-std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createBoxPart(float len, float width, float height, const glm::vec4& color,const  CString name)
+std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createBoxPart(float len, float width, float height, const glm::vec4& color,const  CString name, MaterialPreset preset)
 {
 	using namespace std;
 	auto cube = make_shared<CGCube>(len, width, height);
@@ -563,9 +566,8 @@ std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createBoxPart(float len, fl
 	colorState->setValue(color);
 	geode->gocRenderStateSet()->setRenderState(colorState, -1);
 
-	auto metal = SceneMaterials::CreateMaterialWithColor(color, SceneMaterials::MaterialType::Metal);
-	auto material = make_shared<CGMaterial>(metal);
-
+	auto material = make_shared<CGMaterial>(CreateMaterial(preset));
+	geode->gocRenderStateSet()->setRenderState(material, -1);
 	 //设置线框模式
 	//auto mode = make_shared<CGPolygonMode>(PM_LINE, PM_LINE);
 	//geode->gocRenderStateSet()->setRenderState(mode, -1);
@@ -580,7 +582,17 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	using namespace glm;
 	// 定义常用颜色常量
 	auto red = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f); // 红色
-
+	auto white = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // 纯白
+	auto black = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // 纯黑
+	auto blue = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); // 蓝色
+	auto green = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f); // 绿色
+	auto yellow = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f); // 黄色
+	auto cyan = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f); // 青色
+	auto magenta = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f); // 品红
+	auto orange = glm::vec4(1.0f, 0.5f, 0.0f, 1.0f); // 橙色
+	auto purple = glm::vec4(0.5f, 0.0f, 0.5f, 1.0f); // 紫色
+	auto brown = glm::vec4(0.6f, 0.3f, 0.0f, 1.0f); // 棕色
+	auto pink = glm::vec4(1.0f, 0.75f, 0.8f, 1.0f); // 粉色
 	auto gray = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f); // 灰色
 
 	// 创建根节点
@@ -589,9 +601,9 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	// create trunk 
 	auto trunk = createTransfrom("trunk");
 
-	auto middleTrunk = createBoxPart(80, 30, 50, gray, "middleTrunk");
-	auto upperTrunk = createBoxPart(100, 40, 50, gray, "upperTrunk");
-	auto lowerTrunk = createBoxPart(60, 20, 50, gray, "lowerTrunk");
+	auto middleTrunk = createBoxPart(80, 30, 50, cyan, "middleTrunk");
+	auto upperTrunk = createBoxPart(100, 40, 60, cyan, "upperTrunk");
+	auto lowerTrunk = createBoxPart(60, 20, 40, cyan, "lowerTrunk");
 
 	upperTrunk->translate(0, 35, 0); 
 	lowerTrunk->translate(0, -25, 0);
@@ -603,7 +615,7 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 
 
 	//  head
-	auto head = createBoxPart(40, 40, 40, red, "head");
+	auto head = createBoxPart(40, 40, 40, gray, "head");
 	head->translate(0, 75, 0);
 	//head->rotate(45, 1, 1, 0); 
 	root->AddChild(head);
@@ -611,8 +623,8 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	// create rightArm
 	auto rightArm = createTransfrom("rightArm");
 
-	auto rightUpperArm = createBoxPart(20, 50, 20, gray, "rightUpperArm");
-	auto rightLowerArm = createBoxPart(20, 50, 20, gray, "rightLowerArm");
+	auto rightUpperArm = createBoxPart(20, 50, 20, yellow, "rightUpperArm");
+	auto rightLowerArm = createBoxPart(20, 50, 20, pink, "rightLowerArm");
 	
 	rightLowerArm->translate( 0, -40, 0);
 	rightUpperArm->AddChild(rightLowerArm);
@@ -623,7 +635,7 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	root->AddChild(rightArm);
 
 	// 创建右手掌
-	auto rightPalm = createBoxPart(25, 10, 20, gray, "rightPalm");
+	auto rightPalm = createBoxPart(25, 10, 20, white, "rightPalm");
 	rightPalm->translate(0, -30, 0); // 根据手臂长度调整位置
 	rightLowerArm->AddChild(rightPalm);
 
@@ -634,27 +646,27 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 
 	// 创建右手的手指
 	// 拇指
-	auto thumb = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "thumb");
+	auto thumb = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "thumb");
 	thumb->translate(-8.0f, -15.0f, 10.0f); // 调整到合适的位置
 	rightPalm->AddChild(thumb);
 
 	// 食指
-	auto indexFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "indexFinger");
+	auto indexFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "indexFinger");
 	indexFinger->translate(-(fingerSpacing * 2), -15.0f, 0.0f);
 	rightPalm->AddChild(indexFinger);
 
 	// 中指
-	auto middleFinger = createBoxPart(fingerWidth, fingerHeight + 5.0f, fingerWidth, gray, "middleFinger"); // 中指稍长一些
+	auto middleFinger = createBoxPart(fingerWidth, fingerHeight + 5.0f, fingerWidth, cyan, "middleFinger"); // 中指稍长一些
 	middleFinger->translate(-(fingerSpacing), -15.0f, 0.0f);
 	rightPalm->AddChild(middleFinger);
 
 	// 无名指
-	auto ringFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "ringFinger");
+	auto ringFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "ringFinger");
 	ringFinger->translate(0.0f, -15.0f, 0.0f);
 	rightPalm->AddChild(ringFinger);
 
 	// 小指
-	auto littleFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "littleFinger");
+	auto littleFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "littleFinger");
 	littleFinger->translate((fingerSpacing), -15.0f, 0.0f);
 	rightPalm->AddChild(littleFinger);
 
@@ -662,8 +674,8 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	// create leftArm
 	auto leftArm = createTransfrom("leftArm");
 
-	auto leftUpperArm = createBoxPart(20, 50, 20, gray, "leftUpperArm");
-	auto leftLowerArm = createBoxPart(20, 50, 20, gray, "leftLowerArm");
+	auto leftUpperArm = createBoxPart(20, 50, 20, yellow, "leftUpperArm");
+	auto leftLowerArm = createBoxPart(20, 50, 20, pink, "leftLowerArm");
 
 	leftLowerArm->translate(0, -40, 0);
 	leftUpperArm->AddChild(leftLowerArm);
@@ -674,39 +686,39 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	root->AddChild(leftArm);
 
 	// 创建左手掌
-	auto leftPalm = createBoxPart(25, 10, 20, gray, "leftPalm");
+	auto leftPalm = createBoxPart(25, 10, 20, white, "leftPalm");
 	leftPalm->translate(0, -30, 0); // 根据手臂长度调整位置
 	leftLowerArm->AddChild(leftPalm);
 
 	// 创建左手的手指
 	// 拇指
-	auto leftThumb = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftThumb");
+	auto leftThumb = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "leftThumb");
 	leftThumb->translate(8.0f, -15.0f, 10.0f); // 调整到合适的位置
 	leftPalm->AddChild(leftThumb);
 
 	// 食指
-	auto leftIndexFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftIndexFinger");
+	auto leftIndexFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "leftIndexFinger");
 	leftIndexFinger->translate((fingerSpacing * 2), -15.0f, 0.0f);
 	leftPalm->AddChild(leftIndexFinger);
 
 	// 中指
-	auto leftMiddleFinger = createBoxPart(fingerWidth, fingerHeight + 5.0f, fingerWidth, gray, "leftMiddleFinger");
+	auto leftMiddleFinger = createBoxPart(fingerWidth, fingerHeight + 5.0f, fingerWidth, cyan, "leftMiddleFinger");
 	leftMiddleFinger->translate((fingerSpacing), -15.0f, 0.0f);
 	leftPalm->AddChild(leftMiddleFinger);
 
 	// 无名指
-	auto leftRingFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftRingFinger");
+	auto leftRingFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "leftRingFinger");
 	leftRingFinger->translate(0.0f, -15.0f, 0.0f);
 	leftPalm->AddChild(leftRingFinger);
 
 	// 小指
-	auto leftLittleFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, gray, "leftLittleFinger");
+	auto leftLittleFinger = createBoxPart(fingerWidth, fingerHeight, fingerWidth, cyan, "leftLittleFinger");
 	leftLittleFinger->translate(-(fingerSpacing), -15.0f, 0.0f);
 	leftPalm->AddChild(leftLittleFinger);
 
 	// right leg
 	auto rightLeg = createTransfrom("rightLeg");
-	auto rightUpperLeg = createBoxPart(20, 60, 20, gray, "rightUpperLeg");
+	auto rightUpperLeg = createBoxPart(20, 60, 20, yellow, "rightUpperLeg");
 	auto rightLowerLeg = createBoxPart(20, 60, 20, gray, "rightLowerLeg");
 
 	rightLowerLeg->translate(-15, -55, 0);
@@ -722,13 +734,13 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 
 
 	// 创建右脚掌
-	auto rightFoot = createBoxPart(25, 10, 40, gray, "rightFoot"); // 尺寸适合脚掌
+	auto rightFoot = createBoxPart(25, 10, 40, white, "rightFoot"); // 尺寸适合脚掌
 	rightFoot->translate(0, -35, 0); // 调整到合适的位置
 	rightLowerLeg->AddChild(rightFoot);
 
 	// left leg
 	auto leftLeg = createTransfrom("leftLeg");
-	auto leftUpperLeg = createBoxPart(20, 60, 20, gray, "leftUpperLeg");
+	auto leftUpperLeg = createBoxPart(20, 60, 20, yellow, "leftUpperLeg");
 	auto leftLowerLeg = createBoxPart(20, 60, 20, gray, "leftLowerLeg");
 
 	leftLowerLeg->translate(15, -55, 0);
@@ -744,41 +756,41 @@ void CCG2022112453游坤坤Doc::buildRobot() {
 	root->AddChild(leftLeg);
 
 	// 创建左脚掌
-	auto leftFoot = createBoxPart(25, 10, 40, gray, "leftFoot");
+	auto leftFoot = createBoxPart(25, 10, 40, white, "leftFoot");
 	leftFoot->translate(0, -35, 0);
 	leftLowerLeg->AddChild(leftFoot);
 
 	AddNode(root);
 
-	//// 设置机器人身体的变换参数和旋转回调
-	//std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
-	//std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
-	//
-	//root->setUserData(data);
-	//root->SetUpdateCallback(rc);
+	// 设置机器人身体的变换参数和旋转回调
+	std::shared_ptr<RobotBodyTransformParam> data = std::make_shared<RobotBodyTransformParam>();
+	std::shared_ptr<RobotBodyRotate> rc = std::make_shared<RobotBodyRotate>();
+	
+	root->setUserData(data);
+	root->SetUpdateCallback(rc);
 
-	//// 设置手臂和腿的旋转参数和回调
-	//shared_ptr<RotateParam> leftParam = make_shared<RotateParam>();
-	//shared_ptr<RotateParam> rightParam = make_shared< RotateParam>();
-	//shared_ptr<RotateCallback> callback = make_shared<RotateCallback>();
+	// 设置手臂和腿的旋转参数和回调
+	shared_ptr<RotateParam> leftParam = make_shared<RotateParam>();
+	shared_ptr<RotateParam> rightParam = make_shared< RotateParam>();
+	shared_ptr<RotateCallback> callback = make_shared<RotateCallback>();
 
-	//rightParam->setMaxAngle(45);
-	//rightParam->setAngle(45);
-	//rightParam->setStep(-2);
-
-
-	//leftArm->setUserData(leftParam);
-	//leftArm->SetUpdateCallback(callback);
-
-	//rightArm->setUserData(rightParam);
-	//rightArm->SetUpdateCallback(callback);
+	rightParam->setMaxAngle(45);
+	rightParam->setAngle(45);
+	rightParam->setStep(-2);
 
 
-	//leftLeg->setUserData(leftParam);
-	//leftLeg->SetUpdateCallback(callback);
+	leftArm->setUserData(leftParam);
+	leftArm->SetUpdateCallback(callback);
 
-	//rightLeg->setUserData(rightParam);
-	//rightLeg->SetUpdateCallback(callback);
+	rightArm->setUserData(rightParam);
+	rightArm->SetUpdateCallback(callback);
+
+
+	leftLeg->setUserData(leftParam);
+	leftLeg->SetUpdateCallback(callback);
+
+	rightLeg->setUserData(rightParam);
+	rightLeg->SetUpdateCallback(callback);
 
 	// 刷新视图
 	UpdateAllViews(NULL);
@@ -802,8 +814,68 @@ void CCG2022112453游坤坤Doc::setLight(CGLight& light)
 	{
 		glDisable(GL_LIGHT0 + i);
 	}
-	light.apply();
+	//light.apply();
+	using namespace std;
+	auto lightState = make_shared<CGLight>(light);
+	auto data = make_shared<LightTransformParam>();
+	auto callbackk = make_shared<LightCallback>();
+
+	lightState->setUserData(data);
+	lightState->SetUpdateCallback(callbackk);
+	mScene->GetSceneData()->asGroup()->gocRenderStateSet()->setRenderState(lightState, 0);
+
 	UpdateAllViews(NULL);
+}
+
+std::shared_ptr<CGTransform> CCG2022112453游坤坤Doc::createSolidAndWireframeObject(
+	std::shared_ptr<CGRenderable> shape,
+	const glm::vec3& position,
+	const glm::vec4& color,
+	MaterialPreset preset,
+	const CString& name)
+{
+	using namespace std;
+
+	vector<shared_ptr<CGRenderState>> states;
+
+	auto colorState = make_shared<CGColor>();
+	colorState->setValue(color);
+	states.push_back(colorState);
+
+	auto material = make_shared<CGMaterial>(CreateMaterial(preset));
+	states.push_back(material);
+
+	auto tranSolid = createGeometry(shape, position, states, name);
+
+	// 加入线框模式
+	auto wireframeStates = states; // 复制已有状态
+	auto mode = make_shared<CGPolygonMode>(PM_LINE, PM_LINE);
+	wireframeStates.push_back(mode);
+	auto tranWireframe = createGeometry(shape, { -position.x, position.y, position.z }, wireframeStates, name + "-线框");
+
+	// 创建变换节点
+	auto transform = createTransfrom(name);
+
+	float scaleFactor = 50.0f;
+	tranSolid->scale(scaleFactor, scaleFactor, scaleFactor);
+	tranWireframe->scale(scaleFactor, scaleFactor, scaleFactor);
+	transform->AddChild(tranSolid);
+	transform->AddChild(tranWireframe);
+
+	auto param1 = make_shared<MaterialTransformParam>();
+	param1->current = static_cast<int>(preset);
+
+	auto callback = make_shared<MaterialTransfomCallback>();
+
+	tranSolid->setUserData(param1);
+	tranSolid->SetUpdateCallback(callback);
+
+	auto param2 = make_shared<MaterialTransformParam>();
+	param2->current = static_cast<int>(preset);
+	tranWireframe->setUserData(param2);
+	tranWireframe->SetUpdateCallback(callback);
+
+	return transform;
 }
 
 void CCG2022112453游坤坤Doc::OnUpdateDraw2dLineseg(CCmdUI* pCmdUI)
@@ -1018,61 +1090,27 @@ void CCG2022112453游坤坤Doc::OnButtonDraw3dSphere()
 	dialog.setDrawType(DrawType::SPHERE);
 	if (dialog.DoModal() == IDOK)
 	{
-		
+		glm::vec3 point(dialog.xpos, dialog.ypos, dialog.zpos);
 
-		glm::vec3 point;
-		float radius = dialog.radius;
-		int slice = dialog.slice;
-		int stack = dialog.mstack;
+        auto sphere = make_shared<CGSphere>();
+        auto hints = make_shared<TessellationHints>();
+        hints->setTargetSlices(dialog.slice);
+        hints->setTargetStacks(dialog.mstack);
+        sphere->setRadius(dialog.radius);
+        sphere->setTessellationHints(hints);
+        sphere->setDisplayListEnabled(true);
 
-		point.x = dialog.xpos;
-		point.y = dialog.ypos;
-		point.z = dialog.zpos;
+        auto tran = createSolidAndWireframeObject(
+            sphere,
+            point,
+            dialog.getColor(),
+            static_cast<MaterialPreset>(dialog.mSel),
+            "球体"
+        );
 
-		auto sphere = make_shared<CGSphere>();
-		auto hints = make_shared< TessellationHints>();
+        AddNode(tran);
+        UpdateAllViews(NULL);
 
-		hints->setTargetSlices(slice);
-		hints->setTargetStacks(stack);
-		sphere->setRadius(radius);
-		sphere->setTessellationHints(hints);
-		sphere->setDisplayListEnabled(true);
-
-		vector<shared_ptr<CGRenderState>> states;
-		auto color = dialog.getColor();
-		//auto type = dialog.materialType;
-		auto type = SceneMaterials::MaterialType::Plastic;
-
-		CString index;
-		index.Format(_T("%d"), int(type));
-
-		AfxMessageBox(_T("index: ") + index);
-
-		auto colorState = make_shared<CGColor>();
-		colorState->setValue(color);
-		states.push_back(colorState);
-
-		auto metal = SceneMaterials::CreateMaterialWithColor(color, type);
-		auto material = make_shared<CGMaterial>(metal);
-		states.push_back(material);
-
-		auto tran1 = createGeometry(sphere, point, states, "球体");
-
-
-		auto mode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
-		states.push_back(mode);
-		auto tran2 = createGeometry(sphere, { -point.x, point.y, point.z }, states, "球体-线框");
-
-		auto tran = createTransfrom("立方体");
-		tran1->scale(50, 50, 50);
-		tran2->scale(50, 50, 50);
-
-		tran->AddChild(tran1);
-		tran->AddChild(tran2);
-
-		AddNode(tran);
-
-		UpdateAllViews(NULL);
 	}
 }
 
@@ -1083,53 +1121,21 @@ void CCG2022112453游坤坤Doc::OnButtonCube()
 	dialog.setDrawType(DrawType::CUBE);
 	if (dialog.DoModal() == IDOK)
 	{
+		glm::vec3 point(dialog.xpos, dialog.ypos, dialog.zpos);
 
-		glm::vec3 point;
-		float len = dialog.len;
-		float width = dialog.width;
-		float height = dialog.height;
-
-		point.x = dialog.xpos;
-		point.y = dialog.ypos;
-		point.z = dialog.zpos;
-
-		auto cube = make_shared<CGCube>(len, width, height);
-		auto hints = make_shared< TessellationHints>();
-
+		auto cube = make_shared<CGCube>(dialog.len, dialog.width, dialog.height);
+		auto hints = make_shared<TessellationHints>();
 		cube->setTessellationHints(hints);
 		cube->setDisplayListEnabled(true);
 
-
-		vector<shared_ptr<CGRenderState>> states;
-		auto color = dialog.getColor();
-		auto type = dialog.getMaterialType();
-		
-
-
-		auto colorState = make_shared<CGColor>();
-		colorState->setValue(color);
-		states.push_back(colorState);
-
-		auto metal = SceneMaterials::CreateMaterialWithColor(color, type);
-		auto material = make_shared<CGMaterial>(metal);
-		states.push_back(material);
-
-		auto tran1 = createGeometry(cube, point, states, "立方体");
-
-
-		auto mode = std::make_shared<CGPolygonMode>(PM_LINE, PM_LINE); //设置线框模式 
-		states.push_back(mode);
-		auto tran2 = createGeometry(cube, { -point.x, point.y, point.z }, states, "立方体-线框");
-
-		auto tran = createTransfrom("立方体");
-		tran1->scale(50, 50, 50);
-		tran2->scale(50, 50, 50);
-
-		tran->AddChild(tran1);
-		tran->AddChild(tran2);
-
+		auto tran = createSolidAndWireframeObject(
+			cube,
+			point,
+			dialog.getColor(),
+			static_cast<MaterialPreset>(dialog.mSel),
+			"立方体"
+		);
 		AddNode(tran);
-
 		UpdateAllViews(NULL);
 	}
 }
@@ -1229,15 +1235,17 @@ void CCG2022112453游坤坤Doc::OnButtonLightControl()
 }
 void CCG2022112453游坤坤Doc::OnButtonPointLight()
 {
+	using namespace std;
 	auto& light = SceneLights::PointLight;
-	light.setPosition(glm::vec4(0, 100, 100, 1));
+	light.setPosition(glm::vec4(0, 0, 100, 1));
+	light.enable(true);
 	setLight(light);
 
 }
 void CCG2022112453游坤坤Doc::OnButtonDirectionalLight()
 {
 	auto& light = SceneLights::DirectionalLight;
-	light.setPosition(glm::vec4(0, 100, 100, 0));
+	light.setPosition(glm::vec4(0, 0, 100, 0));
 	setLight(light);
 
 }
@@ -1246,7 +1254,7 @@ void CCG2022112453游坤坤Doc::OnButtonSpotLight()
 {
 	auto& light = SceneLights::SpotLight;
 
-	glm::vec3 pos = glm::vec3(0, 100, 100);
+	glm::vec3 pos = glm::vec3(0, 0, 100);
 	glm::vec3 target = glm::vec3(0, 0, 0);
 	light.setPosition(glm::vec4(pos, 1.0f));
 	light.setSpotDirection(glm::normalize(target - pos));

@@ -35,7 +35,6 @@ public:
 	void hideItem(int nId);
 	void hideItems(int nIds[], int len);
 	glm::vec4 getColor();
-	SceneMaterials::MaterialType getMaterialType();
 	int getSel();
 public:
 	afx_msg void OnBnClickedOk();
@@ -56,7 +55,6 @@ public:
 	float width;
 	CMFCColorButton colorButton;
 	CComboBox materialCombox;
-	SceneMaterials::MaterialType  materialType = SceneMaterials::MaterialType::Metal;
 	int mSel = 0;
 	afx_msg void OnBnClickedMfccolorbuttonColor();
 	afx_msg void OnCbnSelchangeComboMaterials();

@@ -105,22 +105,17 @@ glm::vec4 MyDialog::getColor()
 	return glm::vec4(r, g, b, 1.0f);
 }
 
-SceneMaterials::MaterialType MyDialog::getMaterialType()
-{
-	int sel = materialCombox.GetCurSel();
-	return static_cast<SceneMaterials::MaterialType>(sel);
-}
+//SceneMaterials::MaterialType MyDialog::getMaterialType()
+//{
+//	int sel = materialCombox.GetCurSel();
+//	return static_cast<SceneMaterials::MaterialType>(sel);
+//}
 
-int MyDialog::getSel()
-{
-	int sel = materialCombox.GetCurSel();
-	return sel;
-}
 
 void MyDialog::OnBnClickedOk()
 {
-	materialType = getMaterialType();
-	mSel = getSel();
+	//materialType = getMaterialType();
+	mSel = materialCombox.GetCurSel();
 	CDialogEx::OnOK();
 }
 
@@ -137,13 +132,20 @@ BOOL MyDialog::OnInitDialog()
 	{
 		drawCube();
 	}
-	materialCombox.AddString(_T("塑料"));
-	materialCombox.AddString(_T("金属"));
-	materialCombox.AddString(_T("木制"));
-	materialCombox.AddString(_T("陶瓷"));
+	materialCombox.AddString(_T("浅色木材"));
+	materialCombox.AddString(_T("深色木材"));
+	materialCombox.AddString(_T("红色塑料"));
+	materialCombox.AddString(_T("黑色塑料"));
+	materialCombox.AddString(_T("金属-金"));
+	materialCombox.AddString(_T("金属-银"));
+	materialCombox.AddString(_T("金属-铜"));
+	materialCombox.AddString(_T("陶瓷-白色"));
+	materialCombox.AddString(_T("黑色橡胶"));
+	materialCombox.AddString(_T("透明玻璃"));
+
 	materialCombox.SetCurSel(0);
 
-	colorButton.SetColor(RGB(0, 0, 255));
+	colorButton.SetColor(RGB(255, 255, 255));
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// 异常: OCX 属性页应返回 FALSE
 }
